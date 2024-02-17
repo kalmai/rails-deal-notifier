@@ -6,6 +6,7 @@ ruby '3.3.0'
 
 gem 'importmap-rails'
 gem 'jbuilder'
+gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
 gem 'rails', '7.1.3'
