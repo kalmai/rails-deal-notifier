@@ -14,6 +14,7 @@ gem 'redis', '>= 4.0.1'
 gem 'rubocop'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
+gem 'strong_migrations'
 gem 'turbo-rails'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"

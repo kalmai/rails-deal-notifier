@@ -12,6 +12,7 @@ Things you may want to cover:
 * Configuration
 
 * Database creation
+![database_model](./app/assets/images/database_model.png)
 
 * Database initialization
 
