@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
   get 'test_email', to: 'application#send_email'
 
+  resources :contact_method
   # Defines the root path route ("/")
   # root "posts#index"
 end
