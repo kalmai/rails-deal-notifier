@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 ruby '3.3.0'
 
+gem 'factory_bot_rails'
 gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
@@ -11,6 +12,8 @@ gem 'pry'
 gem 'puma', '>= 5.0'
 gem 'rails', '7.1.3'
 gem 'redis', '>= 4.0.1'
+gem 'rspec'
+gem 'rspec-rails'
 gem 'rubocop'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
@@ -50,4 +53,5 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 6.0'
 end

@@ -1,0 +1,2 @@
+class ContactMethodController < ApplicationController
+end
