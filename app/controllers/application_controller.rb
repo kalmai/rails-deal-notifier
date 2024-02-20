@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   end
 
   def postman_request
-    binding.pry
     Rails.env.development? && request.headers['HTTP_USER_AGENT'].downcase.include?('postman')
   end
 end
