@@ -2,9 +2,9 @@
 
 class ContactMethod < ApplicationRecord
   enum :contact_type, { email: 0, phone_number: 1 }
-  validates_uniqueness_of :contact_detail
   validates :contact_detail, :enabled, :contact_type, presence: true
   validate :valid_contact_detail?
+  validates_uniqueness_of :contact_detail
 
   belongs_to :user
 
