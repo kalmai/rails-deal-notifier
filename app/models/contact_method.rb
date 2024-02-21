@@ -5,7 +5,7 @@ class ContactMethod < ApplicationRecord
   encrypts :contact_detail, deterministic: true, downcase: true
   validates :contact_detail, :enabled, :contact_type, presence: true
   validate :valid_contact_detail?
-  validates_uniqueness_of :contact_detail
+  validates :contact_detail, uniqueness: { case_sensitive: false }
 
   belongs_to :user
 

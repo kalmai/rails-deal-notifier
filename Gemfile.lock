@@ -110,6 +110,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faker (3.2.3)
+      i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -261,6 +263,14 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
+    rubocop-capybara (2.17.1)
+      rubocop (~> 1.41)
+    rubocop-factory_bot (2.25.1)
+      rubocop (~> 1.41)
+    rubocop-rspec (2.26.1)
+      rubocop (~> 1.40)
+      rubocop-capybara (~> 2.17)
+      rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -319,6 +329,7 @@ DEPENDENCIES
   capybara
   debug
   factory_bot_rails
+  faker
   importmap-rails
   jbuilder
   pg
@@ -329,6 +340,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   rubocop
+  rubocop-rspec
   selenium-webdriver
   shoulda-matchers (~> 6.0)
   sprockets-rails
