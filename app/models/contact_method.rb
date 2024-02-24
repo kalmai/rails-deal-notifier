@@ -15,7 +15,7 @@ class ContactMethod < ApplicationRecord
       unless contact_detail.match?(URI::MailTo::EMAIL_REGEXP) && contact_detail.length.between?(6, 256)
         errors.add(:contact_detail, 'invalid email')
       end
-    when 'phone_number' then false # POST-MVP
+    else errors.add(:contact_detail, 'unsupported contact type') # POST-MVP add phone_number
     end
   end
 end

@@ -43,5 +43,11 @@ RSpec.describe ContactMethod do
 
       it { is_expected.not_to be_valid }
     end
+
+    context 'with an unimplemented contact_type' do
+      let(:contact_type) { :phone_number }
+
+      it { is_expected.not_to be_valid }
+    end
   end
 end

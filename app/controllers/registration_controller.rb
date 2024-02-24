@@ -2,6 +2,7 @@
 
 class RegistrationController < ApplicationController
   def index
+    session[:assumed_zipcode] = Geocoder.search(request.remote_ip)&.first&.data&.dig('postal')
     render :index
   end
 

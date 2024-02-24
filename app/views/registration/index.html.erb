@@ -3,7 +3,7 @@
   <%= form.text_field :contact_detail %>
   <br>
   <%= form.label :zipcode, "Enter zipcode:" %>
-  <%= form.text_field :zipcode%>
+  <%= form.text_field :zipcode, value: session[:assumed_zipcode] %>
   <br>
   <%= form.submit "Register" %>
 <% end %>

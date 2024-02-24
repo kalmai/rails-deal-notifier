@@ -6,6 +6,7 @@ ruby '3.3.0'
 
 gem 'factory_bot_rails'
 gem 'faker'
+gem 'geocoder'
 gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
