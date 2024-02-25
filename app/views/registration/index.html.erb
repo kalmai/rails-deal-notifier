@@ -3,12 +3,10 @@
   <%= form.text_field :contact_detail %>
   <br>
   <%= form.label :zipcode, "Enter zipcode:" %>
-  <%= form.text_field :zipcode, value: session[:assumed_zipcode] %>
+  <%= form.text_field :zipcode, value: session[:assumed_zipcode], autocomplete: "off" %> Assumed zipcode based off of your IP Address, update if necessary!
   <br>
   <%= form.submit "Register" %>
-<% end %>
-<% flash.each do |_type, msg| %>
-  <div>
+  <% flash.each do |_type, msg| %>
     <%= msg %>
-  </div>
+  <% end %>
 <% end %>
