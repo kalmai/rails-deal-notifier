@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_20_175453) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_25_061326) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,8 +24,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_20_175453) do
     t.index ["user_id"], name: "index_contact_methods_on_user_id"
   end
 
+  create_table "teams", force: :cascade do |t|
+    t.string "full_name"
+    t.string "short_name"
+    t.string "region"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
-    t.string "zipcode", limit: 15
+    t.string "postal", limit: 15
+    t.string "region"
+    t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
