@@ -34,9 +34,8 @@ class RegistrationController < ApplicationController
   end
 
   def provided_location_data
-    data = Geocoder.search(registration_params[:postal], params: { countrycodes: 'us,ca' })
-    # TODO: properly dig through data to desired fields including timezones
-    { region: data.dig('address', 'state').downcase, country: data.dig('address', 'country_code').downcase }
+    data = Geocoder.search(registration_params[:postal], params: { countrycodes: 'us,ca' }).first.data['properties']
+    { region: data['state'].downcase, country: data['country_code'].downcase, timezone: data.dig('timezone', 'name') }
   end
 
   def contact_methods_attributes

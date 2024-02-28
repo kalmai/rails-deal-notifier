@@ -15,9 +15,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_061326) do
   enable_extension "plpgsql"
 
   create_table "contact_methods", force: :cascade do |t|
-    t.integer "contact_type"
-    t.string "contact_detail"
-    t.boolean "enabled"
+    t.integer "contact_type", null: false
+    t.string "contact_detail", null: false
+    t.boolean "enabled", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"

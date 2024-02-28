@@ -7,7 +7,12 @@ RSpec.describe ContactMethod do
     it { is_expected.to validate_presence_of(:contact_detail) }
     it { is_expected.to validate_presence_of(:contact_type) }
     it { is_expected.to validate_presence_of(:enabled) }
-    it { is_expected.to validate_uniqueness_of(:contact_detail).case_insensitive }
+
+    context 'when a record exists with the same contact_detail' do
+      subject(:contact_method) { build(:contact_method) } # necessary for .validate_uniqueness_of
+
+      it { is_expected.to validate_uniqueness_of(:contact_detail).case_insensitive }
+    end
   end
 
   describe 'associations' do
