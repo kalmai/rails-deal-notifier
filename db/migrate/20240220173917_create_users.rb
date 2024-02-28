@@ -4,9 +4,8 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.string :postal, limit: 15
       t.string :region
       t.string :country
-      # TODO: add timezone to users
+      t.string :timezone
       # example: ActiveSupport::TimeZone.find_tzinfo("America/Chicago").now # yields current time in that zone
-      # t.string :timezone
 
       t.timestamps
     end

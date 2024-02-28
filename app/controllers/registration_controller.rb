@@ -2,7 +2,7 @@
 
 class RegistrationController < ApplicationController
   def index
-    session[:geocode_data] = Geocoder.search(request.remote_ip)&.first&.data
+    session[:geocode_data] = request.location.data
     render :index
   end
 
@@ -15,30 +15,28 @@ class RegistrationController < ApplicationController
   private
 
   def create_user_contact_method
-    User.transaction { @user = User.create!(**(postal_codes_match? ? assumed_data : provided_data)) }
+    User.transaction { @user = User.create!(user_data) }
   rescue ActiveRecord::RecordInvalid
     # do some logging in the future?
   end
 
-  def assumed_data
+  def user_data
+    { postal: registration_params[:postal], contact_methods_attributes: }
+      .merge(postal_codes_match? ? assumed_location_data : provided_location_data)
+  end
+
+  def assumed_location_data
     {
-      postal: registration_params[:postal],
       region: session.dig(:geocode_data, 'region').downcase,
       country: session.dig(:geocode_data, 'country').downcase,
-      timezone: session.dig(:geocode_data, 'timezone').downcase,
-      contact_methods_attributes:
+      timezone: session.dig(:geocode_data, 'timezone')
     }
   end
 
-  def provided_data
-    data = Geocoder.search(registration_params[:postal], params: { countrycodes: 'us,ca' }).first.data
-    {
-      postal: registration_params[:postal],
-      region: data.dig('address', 'state').downcase,
-      country: data.dig('address', 'country_code').downcase,
-      timezone: nil,
-      contact_methods_attributes:
-    }
+  def provided_location_data
+    data = Geocoder.search(registration_params[:postal], params: { countrycodes: 'us,ca' })
+    # TODO: properly dig through data to desired fields including timezones
+    { region: data.dig('address', 'state').downcase, country: data.dig('address', 'country_code').downcase }
   end
 
   def contact_methods_attributes

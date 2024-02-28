@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :user do
-    zipcode { "MyString" }
+    postal { "MyString" }
   end
 end

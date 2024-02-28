@@ -37,6 +37,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_25_061326) do
     t.string "postal", limit: 15
     t.string "region"
     t.string "country"
+    t.string "timezone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
