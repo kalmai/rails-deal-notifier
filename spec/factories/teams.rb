@@ -8,7 +8,7 @@ FactoryBot.define do
 
     league
     full_name { team_name }
-    short_name { team_name.split(' ').map(&:first).join }
+    short_name { team_name.split.map(&:first).join }
     region { Faker::Address.state.downcase }
     country { 'us' }
   end
