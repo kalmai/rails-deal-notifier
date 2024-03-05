@@ -27,8 +27,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_205024) do
   create_table "leagues", force: :cascade do |t|
     t.string "full_name"
     t.string "short_name"
-    t.datetime "start_at"
-    t.datetime "end_at"
+    t.integer "start_month"
+    t.string "end_month"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

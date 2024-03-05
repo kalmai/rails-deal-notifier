@@ -10,7 +10,13 @@ namespace :digest_sports_data do
       country = Geocoder.search(
         "#{datum[:stateprovince]},#{datum[:city]}", params: { countrycodes: 'us,ca' }
       ).first.data['properties']['country_code']
-      Team.create!(full_name: datum[:team], short_name: nil, region: datum[:stateprovince], country:)
+      Team.create!(
+        full_name: datum[:team], short_name: nil,
+        # https://en.wikipedia.org/wiki/Wikipedia:WikiProject_National_Football_League/National_Football_League_team_abbreviations
+        # may need to get a lookup for this?
+        region: datum[:stateprovince].downcase, country:,
+        league: League.find_by(short_name: datum[:league].downcase)
+      )
       print '.'
     end
   end
