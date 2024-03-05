@@ -1,9 +1,14 @@
 FactoryBot.define do
   factory :league do
-    full_name { "national hockey league" }
-    short_name { "nhl" }
+    transient do
+      sport { Faker::Sport.sport.downcase }
+    end
+
+    full_name { "national #{sport} league" }
+
+    short_name { "n#{sport.split(' ').map(&:first).join }l" }
     start_month { 1 }
-    end_month { "10" }
+    end_month { '10' }
 
     transient do
       team_count { 2 }
