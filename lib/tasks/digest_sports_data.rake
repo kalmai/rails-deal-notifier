@@ -24,7 +24,10 @@ namespace :digest_sports_data do
   task populate_nhl_team_abbreviations: :environment do
     # https://github.com/Zmalski/NHL-API-Reference?tab=readme-ov-file#get-standings-by-date
     response = RestClient.get("https://api-web.nhle.com/v1/standings/#{Time.now.strftime('%Y-%m-%d')}")
-    binding.pry
-    # JSON.parse(response.body)['standings'] from here we need to itterate over each team for their full name and abreviation
+    parsed_response = JSON.parse(response.body)['standings']
+    parsed_response.each do |ele|
+      team = Team.find_by(full_name: ele.dig('teamName', 'default'))
+      team&.update(short_name: ele.dig('teamAbbrev', 'default').downcase)
+    end
   end
 end

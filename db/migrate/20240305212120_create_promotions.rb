@@ -16,6 +16,7 @@ class CreatePromotions < ActiveRecord::Migration[7.1]
       t.integer :redemption_limiter # enum i.e. seasonal, lifetime, count, absense of a limiter means there is no limit
       t.integer :redemption_count # season:1, lifetime:1, nil:nil
       t.integer :hours_valid
+      t.text :requirements, array: true, default: []
 
       t.timestamps
     end

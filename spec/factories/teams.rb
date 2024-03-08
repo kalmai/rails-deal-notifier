@@ -5,6 +5,7 @@ FactoryBot.define do
     transient do
       promotion_count { 2 }
     end
+
     full_name { Faker::Sports::Football.team.downcase }
     short_name { full_name.split.map(&:first).join }
     region { Faker::Address.state.downcase }

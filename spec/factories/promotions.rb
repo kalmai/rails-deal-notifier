@@ -11,7 +11,24 @@ FactoryBot.define do
     redemption_limiter { 'seasonal' }
     redemption_count { 1 }
     hours_valid { 24 }
+    requirements { Array.new(2) { Faker::Lorem.sentence } }
 
     team
+
+    trait :cbj_moo_moo_carwash do
+      company { 'Moo Moo Express Car Wash' }
+      promo_type { 'free_gifts' }
+      name { 'Moo Moo Express Car Wash 3rd Period Goal' }
+      condition { "'hello world' if true" }
+      promo_code { nil }
+      source_url { 'https://www.nhl.com/bluejackets/fans/gameday-central' }
+      requirements do
+        [
+          'sign up on gameday', 'one hour before the start of the game',
+          'or till end of game', 'sign up here: https://moomoocarwash.com/cbj/',
+          'enter cellphone number'
+        ]
+      end
+    end
   end
 end

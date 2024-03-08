@@ -43,6 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
     t.integer "redemption_limiter"
     t.integer "redemption_count"
     t.integer "hours_valid"
+    t.text "requirements", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "team_id"

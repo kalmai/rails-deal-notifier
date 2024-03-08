@@ -3,14 +3,14 @@
 class Promotion < ApplicationRecord
   # as per https://www.google.com/search?q=types+of+discounts
   enum :promo_type, %i[
-    bogo free_shipping percentage_discounts seasonal_discounts
-    cash_discount free_gifts volume_discounts contractual_discount
-    automatic_coupons referral_discounts category_discounts
-    customer_discounts quantity_discount trade_discount bundle_discounts
-    coupon_codes order_discounts price_bundling brand_discounts
-    limited_time_offers flash_sales loyalty_points rebate try_before_you_buy
+    automatic_coupons bogo brand_discounts bundle_discounts cash_discount
+    category_discounts contractual_discount coupon_codes customer_discounts flash_sales
+    free_gifts free_shipping limited_time_offers loyalty_points order_discounts
+    percentage_discounts price_bundling quantity_discount rebate referral_discounts
+    seasonal_discounts sweepstakes trade_discount try_before_you_buy volume_discounts
   ]
   enum :redemption_limiter, %i[seasonal lifetime number]
+  validates :condition, :company, presence: true # move this to it's own model
 
   belongs_to :team
 end
