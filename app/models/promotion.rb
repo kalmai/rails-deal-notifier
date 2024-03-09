@@ -10,7 +10,8 @@ class Promotion < ApplicationRecord
     seasonal_discounts sweepstakes trade_discount try_before_you_buy volume_discounts
   ]
   enum :redemption_limiter, %i[seasonal lifetime number]
-  validates :condition, :company, presence: true # move this to it's own model
+  validates :company, presence: true
 
   belongs_to :team
+  has_many :expressions
 end

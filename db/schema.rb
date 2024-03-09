@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_223310) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_contact_methods_on_user_id"
+  end
+
+  create_table "expressions", force: :cascade do |t|
+    t.string "left"
+    t.string "operand"
+    t.string "right"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "promotion_id"
+    t.index ["promotion_id"], name: "index_expressions_on_promotion_id"
   end
 
   create_table "leagues", force: :cascade do |t|
@@ -36,14 +46,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
   create_table "promotions", force: :cascade do |t|
     t.string "company"
     t.string "name"
-    t.string "condition"
     t.integer "promo_type"
     t.string "promo_code"
     t.string "source_url"
     t.integer "redemption_limiter"
     t.integer "redemption_count"
     t.integer "hours_valid"
-    t.text "requirements", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "team_id"
