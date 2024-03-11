@@ -13,5 +13,4 @@ class Promotion < ApplicationRecord
   validates :company, presence: true
 
   belongs_to :team
-  has_many :expressions
 end

@@ -13,6 +13,7 @@ FactoryBot.define do
     redemption_limiter { 'seasonal' }
     redemption_count { 1 }
     hours_valid { 24 }
+    api_methods { %w[won] }
 
     team
 
@@ -29,12 +30,6 @@ FactoryBot.define do
       #     'enter cellphone number'
       #   ]
       # end
-    end
-
-    trait :with_expressions do
-      after(:create) do |promotion, evaluator|
-        create_list(:expression, evaluator.expression_count, promotion:)
-      end
     end
   end
 end
