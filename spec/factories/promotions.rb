@@ -13,7 +13,7 @@ FactoryBot.define do
     redemption_limiter { 'seasonal' }
     redemption_count { 1 }
     hours_valid { 24 }
-    api_methods { %w[won] }
+    api_methods { %w[won?] }
 
     team
 
