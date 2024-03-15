@@ -10,16 +10,22 @@ module Nhl
     BASE_URL = 'https://api-web.nhle.com'
 
     class << self
-      def won?(short_name:)
-        results_for_yesterday[short_name].won?
+      def won?(args)
+        return false unless played?(args[:short_name])
+
+        results_for_yesterday[args[:short_name]].won?
       end
 
-      def scored_in?(short_name:, period:)
-        results_for_yesterday[short_name].goals&.any? { _1.period == period }
+      def scored_in?(args)
+        return false unless played?(args[:short_name])
+
+        results_for_yesterday[args[:short_name]].goals&.any? { _1.period == args[:period].to_i }
       end
 
-      def first_goal?(short_name:)
-        defender = results_for_yesterday[short_name]
+      def first_goal?(args)
+        return false unless played?(args[:short_name])
+
+        defender = results_for_yesterday[args[:short_name]]
         return false unless defender
 
         opponent = results_for_yesterday[defender.opponent.downcase]
@@ -27,6 +33,10 @@ module Nhl
       end
 
       private
+
+      def played?(short_name)
+        short_name.in?(results_for_yesterday.keys)
+      end
 
       def scored_first_goal?(defender, attacker)
         defender_first_goal = defender.goals.first

@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "hstore"
   enable_extension "plpgsql"
 
   create_table "contact_methods", force: :cascade do |t|
@@ -43,6 +44,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_212120) do
     t.integer "redemption_count"
     t.integer "hours_valid"
     t.string "api_methods", default: [], array: true
+    t.hstore "api_parameters"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "team_id"

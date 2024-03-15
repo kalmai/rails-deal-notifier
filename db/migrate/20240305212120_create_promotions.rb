@@ -1,5 +1,6 @@
 class CreatePromotions < ActiveRecord::Migration[7.1]
   disable_ddl_transaction!
+  enable_extension :hstore unless extension_enabled?(:hstore)
 
   def change
     create_table :promotions do |t|
@@ -12,8 +13,7 @@ class CreatePromotions < ActiveRecord::Migration[7.1]
       t.integer :redemption_count # season:1, lifetime:1, nil:nil
       t.integer :hours_valid
       t.string :api_methods, array: true, default: []
-      # TODO: POST-MVP-GOAL
-      # add a way to calculate the difficulty there is to redeem/sign up for a promotion
+      t.hstore :api_parameters
 
       t.timestamps
     end

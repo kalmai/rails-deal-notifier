@@ -13,4 +13,16 @@ class Promotion < ApplicationRecord
   validates :company, presence: true
 
   belongs_to :team
+
+  def evaluate
+    client = "#{team.league.short_name.titleize}::Client".constantize
+    api_methods.all? do |method|
+      binding.pry
+      client.send(method.to_sym, client_params)
+    end
+  end
+
+  def client_params
+    { short_name: team.short_name }.merge!(api_parameters).with_indifferent_access
+  end
 end
