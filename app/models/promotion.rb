@@ -17,8 +17,7 @@ class Promotion < ApplicationRecord
   def evaluate
     client = "#{team.league.short_name.titleize}::Client".constantize
     api_methods.all? do |method|
-      binding.pry
-      client.send(method.to_sym, client_params)
+      client.call(method, client_params)
     end
   end
 

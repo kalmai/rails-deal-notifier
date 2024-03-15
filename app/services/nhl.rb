@@ -10,29 +10,31 @@ module Nhl
     BASE_URL = 'https://api-web.nhle.com'
 
     class << self
-      def won?(args)
+      def call(method, args)
         return false unless played?(args[:short_name])
 
+        send(method, args)
+      end
+
+      private
+
+      def won?(args)
         results_for_yesterday[args[:short_name]].won?
       end
 
       def scored_in?(args)
-        return false unless played?(args[:short_name])
+        return false unless results_for_yesterday[args[:short_name]].goals&.present?
 
         results_for_yesterday[args[:short_name]].goals&.any? { _1.period == args[:period].to_i }
       end
 
       def first_goal?(args)
-        return false unless played?(args[:short_name])
-
         defender = results_for_yesterday[args[:short_name]]
-        return false unless defender
-
         opponent = results_for_yesterday[defender.opponent.downcase]
+        return false if defender.goals.empty?
+
         scored_first_goal?(defender, opponent)
       end
-
-      private
 
       def played?(short_name)
         short_name.in?(results_for_yesterday.keys)
@@ -41,8 +43,8 @@ module Nhl
       def scored_first_goal?(defender, attacker)
         defender_first_goal = defender.goals.first
         attacker_first_goal = attacker.goals.first
-        return false if defender_first_goal.period < attacker_first_goal.period
-        return true if defender_first_goal.period > attacker_first_goal.period
+        return true if defender_first_goal.period < attacker_first_goal.period
+        return false if defender_first_goal.period > attacker_first_goal.period
 
         Time.parse("00:#{defender_first_goal.time}") < Time.parse("00:#{attacker_first_goal.time}")
       end

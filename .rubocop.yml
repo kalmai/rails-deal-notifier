@@ -13,3 +13,11 @@ Style/Documentation:
   Enabled: false
 RSpec/MultipleExpectations:
   Max: 4
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/SpecFilePathFormat:
+  Enabled: false
+RSpec/FilePath:
+  SpecSuffixOnly: true
+RSpec/NestedGroups:
+  Enabled: false
