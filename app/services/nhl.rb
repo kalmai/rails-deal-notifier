@@ -4,6 +4,7 @@ require 'rest-client'
 
 GameResult = Struct.new(:won?, :goals, :away?, :opponent, keyword_init: true)
 Goal = Struct.new(:period, :time, keyword_init: true)
+TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true)
 
 module Nhl
   class Client
@@ -11,12 +12,17 @@ module Nhl
 
     class << self
       def call(method, args)
-        return false unless played?(args[:short_name])
+        return false unless played?(args[:short_name]) || playing?(args[:short_name])
 
         send(method, args)
       end
 
       private
+
+      def playing_at(args)
+        games_for_today.find { |ele| ele.team_abbrev == args[:short_name] }.utc_start_time
+        # output.in_time_zone(User.last.timezone)
+      end
 
       def won?(args)
         results_for_yesterday[args[:short_name]].won?
@@ -38,6 +44,10 @@ module Nhl
 
       def played?(short_name)
         short_name.in?(results_for_yesterday.keys)
+      end
+
+      def playing?(short_name)
+        short_name.in?(games_for_today.map(&:team_abbrev))
       end
 
       def scored_first_goal?(defender, attacker)
@@ -95,6 +105,32 @@ module Nhl
 
       def home_victory?(data)
         (data.dig('homeTeam', 'score') <=> data.dig('awayTeam', 'score')) == 1
+      end
+
+      def games_for_today
+        results = Rails.cache.read(:nhl_today)
+        return results if results.present?
+
+        nhl_today
+      end
+
+      def nhl_today
+        raw_response = RestClient.get("#{BASE_URL}/v1/schedule/now")
+        data = JSON.parse(raw_response.body)
+        games = data['gameWeek'].select { |hsh| hsh['date'] == Time.zone.now.strftime('%Y-%m-%d') }.first['games']
+        games_today = build_today_games(games)
+        Rails.cache.write(:nhl_today, games_today, expires_at: Time.now.end_of_day)
+        games_today
+      end
+
+      def build_today_games(games)
+        games.each_with_object({}) do |game, hsh|
+          time = Time.parse(game['startTimeUTC'])
+          arr.push TodayGame.new \
+            away?: false, team_abbrev: game.dig('homeTeam', 'abbrev').downcase, utc_start_time: time
+          arr.push TodayGame.new \
+            away?: true, team_abbrev: game.dig('awayTeam', 'abbrev').downcase, utc_start_time: time
+        end
       end
     end
   end
