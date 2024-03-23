@@ -13,6 +13,8 @@ class Promotion < ApplicationRecord
   validates :company, presence: true
 
   belongs_to :team
+  has_many :user_promotions
+  has_many :users, through: :user_promotions
 
   def evaluate
     client = "#{team.league.short_name.titleize}::Client".constantize

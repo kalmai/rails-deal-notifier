@@ -124,12 +124,10 @@ module Nhl
       end
 
       def build_today_games(games)
-        games.each_with_object({}) do |game, hsh|
+        games.each_with_object([]) do |game, arr|
           time = Time.parse(game['startTimeUTC'])
-          arr.push TodayGame.new \
-            away?: false, team_abbrev: game.dig('homeTeam', 'abbrev').downcase, utc_start_time: time
-          arr.push TodayGame.new \
-            away?: true, team_abbrev: game.dig('awayTeam', 'abbrev').downcase, utc_start_time: time
+          arr << TodayGame.new(away?: false, team_abbrev: game.dig('homeTeam', 'abbrev').downcase, utc_start_time: time)
+          arr << TodayGame.new(away?: true, team_abbrev: game.dig('awayTeam', 'abbrev').downcase, utc_start_time: time)
         end
       end
     end
