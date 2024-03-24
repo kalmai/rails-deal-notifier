@@ -9,7 +9,7 @@ RSpec.describe Nhl::Client do
   let(:params) { base_params.merge(addional_params) }
   let(:base_params) { { short_name: 'cbj' } }
   let(:addional_params) { {} }
-  let(:game_results) do
+  let(:results_for_yesterday) do
     {
       'cbj' => GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
       'ott' => GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
@@ -20,9 +20,16 @@ RSpec.describe Nhl::Client do
   let(:opponent) { 'OTT' }
   let(:cbj_goals) { [Goal.new(period: 1, time: '00:15'), Goal.new(period: 3, time: '05:21')] }
   let(:ott_goals) { [Goal.new(period: 3, time: '07:25')] }
+  let(:utc_start_time) { Time.now.end_of_day - 3.hours }
+  let(:games_for_today) do
+    [
+      TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
+      TodayGame.new(away?: false, team_abbrev: 'arz', utc_start_time:)
+    ]
+  end
 
   before do
-    allow(described_class).to receive(:results_for_yesterday).and_return(game_results)
+    allow(described_class).to receive_messages(results_for_yesterday:, games_for_today:)
   end
 
   describe '#call' do
@@ -74,6 +81,18 @@ RSpec.describe Nhl::Client do
       context 'when the defenders first goal is in a later period than the opponent' do
         let(:cbj_goals) { [Goal.new(period: 2, time: '00:15')] }
         let(:ott_goals) { [Goal.new(period: 1, time: '07:25')] }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    describe '#playing_at' do
+      let(:method) { 'playing_at' }
+
+      it { is_expected.to eq utc_start_time }
+
+      context 'when team is not playing today' do
+        let(:base_params) { { short_name: 'ott' } }
 
         it { is_expected.to be false }
       end

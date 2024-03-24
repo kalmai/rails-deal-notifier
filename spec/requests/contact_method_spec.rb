@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe 'ContactMethods', type: :request do
+RSpec.describe 'ContactMethods' do
   describe 'GET /index' do
     pending "add some examples (or delete) #{__FILE__}"
   end

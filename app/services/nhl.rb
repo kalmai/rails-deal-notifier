@@ -9,15 +9,22 @@ TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true
 module Nhl
   class Client
     BASE_URL = 'https://api-web.nhle.com'
+    INVOKABLES = { played?: %w[won? scored_in? first_goal?], playing?: %w[playing_at] }.with_indifferent_access.freeze
 
     class << self
       def call(method, args)
-        return false unless played?(args[:short_name]) || playing?(args[:short_name])
+        return false unless ignore_invokation?(method, args)
 
         send(method, args)
       end
 
       private
+
+      def ignore_invokation?(method, args)
+        INVOKABLES.each do |guard_method, sent_method|
+          return send(guard_method, args[:short_name]) if method.in?(sent_method)
+        end
+      end
 
       def playing_at(args)
         games_for_today.find { |ele| ele.team_abbrev == args[:short_name] }.utc_start_time
@@ -92,15 +99,13 @@ module Nhl
       end
 
       def build_goals(goals)
-        goal_results = {}
-        goals.each do |goal|
+        goals.each.with_object({}) do |goal, goal_results|
           if goal_results.keys.include?(goal['teamAbbrev'])
             goal_results[goal['teamAbbrev']].push(Goal.new(period: goal['period'], time: goal['timeInPeriod']))
           else
             goal_results[goal['teamAbbrev']] = [Goal.new(period: goal['period'], time: goal['timeInPeriod'])]
           end
         end
-        goal_results
       end
 
       def home_victory?(data)
