@@ -22,18 +22,23 @@ ruby 3.3.0
 
 #### How to run the test suite
 - `bundle exec rspec`
+- future me, if there are issues with data persistence in test suite database, run something like `rails db:drop RAILS_ENV=test` plus `rails db:create RAILS_ENV=test`
 
 #### Services (job queues, cache servers, search engines, etc.)
 - redis
+- sidekiq, coming soon...
 
 #### Deployment instructions
 - run with ngrok for now...?
 
 ### TODOs:
 * seed CBJ deals: https://www.nhl.com/bluejackets/fans/gameday-central#gameday-promotions
-* calculate which deals the subscriber should be notified of
+* ~~calculate which deals the subscriber should be notified of~~
 * send a notification email which contains actionable deals
 * glam up user interface
+* add sidekiq to then implement cron jobs and notify users of deals they can act upon
+  * make this timezone aware
+  * add the notification for time sensitive deals i.e. moomoocarwash's 1 hour before game deal
 * remove current GitHub Page and replace with this application
 * calculate effort level of deal so subscriber can choose the level of effort they want to exert for the discount
   * add notification email regarding users who have subscribed to time sensitive deals
