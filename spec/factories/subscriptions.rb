@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :user_promotion do
+  factory :subscription do
     user
     promotion
   end

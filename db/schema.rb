@@ -51,6 +51,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_052018) do
     t.index ["team_id"], name: "index_promotions_on_team_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "promotion_id"
+    t.boolean "enabled", default: true
+    t.integer "redemption_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["promotion_id"], name: "index_subscriptions_on_promotion_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "teams", force: :cascade do |t|
     t.string "full_name"
     t.string "short_name"
@@ -62,17 +73,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_052018) do
     t.index ["league_id"], name: "index_teams_on_league_id"
   end
 
-  create_table "user_promotions", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "promotion_id"
-    t.boolean "enabled", default: true
-    t.integer "redemption_count", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["promotion_id"], name: "index_user_promotions_on_promotion_id"
-    t.index ["user_id"], name: "index_user_promotions_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "postal", limit: 15
     t.string "region"
@@ -82,6 +82,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_052018) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "user_promotions", "promotions"
-  add_foreign_key "user_promotions", "users"
+  add_foreign_key "subscriptions", "promotions"
+  add_foreign_key "subscriptions", "users"
 end
