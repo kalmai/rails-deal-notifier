@@ -12,6 +12,8 @@ module Nhl
     INVOKABLES = { played?: %w[won? scored_in? first_goal?], playing?: %w[playing_at] }.with_indifferent_access.freeze
 
     class << self
+      # perhaps adding a bulk call would be useful?
+      # example output would be like: { won?: true, playing?: false } ({method: (method.eval)})
       def call(method, args)
         return false unless ignore_invokation?(method, args)
 

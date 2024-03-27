@@ -10,6 +10,8 @@ FactoryBot.define do
     redemption_limiter { 'seasonal' }
     redemption_count { 1 }
     hours_valid { 24 }
+    timing_methods { nil }
+    timing_parameters { {} }
     api_methods { %w[won?] }
     api_parameters { {} }
 
@@ -26,6 +28,8 @@ FactoryBot.define do
       source_url { 'https://www.nhl.com/bluejackets/fans/gameday-central' }
       api_methods { %w[scored_in?] }
       api_parameters { { period: 3 } }
+      timing_methods { %w[playing_at] }
+      timing_parameters { { minutes_before: 60 } }
       team { league.teams.first }
       # requirements do
       #   [

@@ -43,6 +43,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_052018) do
     t.integer "redemption_limiter"
     t.integer "redemption_count"
     t.integer "hours_valid"
+    t.string "timing_methods", default: [], array: true
+    t.hstore "timing_parameters"
     t.string "api_methods", default: [], array: true
     t.hstore "api_parameters"
     t.datetime "created_at", null: false

@@ -17,13 +17,23 @@ class Promotion < ApplicationRecord
   has_many :users, through: :subscriptions
 
   def evaluate
-    client = "#{team.league.short_name.titleize}::Client".constantize
-    api_methods.all? do |method|
-      client.call(method, client_params)
-    end
+    api_methods.all? { |method| client.call(method, client_params) }
   end
 
+  def utc_notification_time
+    return unless timing_methods.present? && client.call('playing?', client_params)
+
+    utc_start_time = client.call('playing_at', client_params)
+    utc_start_time - client_params[:minutes_before]
+  end
+
+  private
+
   def client_params
-    { short_name: team.short_name }.merge!(api_parameters).with_indifferent_access
+    { short_name: team.short_name }.merge!(api_parameters, timing_parameters).with_indifferent_access
+  end
+
+  def client
+    "#{team.league.short_name.titleize}::Client".constantize
   end
 end
