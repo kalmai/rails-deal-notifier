@@ -8,7 +8,7 @@ class RegistrationController < ApplicationController
 
   def create
     create_user_contact_method if registration_params[:contact_detail] && registration_params[:postal]
-    ApplicationMailer.with(email: @user.contact_methods.last.contact_detail).welcome_email.deliver_now if @user
+    Registration::NotifyJob.perform_later(user: @user) if @user
     redirect_to root_path, notice: 'Success!'
   end
 

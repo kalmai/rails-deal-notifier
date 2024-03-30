@@ -2,11 +2,10 @@
 
 module Registration
   class NotifyJob < ApplicationJob
-    queue_as :default
+    queue_as :low_priority
 
-    def perform(*_args)
-      # Do something later
-      puts 'himom'
+    def perform(user:)
+      ApplicationMailer.with(email: user.contact_methods.last.contact_detail).welcome_email.deliver_now
     end
   end
 end
