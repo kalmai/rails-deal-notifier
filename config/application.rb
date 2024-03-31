@@ -35,7 +35,7 @@ module DealNotifier
       preserve_job_records: true, retry_on_unhandled_error: false, execution_mode: :async, queues: '*',
       max_threads: 5, poll_interval: 30, shutdown_timeout: 25, dashboard_default_locale: :en,
       on_thread_error: -> (exception) { Rails.error.report(exception) },
-      enable_cron: true,
+      enable_cron: false,
       cron: {
         example: {
           cron: '0 * * * *',

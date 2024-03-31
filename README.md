@@ -26,7 +26,7 @@ ruby 3.3.0
 
 #### Services (job queues, cache servers, search engines, etc.)
 - redis
-- sidekiq, coming soon...
+- good_job start locally with `bundle exec good_job start`
 
 #### Deployment instructions
 - run with ngrok for now...?
