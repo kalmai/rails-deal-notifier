@@ -30,7 +30,6 @@ module Nhl
 
       def playing_at(args)
         games_for_today.find { |ele| ele.team_abbrev == args[:short_name] }.utc_start_time
-        # output.in_time_zone(User.last.timezone)
       end
 
       def won?(args)

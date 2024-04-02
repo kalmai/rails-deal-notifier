@@ -21,10 +21,10 @@ class Promotion < ApplicationRecord
   end
 
   def utc_notification_time
-    return unless timing_methods.present? && client.call('playing?', client_params)
+    return unless timing_methods.present? && client.call('playing?', client_params[:short_name])
 
     utc_start_time = client.call('playing_at', client_params)
-    utc_start_time - client_params[:minutes_before]
+    utc_start_time - client_params[:minutes_before].to_i.minutes
   end
 
   private
