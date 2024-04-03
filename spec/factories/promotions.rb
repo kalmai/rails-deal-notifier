@@ -19,7 +19,7 @@ FactoryBot.define do
 
     trait :cbj_moo_moo_carwash do
       transient do
-        league { create(:league, short_name: 'nhl', teams: [create(:team, short_name: 'cbj')]) }
+        league { create(:league, short_name: 'nhl', teams: [create(:team, short_name: 'cbj', region: 'ohio')]) }
       end
       company { 'Moo Moo Express Car Wash' }
       promo_type { 'free_gifts' }

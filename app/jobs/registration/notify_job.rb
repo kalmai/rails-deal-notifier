@@ -5,7 +5,7 @@ module Registration
     queue_as :low_priority
 
     def perform(user:)
-      ApplicationMailer.with(email: user.contact_methods.last.contact_detail).welcome_email.deliver_now
+      RegistrationMailer.with(user:).welcome_email.deliver_now
     end
   end
 end
