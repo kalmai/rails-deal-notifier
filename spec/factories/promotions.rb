@@ -18,9 +18,6 @@ FactoryBot.define do
     team
 
     trait :cbj_moo_moo_carwash do
-      transient do
-        league { create(:league, short_name: 'nhl', teams: [create(:team, short_name: 'cbj', region: 'ohio')]) }
-      end
       company { 'Moo Moo Express Car Wash' }
       promo_type { 'free_gifts' }
       name { 'Moo Moo Express Car Wash 3rd Period Goal' }
@@ -30,7 +27,7 @@ FactoryBot.define do
       api_parameters { { period: 3 } }
       timing_methods { %w[playing_at] }
       timing_parameters { { minutes_before: 60 } }
-      team { league.teams.first }
+      team { association :team, short_name: 'cbj', region: 'ohio', league: create(:league, short_name: 'nhl') }
       # requirements do
       #   [
       #     'sign up on gameday', 'one hour before the start of the game',

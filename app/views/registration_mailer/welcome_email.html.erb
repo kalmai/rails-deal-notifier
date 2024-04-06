@@ -4,9 +4,32 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-  <h1>Welcome to Sports DealNotifier!</h1>
+    <h1>Welcome to Sports DealNotifier!</h1>
     <p>You have successfully signed up with: <%= params[:email] %>.</p>
-    <p>By default based on your location, your local teams are as follows: ...TODO: fill this out...</p>
+    <p>By default based on your location, your local teams are as follows:</p>
+    <table style="width:100%">
+      <% defaulted_promotions(params[:user]).each do |league, teams| %>
+        <tr>
+          <td>
+            <b><%= league %></b>
+          </td>
+          <% teams.each do |team, promotions| %>
+            <td>
+              <%= team %>
+            </td>
+            <td>
+            <table>
+              <% promotions.each do |promotion| %>
+                <tr>
+                  <td><%= promotion %></td>
+                </tr>
+              <% end %>
+            </table>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
     <p>You can modify your local teams to receive more accurate promotion notifications by here. POST-MVP-GOAL</p>
   </body>
 </html>
