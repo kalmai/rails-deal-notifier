@@ -6,8 +6,8 @@ FactoryBot.define do
       contact_methods_count { 1 }
     end
 
-    postal { '15105' }
-    region { 'pennsylvania' }
+    postal { '43026' }
+    region { 'ohio' }
     country { 'us' }
     timezone { 'America/New_York' }
 
