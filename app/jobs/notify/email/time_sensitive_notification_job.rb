@@ -14,20 +14,19 @@ module Notify
 
           users_to_be_notified = promotion.users
           users_to_be_notified.each do |user|
-            email = user.contact_methods&.first&.contact_detail
             next unless today_for_user?(notification_time, user.timezone)
 
-            # this is how we're going to send emails at a certain time
-            # RegistrationMailer.with(user:).welcome_email.deliver_later(wait_until: Time.zone.now + 1.minute)
-            # getting the time difference will be something like
-            # diff = Time.zone.now - notification_time # this is in seconds apparently
-            # hrs = (diff.abs/60/60)
-            # RegistrationMailer.with(user:).welcome_email.deliver_later(wait_until: Time.zone.now + hrs)
-            # Time.at(Time.zone.now.in(hrs.hours))
-            # verify above and timezone by calling .zone on the Time object above
-            puts "#{email}: #{notification_time}"
+            TimeSensitiveNotificationMailer.with(user:).welcome_email.deliver_later \
+              wait_until: Time.zone.now + time_difference_in_hours(notification_time)
           end
         end
+      end
+
+      def time_difference_in_hours(notification_time)
+        diff_in_seconds = Time.zone.now - notification_time
+        # Time.at(Time.zone.now.in(hrs.hours))
+        # verify above and timezone by calling .zone on the Time object above
+        diff_in_seconds.abs / 60 / 60 # yield hours till
       end
 
       def today_for_user?(utc_time, user_timezone)
