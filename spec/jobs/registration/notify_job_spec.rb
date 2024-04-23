@@ -9,7 +9,8 @@ RSpec.describe Registration::NotifyJob do
 
   describe '#perform' do
     before do
-      allow(ApplicationMailer).to receive_message_chain(:with, :welcome_email, :deliver_later).and_return(true)
+      # TODO: figure out how to fix this cop.
+      allow(ApplicationMailer).to receive_message_chain(:with, :welcome_email, :deliver_later).and_return(true) # rubocop:disable Rspec/MessageChain
       job.perform(user:)
     end
 

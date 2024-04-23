@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.3.0'
+ruby file: '.ruby-version'
 
 gem 'brakeman'
 gem 'bundler-audit'
@@ -15,7 +15,8 @@ gem 'jbuilder'
 gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
-gem 'rails', '7.1.3'
+gem 'rack', '~> 2.2.8' # pinned for bundler-audit
+gem 'rails', '7.1.3.1' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
 gem 'rspec'
