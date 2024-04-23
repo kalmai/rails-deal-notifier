@@ -44,17 +44,21 @@ module Nhl
 
       def build_goal_results(home_team, away_team, team_goals, home_win)
         {
-          home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: home_win, opponent: away_team),
-          away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: !home_win, opponent: home_team)
+          home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: home_win,
+                                                  opponent: away_team),
+          away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: !home_win,
+                                                  opponent: home_team)
         }.transform_keys(&:downcase)
       end
 
       def build_goals(goals)
         goals.each.with_object({}) do |goal, goal_results|
           if goal_results.keys.include?(goal['teamAbbrev'])
-            goal_results[goal['teamAbbrev']].push(BaseClient::Goal.new(period: goal['period'], time: goal['timeInPeriod']))
+            goal_results[goal['teamAbbrev']].push(BaseClient::Goal.new(period: goal['period'],
+                                                                       time: goal['timeInPeriod']))
           else
-            goal_results[goal['teamAbbrev']] = [BaseClient::Goal.new(period: goal['period'], time: goal['timeInPeriod'])]
+            goal_results[goal['teamAbbrev']] =
+              [BaseClient::Goal.new(period: goal['period'], time: goal['timeInPeriod'])]
           end
         end
       end
@@ -71,19 +75,25 @@ module Nhl
       end
 
       def league_schedule_today
-        raw_response = RestClient.get("#{BASE_URL}/v1/schedule/now")
-        data = JSON.parse(raw_response.body)
+        data = nhl_schedule
         games = data['gameWeek'].select { |hsh| hsh['date'] == Time.zone.now.strftime('%Y-%m-%d') }.first['games']
         games_today = build_today_games(games)
         Rails.cache.write("#{module_parent}_today", games_today, expires_at: Time.now.end_of_day)
         games_today
       end
 
+      def nhl_schedule
+        raw_response = RestClient.get("#{BASE_URL}/v1/schedule/now")
+        JSON.parse(raw_response.body)
+      end
+
       def build_today_games(games)
         games.each_with_object([]) do |game, arr|
           time = Time.parse(game['startTimeUTC'])
-          arr << BaseClient::TodayGame.new(away?: false, team_abbrev: game.dig('homeTeam', 'abbrev').downcase, utc_start_time: time)
-          arr << BaseClient::TodayGame.new(away?: true, team_abbrev: game.dig('awayTeam', 'abbrev').downcase, utc_start_time: time)
+          arr << BaseClient::TodayGame.new(away?: false, team_abbrev: game.dig('homeTeam', 'abbrev').downcase,
+                                           utc_start_time: time)
+          arr << BaseClient::TodayGame.new(away?: true, team_abbrev: game.dig('awayTeam', 'abbrev').downcase,
+                                           utc_start_time: time)
         end
       end
     end
