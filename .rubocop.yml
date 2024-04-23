@@ -8,6 +8,8 @@ AllCops:
     - 'script/**/*'
     - 'bin/{rails,rake,bundle,setup}'
     - !ruby/regexp /old_and_unused\.rb$/
+    - 'vendor/**/*'
+    - 'vendor/'
 
 Style/Documentation:
   Enabled: false
