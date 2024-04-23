@@ -6,6 +6,8 @@ GameResult = Struct.new(:won?, :goals, :away?, :opponent, keyword_init: true)
 Goal = Struct.new(:period, :time, keyword_init: true)
 TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true)
 
+# We're fixing this length issue with PR #1
+# rubocop:disable Metrics/ClassLength
 module Nhl
   class Client
     BASE_URL = 'https://api-web.nhle.com'
@@ -139,3 +141,4 @@ module Nhl
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
