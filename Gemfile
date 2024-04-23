@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 
 ruby '3.3.0'
 
+gem 'brakeman'
+gem 'bundler-audit'
 gem 'factory_bot_rails'
 gem 'faker'
 gem 'geocoder'
