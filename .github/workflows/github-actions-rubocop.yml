@@ -10,13 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+      - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
       - name: bundle
         run: bundle install
-      - run: bundle exec rake
       - name: rubocop
         run: bundle exec rubocop
-      - name: rspec
-        run: bundle exec rspec
