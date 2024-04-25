@@ -15,7 +15,6 @@ gem 'jbuilder'
 gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
-gem 'rack', '~> 2.2.8' # pinned for bundler-audit
 gem 'rails', '7.1.3.1' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
@@ -37,6 +36,10 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
+
+# Security pinning
+gem 'rack', '~> 2.2.8' # pinned for bundler-audit
+gem 'rdoc', '>= 6.6.3.1'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
