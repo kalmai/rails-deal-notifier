@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "${DATABASE_USER-postgres}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
+    user: postgres
+    ports:
+      - '5432:5432'
+  rails:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/rails
+    tmpfs:
+      - /tmp/pids/
+    depends_on:
+      - db  # add all dependant container
+      - redis
+    environment:
+      PIDFILE: /tmp/pids/server.pid
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      POSTGRES_USER: "${DATABASE_USER-postgres}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
+      RAILS_ENV: "${RAILS_ENV-development}"
+
+  redis:
+    image: redis
+    command: redis-server
+    volumes:
+      - redis:/data
+    ports:
+      - 6379
+    logging:
+            driver: none
+
+volumes:
+  postgres:
+  redis:

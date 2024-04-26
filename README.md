@@ -3,21 +3,23 @@ notifiy users of local sports team deals.
 MVP: notify me of a free carwash from CBJ OR columbus crew meeting conditions.
 
 #### Ruby version
-ruby 3.3.0
+ruby 3.3.1
 
 #### System dependencies
-- github for CI and deployment in the future?
-- maybe firebase for BE psql/good_jobs?
+- git
+- docker-compose: 2.27.0
+- docker 26.1.0
 
 #### Configuration
-- rails master key
+- rails master key stored in `./config/master.key`
+- run `docker compose up`
 
 #### Database creation
-- `psql -U zkolker -d deal_notifier_dev` to connect to local DB
+- `psql -U $USER -d deal_notifier_dev` to connect to local DB
 
 #### Database initialization
-- `rails db:seed` to get leagues
-- execute `rake digest_sports_data:wikipedia_ca_us_teams wikipedia_sports_teams.csv` to fill out teams
+- upon booting up the container/local environment it should be seeded by the seed file, should aim to automate team population within leagues in the future...
+- execute `rake digest_sports_data:wikipedia_ca_us_teams wikipedia_sports_teams.csv` to fill out hockey teams
 - need to add team abbreviations to each team since wikipedia does not. may be able to do this just by calling the appropriate sports api once it's built out
 
 #### How to run the test suite
@@ -25,14 +27,19 @@ ruby 3.3.0
 - future me, if there are issues with data persistence in test suite database, run something like `rails db:drop RAILS_ENV=test` plus `rails db:create RAILS_ENV=test`
 
 #### Services (job queues, cache servers, search engines, etc.)
+- nhl api
+- sportapi (for mls, and more soon?)
 - redis
-- good_job start locally with `bundle exec good_job start`
+- good_jobs
 - sendgrid
 - geoapify
 
 #### Deployment instructions
-should explore hosting this application with firebase and building out the deployment in github actions like linting/testing.
-- run with ngrok for now...?
+- run with ngrok for now since firebase image doesn't work yet...
+- Firebase Deployment instructions
+  - create the app image with: `sudo RAILS_MASTER_KEY=$(echo config/master.key) docker compose --env-file ./config/.env.prod up --build --remove-orphans --force-recreate -d`
+  - tag it with: `docker tag rails-deal-notifier-rails northamerica-northeast1-docker.pkg.dev/rails-deal-notifier/deal-notifier/app`
+  - push it to google artifactory: `docker push northamerica-northeast1-docker.pkg.dev/rails-deal-notifier/deal-notifier/app`
 
 ### TODOs:
 * seed CBJ deals: https://www.nhl.com/bluejackets/fans/gameday-central#gameday-promotions
