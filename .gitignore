@@ -33,6 +33,7 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/.env.prod
 
 # Ignore development redis dumps
 /dump.rdb

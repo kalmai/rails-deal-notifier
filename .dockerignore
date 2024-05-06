@@ -5,6 +5,7 @@
 
 # Ignore bundler config.
 /.bundle
+/config/.env.prod
 
 # Ignore all environment files (except templates).
 /.env*

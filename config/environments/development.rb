@@ -36,7 +36,7 @@ Rails.application.configure do
 
   #   config.cache_store = :null_store
   # end
-  config.cache_store = :redis_cache_store
+  config.cache_store = :redis_cache_store, { url: 'redis://redis:6379/0' } # , password: your_pass }
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
@@ -60,7 +60,7 @@ Rails.application.configure do
     :enable_starttls_auto => true
   }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  config.hosts << 'lemming-trusty-dane.ngrok-free.app'
+  # config.hosts << 'lemming-trusty-dane.ngrok-free.app'
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
