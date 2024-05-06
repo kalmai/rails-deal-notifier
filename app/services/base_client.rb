@@ -25,7 +25,7 @@ class BaseClient
 
     def ignore_invokation?(method, args)
       INVOKABLES.each do |guard_method, sent_method|
-        return send(guard_method, args[:short_name]) if method.in?(sent_method)
+        return send(guard_method, args) if method.in?(sent_method)
       end
     end
 
@@ -34,11 +34,11 @@ class BaseClient
     end
 
     def won?(args)
-      results_cache[args[:short_name]].won?
+      results_cache[args[:short_name]].try(:won?) == true
     end
 
     def scored_in?(args)
-      return false unless results_cache[args[:short_name]].goals&.present?
+      return false unless results_cache[args[:short_name]].try(:goals).present?
 
       results_cache[args[:short_name]].goals&.any? { _1.period == args[:period].to_i }
     end
@@ -51,12 +51,13 @@ class BaseClient
       scored_first_goal?(defender, opponent)
     end
 
-    def played?(short_name)
-      short_name.in?(results_cache.keys)
+    def played?(args)
+      args[:short_name].in?(results_cache.keys)
     end
 
-    def playing?(short_name)
-      short_name.in?(schedule_cache.map(&:team_abbrev))
+    def playing?(args)
+      today_teams = schedule_cache.map { _1.team_abbrev if _1.utc_start_time.today? }.compact
+      args[:short_name].in?(today_teams)
     end
 
     def scored_first_goal?(defender, attacker)

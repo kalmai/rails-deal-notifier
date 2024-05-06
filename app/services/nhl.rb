@@ -22,13 +22,13 @@ module Nhl
         return results if results.present?
 
         league_results
-        Rails.cache.read("#{module_parent}_yesterday")
       end
 
       def league_results
         raw_response = RestClient.get("#{BASE_URL}/v1/score/#{Time.now.yesterday.strftime('%Y-%m-%d')}")
         result_hash = build_result_hash(JSON.parse(raw_response)['games'])
         Rails.cache.write("#{module_parent}_yesterday", result_hash, expires_at: Time.now.end_of_day + 3.hours)
+        result_hash
       end
 
       def build_result_hash(data)

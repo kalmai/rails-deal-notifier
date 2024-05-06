@@ -57,6 +57,9 @@ RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
 USER rails:rails
 
+# Uncomment this to make MacOS work...?
+# RUN mkdir -p /tmp/pids/ && chown -R rails:rails /tmp/pids/
+
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 

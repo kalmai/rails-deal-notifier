@@ -38,8 +38,10 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
 
 # Security pinning
-gem 'rack', '~> 2.2.8' # pinned for bundler-audit
+gem 'nokogiri', '>= 1.16.5'
+gem 'rack', '~> 2.2.8'
 gem 'rdoc', '>= 6.6.3.1'
+gem 'rexml', '>= 3.2.8'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
