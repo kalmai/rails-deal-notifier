@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe Nhl::Client do
   subject(:evaluation) { described_class.call(method, params) }
 
-  let(:method) { 'won?' }
-  let(:params) { base_params.merge(addional_params) }
+  let(:method) { :won? }
+  let(:params) { base_params.merge(additional_params) }
   let(:base_params) { { short_name: 'cbj' } }
-  let(:addional_params) { {} }
-  let(:results_for_yesterday) do
+  let(:additional_params) { {} }
+  let(:results_cache) do
     {
       'cbj' => BaseClient::GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
       'ott' => BaseClient::GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
@@ -21,7 +21,7 @@ RSpec.describe Nhl::Client do
   let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
   let(:ott_goals) { [BaseClient::Goal.new(period: 3, time: '07:25')] }
   let(:utc_start_time) { Time.now.utc.end_of_day - 3.hours }
-  let(:games_for_today) do
+  let(:schedule_cache) do
     [
       BaseClient::TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
       BaseClient::TodayGame.new(away?: false, team_abbrev: 'arz', utc_start_time:)
@@ -29,7 +29,7 @@ RSpec.describe Nhl::Client do
   end
 
   before do
-    allow(described_class).to receive_messages(results_for_yesterday:, games_for_today:)
+    allow(described_class).to receive_messages(results_cache:, schedule_cache:)
   end
 
   describe '#call' do
@@ -42,13 +42,13 @@ RSpec.describe Nhl::Client do
     end
 
     describe '#scored_in?' do
-      let(:addional_params) { { period: 3 } }
+      let(:additional_params) { { period: 3 } }
       let(:method) { 'scored_in?' }
 
       it { is_expected.to be true }
 
       context 'when there is no goal in the provided period' do
-        let(:addional_params) { { period: 2 } }
+        let(:additional_params) { { period: 2 } }
 
         it { is_expected.to be false }
       end
