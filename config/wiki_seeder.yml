@@ -1,0 +1,53 @@
+wiki_query: https://en.wikipedia.org/w/api.php?
+wiki_base_params:
+  action: parse
+  prop: text
+  format: json
+
+mls:
+  wiki_specific_params:
+    page: Major_League_Soccer
+    section: 3
+  sport_api:
+    url: https://sportapi.mlssoccer.com/api/standings/live?isLive=true&competitionId=98
+    data_path:
+    abbrev_path:
+    - club
+    - abbreviation
+    full_name_path:
+    - club
+    - fullName
+    additional_params:
+      seasonId: null
+  options:
+    excluded_wiki_columns:
+    - eastern
+    - western
+
+nhl:
+  wiki_specific_params:
+    page: National_Hockey_League
+    section: 11
+  sport_api:
+    url: https://api-web.nhle.com/v1/standings/now
+    data_path:
+    - standings
+    abbrev_path:
+    - teamAbbrev
+    - default
+    full_name_path:
+    - teamName
+    - default
+  options:
+    excluded_wiki_columns:
+    - eastern
+    - western
+    - pacific
+    - central
+    - metropolitan
+    - atlantic
+
+# future wiki pages to seed from
+# National_Basketball_Association
+# National_Football_League
+# Major_League_Baseball
