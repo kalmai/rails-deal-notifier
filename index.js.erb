@@ -1,0 +1,12 @@
+<%= form_with url: '/registration', method: :post do |form| %>
+  <%= form.label :contact_detail, "Enter email:" %>
+  <%= form.text_field :contact_detail %>
+  <br>
+  <%= form.label :postal, "Enter zipcode:" %>
+  <%= form.text_field :postal, value: session.dig(:geocode_data, 'postal'), autocomplete: "off" %> Assumed zipcode based off of your IP Address, update if necessary!
+  <br>
+  <%= form.submit "Register" %>
+  <% flash.each do |_type, msg| %>
+    <%= msg %>
+  <% end %>
+<% end %>
