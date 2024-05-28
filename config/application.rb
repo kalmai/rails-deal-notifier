@@ -20,6 +20,7 @@ module DealNotifier
 
     # https://edgeguides.rubyonrails.org/active_record_encryption.html#unique-validations
     config.active_record.encryption.extend_queries = true
+    config.assets.check_precompiled_asset = false
 
     # Configuration for the application, engines, and railties goes here.
     #

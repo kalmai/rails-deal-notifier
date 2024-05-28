@@ -4,7 +4,7 @@ default: &default
   username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
   password: <%= ENV['POSTGRES_PASSWORD'] || 'postgres' %>
   port: <%= ENV['DATABASE_PORT'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
   timeout: 5000
 
 development:
