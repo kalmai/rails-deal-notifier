@@ -1,0 +1,21 @@
+baseURL = 'localhost'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = 'ananke'
+
+uglyURLs = true
+
+[mediaTypes]
+  [mediaTypes."text/x-html-erb"]
+    suffixes = ["html.erb"]
+
+[outputFormats]
+  [outputFormats.HTML]
+    noUgly = true
+  [outputFormats.ERB]
+    mediaType = "text/x-html-erb"
+    isHTML = true
+    path = "hugo"
+
+[outputs]
+page = ["HTML", "ERB"]
