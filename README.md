@@ -42,7 +42,14 @@ ruby 3.3.1
   - push it to google artifactory: `docker push northamerica-northeast1-docker.pkg.dev/rails-deal-notifier/deal-notifier/app`
 
 ### TODOs:
-* seed CBJ deals: https://www.nhl.com/bluejackets/fans/gameday-central#gameday-promotions
+* seed https://en.wikipedia.org/wiki/Sports_in_Ohio deals listed below:
+  * https://www.nhl.com/bluejackets/fans/gameday-central#gameday-promotions
+  * https://www.columbuscrew.com/supporters/promotions
+  * https://www.mlb.com/guardians/fans/sponsoroffers
+  * https://www.bengals.com/fans/promotions/ promotions are pretty lame... should be low priority
+  * cleveland browns are lacking...
+
+* ~~seed MLS teams from their api standings api.~~
 * ~~calculate which deals the subscriber should be notified of~~
 * send a notification email which contains actionable deals
 * glam up user interface
@@ -55,8 +62,6 @@ ruby 3.3.1
   * ~~this will most likely entail getting the games that will be happening today versus results from yesterday and calculating which deals are time sensitive?~~
     * ~~need to add another call to the api each day in the nhl api service~~
     * ~~`time_sensitive?` seems like a good field to add to the structs~~
-* establish a CSV format for uploading deals from other states
-  * this should and may likely lead to some kind of admin panel for accepting deals as the administrator role
 * add passwordless auth via this blog post: https://blog.testdouble.com/posts/2022-10-25-building-passwordless-email-auth-in-rails/
 * build out a FE for users to select deals they want to use
 * build out a User controller to handle account actions like updating email/notification method from email to sms or something like that
