@@ -19,7 +19,7 @@ module Nhl
 
       def results_for_yesterday
         results = Rails.cache.read("#{module_parent}_yesterday")
-        return results if results.present?
+        return results unless results.nil?
 
         league_results
       end
@@ -69,7 +69,7 @@ module Nhl
 
       def games_for_today
         results = Rails.cache.read("#{module_parent}_today")
-        return results if results.present?
+        return results unless results.nil?
 
         league_schedule_today
       end

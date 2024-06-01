@@ -30,6 +30,8 @@ class BaseClient
     end
 
     def playing_at(args)
+      # return 1.hour.from_now # TODO: remove this line
+
       schedule_cache.find { |ele| ele.team_abbrev == args[:short_name] }.utc_start_time
     end
 
@@ -56,6 +58,7 @@ class BaseClient
     end
 
     def playing?(args)
+      # return true # TODO: remove this line
       today_teams = schedule_cache.map { _1.team_abbrev if _1.utc_start_time.today? }.compact
       args[:short_name].in?(today_teams)
     end

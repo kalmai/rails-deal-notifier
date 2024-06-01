@@ -16,7 +16,7 @@ gem 'jbuilder'
 gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
-gem 'rails', '7.1.3.1' # set for bundler-audit
+gem 'rails', '7.1.3.4' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
 gem 'rspec'
@@ -69,4 +69,6 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 6.0'
+  gem 'timecop'
+  gem 'webmock'
 end

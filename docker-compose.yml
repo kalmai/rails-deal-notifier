@@ -28,6 +28,8 @@ services:
     depends_on:
       - db  # add all dependant container
       - redis
+    tty: true
+    stdin_open: true
     environment:
       PIDFILE: /tmp/pids/server.pid
       DATABASE_HOST: db
