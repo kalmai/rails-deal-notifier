@@ -2,6 +2,19 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+      <style>
+        table, td, th {
+          border: 1px solid black;
+          border-collapse: collapse;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        tr:nth-child(odd), .promotion:nth-child(even) {
+          background-color: #eee;
+          border-collapse: collapse;
+        }
+      </style>
   </head>
   <body>
     <h1>Welcome to Sports DealNotifier!</h1>
@@ -10,18 +23,23 @@
     <table style="width:100%">
       <% defaulted_promotions(params[:user]).each do |league, teams| %>
         <tr>
+          <th>League</th>
+          <th>Team</th>
+          <th>Promotion Name</th>
+        </tr>
+        <tr>
           <td>
-            <b><%= league %></b>
+            <b><%= league.upcase %></b>
           </td>
           <% teams.each do |team, promotions| %>
             <td>
-              <%= team %>
+              <%= team.upcase %>
             </td>
             <td>
             <table>
               <% promotions.each do |promotion| %>
                 <tr>
-                  <td><%= promotion %></td>
+                  <div class=promotion><%= promotion %></div>
                 </tr>
               <% end %>
             </table>

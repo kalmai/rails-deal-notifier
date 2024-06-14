@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Sports DealNotifier Time-Sensitive Notification</h1>
+    <p>The following time sensitive promotion requires action in order to redeem it:</p>
+    <table style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Source</th>
+      </tr>
+      <tr>
+        <td><%= params[:promotion].name %></td>
+        <td><%= params[:promotion].promo_type %></td>
+        <td><%= params[:promotion].source_url %></td>
+      </tr>
+    </table>
+  </body>
+</html>
