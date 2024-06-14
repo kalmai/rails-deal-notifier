@@ -3,7 +3,7 @@ notifiy users of local sports team deals.
 MVP: notify me of a free carwash from CBJ OR columbus crew meeting conditions.
 
 #### Ruby version
-ruby 3.3.1
+ruby 3.3.3
 
 #### System dependencies
 - git
