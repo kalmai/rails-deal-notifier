@@ -21,6 +21,24 @@ class BaseClient
       send(method, args)
     end
 
+    def timezone_cache
+      # check existing cache
+      #   if not there calculate it from the schedule_cache per supported TZ
+      #     store the key as the utc time and the values as hsh[tz] = timestamp in tz
+      #   if there, return the existing cache
+      # expire it 24 hours
+      results = Rails.cache.read('tz_cache')
+      return results unless results.nil?
+
+      calculate_timezone_cache
+    end
+
+    def calculate_timezone_cache
+      utc_start_times = League.all.each { "#{_1.short_name.capitalize}_today" }.map do |cache_name|
+        Rails.cache.read(cache_name)&.map(&:utc_start_time)
+      end
+    end
+
     private
 
     def ignore_invokation?(method, args)

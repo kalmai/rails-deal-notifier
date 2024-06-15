@@ -61,14 +61,18 @@ module Mls
       def aggregate_match_data
         data = schedule_and_results
         # https://sportapi.mlssoccer.com/api/matches/<optaId>? which is available in data
-        _opta_ids = data.map do |datum|
+        #
+        # below api request yields the goals and the time they're scored
+        # https://stats-api.mlssoccer.com/v1/goals?&match_game_id=<optaId>&order_by=goal_minute
+        #
+        # a half is 45 mins, the api tells us what half it is but we can use the minute
+        # also nicely orders in early to later
+        opta_ids = data.map do |datum|
           date = Time.parse(datum['matchDate'])
           datum['optaId'] if date > Time.zone.now.yesterday && date < Time.zone.now
         end.compact
-        # aggregated_data = aggregate_match_data(opta_ids) this is what we actually wanna use
-        test_opt_ids = [2_415_025, 2_415_026, 2_415_027, 2_415_028, 2_415_029, 2_415_030, 2_415_031, 2_415_165]
-        # opta_ids.map do |opta_id|
-        test_opt_ids.map do |opta_id|
+
+        opta_ids.map do |opta_id|
           raw_response = RestClient.get("#{BASE_URL}/matches/#{opta_id}")
           JSON.parse(raw_response)
         end
