@@ -3,7 +3,8 @@
 class NotifyActionablePromotionJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
-    # Do something later
+  def perform
+    Promotion.all.each do |promotion|
+    end
   end
 end

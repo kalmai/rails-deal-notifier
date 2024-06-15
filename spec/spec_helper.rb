@@ -6,6 +6,7 @@ WebMock.disable_net_connect!
 
 require 'simplecov'
 require 'simplecov-cobertura'
+
 SimpleCov.start 'rails'
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
