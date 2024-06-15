@@ -34,9 +34,11 @@ class BaseClient
     end
 
     def calculate_timezone_cache
-      utc_start_times = League.all.each { "#{_1.short_name.capitalize}_today" }.map do |cache_name|
-        Rails.cache.read(cache_name)&.map(&:utc_start_time)
-      end
+      utc_start_times = League.all.map { _1.short_name.capitalize }.map do |league|
+        existing_schedule_data = Rails.cache.read("#{league}_today")&.map(&:utc_start_time)
+        existing_schedule_data.nil? ? "#{league}::Client".constantize.schedule_cache : existing_schedule_data
+      end.flatten!.uniq!
+      binding.pry
     end
 
     private
