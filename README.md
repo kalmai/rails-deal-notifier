@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/kalmai/rails-deal-notifier/graph/badge.svg?token=G2RM4TUOTG)](https://codecov.io/gh/kalmai/rails-deal-notifier)
 ### Sports Deal Notifier
 notifiy users of local sports team deals.
 MVP: notify me of a free carwash from CBJ OR columbus crew meeting conditions.

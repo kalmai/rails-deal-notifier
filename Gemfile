@@ -69,6 +69,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 6.0'
+  gem 'simplecov', require: false
   gem 'timecop'
   gem 'webmock'
 end
