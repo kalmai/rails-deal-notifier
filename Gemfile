@@ -23,6 +23,7 @@ gem 'rspec'
 gem 'rspec-rails'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
+gem 'simplecov-cobertura'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'

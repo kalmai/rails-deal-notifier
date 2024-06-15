@@ -33,4 +33,25 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '#detail_for' do
+    subject(:details_for_user) { user.contact_methods.detail_for(type: contact_method_type) }
+
+    let(:user) { create(:user, :with_contact_methods) }
+    let(:contact_method_type) { :email }
+
+    it { is_expected.to eq user.contact_methods.first.contact_detail }
+
+    context 'when a user does not have any contact_methods' do
+      let(:user) { create(:user) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'when looking up by a contact_method that does not exist' do
+      let(:contact_method_type) { :unsupported_contact_type }
+
+      it { is_expected.to be_nil }
+    end
+  end
 end
