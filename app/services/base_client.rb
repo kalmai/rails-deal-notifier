@@ -38,7 +38,6 @@ class BaseClient
         existing_schedule_data = Rails.cache.read("#{league}_today")&.map(&:utc_start_time)
         existing_schedule_data.nil? ? "#{league}::Client".constantize.schedule_cache : existing_schedule_data
       end.flatten!.uniq!
-      binding.pry
     end
 
     private
@@ -80,6 +79,7 @@ class BaseClient
     def playing?(args)
       # return true # TODO: remove this line
       today_teams = schedule_cache.map { _1.team_abbrev if _1.utc_start_time.today? }.compact
+      t = schedule_cache.last.utc_start_time[Time.now.in_time_zone(User.last.timezone).formatted_offset
       args[:short_name].in?(today_teams)
     end
 
