@@ -20,15 +20,6 @@ class Promotion < ApplicationRecord
     api_methods.all? { |method| client.call(method, client_params) }
   end
 
-  def utc_notification_time
-    return unless timing_methods.present? && client.call('playing?', client_params)
-
-    client.call('playing_at', client_params)
-    # utc_start_time - client_params[:minutes_before].to_i.minutes
-  end
-
-  private
-
   def client_params
     { short_name: team.short_name }.merge!(api_parameters, timing_parameters).with_indifferent_access
   end

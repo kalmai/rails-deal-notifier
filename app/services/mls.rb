@@ -104,33 +104,20 @@ module Mls
       end
 
       def games_for_today
-        # results = Rails.cache.read("#{module_parent}_today")
-        # return results if results.present?
+        results = Rails.cache.read("#{module_parent}_today")
+        return results if results.present?
 
         league_schedule_today
       end
 
       def build_today_games(data)
         data.each_with_object([]) do |game, arr|
-          time = tz_start_times(Time.parse(game['matchDate']))
+          time = Time.parse(game['matchDate'])
           arr << BaseClient::TodayGame.new(away?: false, team_abbrev: game.dig('home', 'abbreviation').downcase,
                                            utc_start_time: time)
           arr << BaseClient::TodayGame.new(away?: true, team_abbrev: game.dig('away', 'abbreviation').downcase,
                                            utc_start_time: time)
         end
-      end
-
-      def tz_start_times(utc_start_time)
-        offsets = %w[-09:00 -10:00 -08:00 -07:00 -06:00 -05:00 -04:00 -03:00 -02:30]
-        # take input time and parse it into each supported TZ
-        # (-12..-4).to_a.each do |offsets|
-
-        offsets.index_with { utc_start_time.getlocal(_1) }
-        # time_zones = %i[us ca].map { ActiveSupport::TimeZone.country_zones(_1) }.flatten!
-        # a = time_zones.each.with_object(Hash.new({})) do |zone, hsh|
-        #   hsh[utc_start_time] = hsh[utc_start_time].merge!({ zone.name => utc_start_time.in_time_zone(zone) })
-        # end
-        # binding.pry
       end
     end
   end
