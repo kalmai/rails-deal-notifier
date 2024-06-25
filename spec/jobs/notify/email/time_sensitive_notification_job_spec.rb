@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
   let!(:promotion) { create(:promotion, :cbj_moo_moo_carwash) }
-  let(:user) { create(:user, :with_contact_methods, region: 'ohio') }
-  let(:utc_start_time) { 1.hour.from_now }
+  let(:user) { create(:user, :with_contact_methods, region: 'ohio', timezone:) }
+  let(:timezone) { 'America/New_York' }
+  let(:freeze_time) { Time.at(0) }
+  let(:utc_start_time) { freeze_time.in(1.hour) }
   let(:schedule_cache) do
     [
       BaseClient::TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
@@ -19,7 +21,7 @@ RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
 
   describe '#perform' do
     it 'enqueues the email' do
-      Timecop.freeze do
+      Timecop.freeze(freeze_time) do
         expect { described_class.new.perform }.to have_enqueued_mail(TimeSensitiveMailer, :notify)
           .with(params: { user:, promotion: }, args: [])
           .on_queue(:default).at(1.hour.from_now).exactly(:once)

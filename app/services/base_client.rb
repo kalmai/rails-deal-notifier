@@ -20,12 +20,11 @@ class BaseClient
     private
 
     def playing_today_at(args)
-      schedule_cache.map do |game|
-        next unless game.team_abbrev == args[:short_name]
-        next unless game.utc_start_time.in_time_zone(args[:timezone]).today?
-
-        game
-      end&.compact&.first&.utc_start_time
+      Time.use_zone(args[:timezone]) do
+        schedule_cache.find do |game|
+          game.team_abbrev == args[:short_name] && game.utc_start_time.in_time_zone(args[:timezone]).today?
+        end&.utc_start_time || false
+      end
     end
 
     def won?(args)

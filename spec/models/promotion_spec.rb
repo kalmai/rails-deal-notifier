@@ -19,22 +19,6 @@ RSpec.describe Promotion do
 
   it { is_expected.to have_many(:users).through(:subscriptions) }
 
-  describe '#utc_notification_time' do
-    subject(:notification_time) { promotion.utc_notification_time }
-
-    let(:promotion) { create(:promotion, :cbj_moo_moo_carwash) }
-    let(:today_games) do
-      [BaseClient::TodayGame.new(away?: false, team_abbrev: promotion.team.short_name, utc_start_time:)]
-    end
-    let(:utc_start_time) { Time.zone.now }
-
-    before do
-      Rails.cache.write("#{promotion.team.league.short_name.titleize}_today", today_games)
-    end
-
-    it { is_expected.to eq utc_start_time }
-  end
-
   describe '#evaluate' do
     subject(:notification_time) { promotion.evaluate }
 

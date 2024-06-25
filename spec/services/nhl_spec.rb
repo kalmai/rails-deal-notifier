@@ -87,7 +87,7 @@ RSpec.describe Nhl::Client do
     end
 
     describe '#playing_at' do
-      let(:method) { 'playing_at' }
+      let(:method) { 'playing_today_at' }
 
       it { is_expected.to eq utc_start_time }
 
