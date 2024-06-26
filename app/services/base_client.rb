@@ -3,7 +3,12 @@
 require 'rest-client'
 
 class BaseClient
-  GameResult = Struct.new(:won?, :goals, :away?, :opponent, keyword_init: true)
+  GameResult = Struct.new(:won?, :goals, :away?, :opponent, :utc_start_time, keyword_init: true) do
+    def initialize(*)
+      super
+      self.utc_start_time = utc_start_time
+    end
+  end
   Goal = Struct.new(:period, :time, keyword_init: true)
   TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true)
 
@@ -48,7 +53,9 @@ class BaseClient
     end
 
     def played?(args)
-      args[:short_name].in?(results_cache.keys)
+      Time.use_zone(args[:timezone]) do
+        results_cache[args[:short_name]]&.utc_start_time&.in_time_zone(args[:timezone])&.yesterday?
+      end
     end
 
     def scored_first_goal?(defender, attacker)

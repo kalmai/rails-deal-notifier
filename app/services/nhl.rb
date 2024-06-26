@@ -25,10 +25,16 @@ module Nhl
       end
 
       def league_results
-        raw_response = RestClient.get("#{BASE_URL}/v1/score/#{Time.now.yesterday.strftime('%Y-%m-%d')}")
-        result_hash = build_result_hash(JSON.parse(raw_response)['games'])
+        result_hash = build_result_hash(results_from_two_days)
         Rails.cache.write("#{module_parent}_yesterday", result_hash, expires_at: Time.now.end_of_day + 3.hours)
         result_hash
+      end
+
+      def results_from_two_days
+        [2, 1].map do |days_ago|
+          raw_response = RestClient.get("#{BASE_URL}/v1/score/#{days_ago.days.ago.strftime('%Y-%m-%d')}")
+          JSON.parse(raw_response)['games']
+        end.flatten!
       end
 
       def build_result_hash(data)
@@ -37,17 +43,18 @@ module Nhl
           away_abbrev = datum.dig('awayTeam', 'abbrev')
           team_goals = build_goals(datum['goals'])
           home_win = home_victory?(datum)
+          start_time = Time.parse(datum['startTimeUTC'])
 
-          result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, home_win))
+          result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, home_win, start_time))
         end
       end
 
-      def build_goal_results(home_team, away_team, team_goals, home_win)
+      def build_goal_results(home_team, away_team, team_goals, home_win, utc_start_time)
         {
           home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: home_win,
-                                                  opponent: away_team),
+                                                  opponent: away_team, utc_start_time:),
           away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: !home_win,
-                                                  opponent: home_team)
+                                                  opponent: home_team, utc_start_time:)
         }.transform_keys(&:downcase)
       end
 
