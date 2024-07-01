@@ -21,8 +21,8 @@ module Mls
       # the below request returns all the teams in MLS, should be useful when creating teams via seeding?
       # raw_response = RestClient.get("#{BASE_URL}/standings/live?isLive=true&seasonId=2024&competitionId=98")
       def results_for_yesterday
-        # results = Rails.cache.read("#{module_parent}_yesterday")
-        # return results if results.present?
+        results = Rails.cache.read("#{module_parent}_yesterday")
+        return results if results.present?
 
         league_results
       end
@@ -69,15 +69,27 @@ module Mls
         # also nicely orders in early to later
         opta_ids = data.map do |datum|
           datum['optaId'] if Time.parse(datum['matchDate']).between?(2.days.ago, Time.current)
-          # date > Time.zone.now.yesterday && date < Time.zone.now
         end.compact
 
         opta_ids.map do |opta_id|
-          game_results = RestClient.get("#{BASE_URL}/matches/#{opta_id}")
-          goal_results = RestClient.get("https://stats-api.mlssoccer.com/v1/goals?&match_game_id=#{opta_id}&order_by=goal_minute&include=club")
-          # TODO merge the above results into each other and add goal data.
-          # JSON.parse(raw_response)
+          raw_response = RestClient.get("#{BASE_URL}/matches/#{opta_id}")
+          JSON.parse(raw_response).merge!(all_goals: goals_for(game_id: opta_id))
         end
+      end
+
+      def goals_for(game_id:)
+        get_goal_data(game_id).each_with_object(Hash.new { |h, k| h[k] = [] }) do |goal_data, hsh|
+          team_abbr = goal_data.dig('club', 'abbreviation')
+          goal = BaseClient::Goal.new(
+            period: goal_data['period'] == 'FirstHalf' ? 1 : 2, time: Time.at(goal_data['timestamp'] / 1000).utc
+          )
+          hsh[team_abbr] = hsh[team_abbr].push(goal)
+        end
+      end
+
+      def get_goal_data(game_id)
+        raw_response = RestClient.get("https://stats-api.mlssoccer.com/v1/goals?&match_game_id=#{game_id}&order_by=goal_minute&include=club")
+        JSON.parse(raw_response)
       end
 
       def schedule_and_results
