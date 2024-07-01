@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
   let!(:promotion) { create(:promotion, :cbj_moo_moo_carwash) }
   let(:user) { create(:user, :with_contact_methods, region: 'ohio', timezone:) }
+  let(:client) { Nhl::Client.new(args: { timezone:, short_name: promotion.team.short_name }) }
   let(:timezone) { 'America/New_York' }
   let(:freeze_time) { Time.at(0) }
   let(:utc_start_time) { freeze_time.in(1.hour) }
@@ -16,7 +17,8 @@ RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
   end
 
   before do
-    allow(Nhl::Client).to receive(:schedule_cache).and_return(schedule_cache)
+    allow(Nhl::Client).to receive(:new).and_return(client)
+    allow(client).to receive(:schedule_cache).and_return(schedule_cache)
   end
 
   describe '#perform' do

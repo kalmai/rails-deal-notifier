@@ -3,16 +3,24 @@
 require 'rails_helper'
 
 RSpec.describe Nhl::Client do
-  subject(:evaluation) { described_class.call(method, params) }
+  subject(:evaluation) { client.call(method) }
 
+  let(:client) { described_class.new(args: params) }
   let(:method) { :won? }
   let(:params) { base_params.merge(additional_params) }
-  let(:base_params) { { short_name: 'cbj' } }
+  let(:base_params) { { timezone: 'America/New_York', short_name: 'cbj' } }
   let(:additional_params) { {} }
+  let(:yesterday_start) { Time.current.yesterday }
   let(:results_cache) do
     {
-      'cbj' => BaseClient::GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
-      'ott' => BaseClient::GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
+      'cbj' => BaseClient::GameResult.new(
+        won?: true, goals: cbj_goals, away?: false, opponent: 'OTT',
+        utc_start_time: yesterday_start
+      ),
+      'ott' => BaseClient::GameResult.new(
+        won?: false, goals: ott_goals, away?: true, opponent: 'CBJ',
+        utc_start_time: yesterday_start
+      )
     }
   end
   let(:won) { true }
@@ -29,7 +37,7 @@ RSpec.describe Nhl::Client do
   end
 
   before do
-    allow(described_class).to receive_messages(results_cache:, schedule_cache:)
+    allow(client).to receive_messages(results_cache:, schedule_cache:)
   end
 
   describe '#call' do
@@ -86,7 +94,7 @@ RSpec.describe Nhl::Client do
       end
     end
 
-    describe '#playing_at' do
+    describe '#playing_today_at' do
       let(:method) { 'playing_today_at' }
 
       it { is_expected.to eq utc_start_time }
@@ -94,7 +102,7 @@ RSpec.describe Nhl::Client do
       context 'when team is not playing today' do
         let(:base_params) { { short_name: 'ott' } }
 
-        it { is_expected.to be false }
+        it { is_expected.to be_nil }
       end
     end
   end

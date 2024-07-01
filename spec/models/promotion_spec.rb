@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Promotion do
   let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
   let(:cache) { Rails.cache }
+  let(:utc_start_time) { 5.hours.ago }
 
   before do
     allow(Rails).to receive(:cache).and_return(memory_store)
@@ -20,12 +21,17 @@ RSpec.describe Promotion do
   it { is_expected.to have_many(:users).through(:subscriptions) }
 
   describe '#evaluate' do
-    subject(:notification_time) { promotion.evaluate }
+    subject(:notification_time) { promotion.evaluate(timezone: 'America/New_York') }
 
     let(:promotion) { create(:promotion, :cbj_moo_moo_carwash, api_methods:) }
     let(:api_methods) { ['scored_in?'] }
+    let(:utc_start_time) { 5.hours.ago }
     let(:yesterday_games) do
-      { 'cbj' => BaseClient::GameResult.new(won?: won, goals: cbj_goals, away?: false, opponent: 'OTT') }
+      {
+        'cbj' => BaseClient::GameResult.new(
+          won?: won, goals: cbj_goals, away?: false, opponent: 'OTT', utc_start_time:
+        )
+      }
     end
     let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
     let(:won) { false }
@@ -76,8 +82,12 @@ RSpec.describe Promotion do
       let(:api_methods) { ['first_goal?'] }
       let(:yesterday_games) do
         {
-          'cbj' => BaseClient::GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
-          'ott' => BaseClient::GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
+          'cbj' => BaseClient::GameResult.new(
+            won?: true, goals: cbj_goals, away?: false, opponent: 'OTT', utc_start_time:
+          ),
+          'ott' => BaseClient::GameResult.new(
+            won?: false, goals: ott_goals, away?: true, opponent: 'CBJ', utc_start_time:
+          )
         }
       end
       let(:cbj_goals) do
