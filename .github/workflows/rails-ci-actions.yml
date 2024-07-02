@@ -12,6 +12,7 @@ on:
     branches: [ "main" ]
 jobs:
   test:
+    needs: lint
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -44,7 +45,6 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/index.html
 
   lint:
     runs-on: ubuntu-latest

@@ -16,24 +16,18 @@ class Promotion < ApplicationRecord
   has_many :subscriptions
   has_many :users, through: :subscriptions
 
-  def evaluate
-    api_methods.all? { |method| client.call(method, client_params) }
-  end
-
-  def utc_notification_time
-    return unless timing_methods.present? && client.call('playing?', client_params)
-
-    client.call('playing_at', client_params)
-    # utc_start_time - client_params[:minutes_before].to_i.minutes
+  def evaluate(timezone:, single_method: nil)
+    eval_client = client(timezone)
+    single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
   end
 
   private
 
-  def client_params
-    { short_name: team.short_name }.merge!(api_parameters, timing_parameters).with_indifferent_access
+  def client_params(timezone)
+    { short_name: team.short_name, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
   end
 
-  def client
-    "#{team.league.short_name.titleize}::Client".constantize
+  def client(timezone)
+    "#{team.league.short_name.titleize}::Client".constantize.new(args: client_params(timezone))
   end
 end

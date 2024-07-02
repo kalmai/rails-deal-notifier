@@ -3,33 +3,48 @@
 require 'rails_helper'
 
 RSpec.describe Nhl::Client do
-  subject(:evaluation) { described_class.call(method, params) }
+  subject(:evaluation) { client.call(method) }
 
+  let(:client) { described_class.new(args: params) }
   let(:method) { :won? }
   let(:params) { base_params.merge(additional_params) }
-  let(:base_params) { { short_name: 'cbj' } }
+  let(:base_params) { { timezone:, short_name: 'cbj' } }
+  let(:timezone) { 'America/New_York' }
   let(:additional_params) { {} }
-  let(:results_cache) do
-    {
-      'cbj' => BaseClient::GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
-      'ott' => BaseClient::GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
-    }
-  end
+  let(:yesterday_start) { Time.current.yesterday }
   let(:won) { true }
   let(:away) { false }
   let(:opponent) { 'OTT' }
   let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
   let(:ott_goals) { [BaseClient::Goal.new(period: 3, time: '07:25')] }
-  let(:utc_start_time) { Time.now.utc.end_of_day - 3.hours }
+  let(:utc_start_time) { Time.use_zone(timezone) { Time.current.end_of_day }.utc }
+  let(:freeze_time) { Time.use_zone(timezone) { Time.current.change(hour: 18) }.utc }
   let(:schedule_cache) do
     [
       BaseClient::TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
       BaseClient::TodayGame.new(away?: false, team_abbrev: 'arz', utc_start_time:)
     ]
   end
+  let(:results_cache) do
+    {
+      'cbj' => BaseClient::GameResult.new(
+        won?: true, goals: cbj_goals, away?: false, opponent: 'OTT',
+        utc_start_time: yesterday_start
+      ),
+      'ott' => BaseClient::GameResult.new(
+        won?: false, goals: ott_goals, away?: true, opponent: 'CBJ',
+        utc_start_time: yesterday_start
+      )
+    }
+  end
 
   before do
-    allow(described_class).to receive_messages(results_cache:, schedule_cache:)
+    Timecop.freeze(freeze_time)
+    allow(client).to receive_messages(results_cache:, schedule_cache:)
+  end
+
+  after do
+    Timecop.return
   end
 
   describe '#call' do
@@ -86,15 +101,15 @@ RSpec.describe Nhl::Client do
       end
     end
 
-    describe '#playing_at' do
-      let(:method) { 'playing_at' }
+    describe '#playing_today_at' do
+      let(:method) { 'playing_today_at' }
 
       it { is_expected.to eq utc_start_time }
 
       context 'when team is not playing today' do
         let(:base_params) { { short_name: 'ott' } }
 
-        it { is_expected.to be false }
+        it { is_expected.to be_nil }
       end
     end
   end

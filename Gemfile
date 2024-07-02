@@ -15,6 +15,7 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
 gem 'pry'
+gem 'pry-rails'
 gem 'puma', '>= 5.0'
 gem 'rails', '7.1.3.4' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
@@ -23,6 +24,7 @@ gem 'rspec'
 gem 'rspec-rails'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
+gem 'simplecov-cobertura'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'
@@ -53,7 +55,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'pry-rails'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 

@@ -5,12 +5,17 @@ require 'rails_helper'
 RSpec.describe Promotion do
   let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
   let(:cache) { Rails.cache }
+  let(:utc_start_time) { Time.current.yesterday }
+  let(:freeze_time) { Time.use_zone(timezone) { Time.current.change(hour: 18) }.utc }
+  let(:timezone) { 'America/New_York' }
 
   before do
+    Timecop.freeze(freeze_time)
     allow(Rails).to receive(:cache).and_return(memory_store)
   end
 
   after do
+    Timecop.return
     Rails.cache.clear
   end
 
@@ -19,29 +24,17 @@ RSpec.describe Promotion do
 
   it { is_expected.to have_many(:users).through(:subscriptions) }
 
-  describe '#utc_notification_time' do
-    subject(:notification_time) { promotion.utc_notification_time }
-
-    let(:promotion) { create(:promotion, :cbj_moo_moo_carwash) }
-    let(:today_games) do
-      [BaseClient::TodayGame.new(away?: false, team_abbrev: promotion.team.short_name, utc_start_time:)]
-    end
-    let(:utc_start_time) { Time.zone.now }
-
-    before do
-      Rails.cache.write("#{promotion.team.league.short_name.titleize}_today", today_games)
-    end
-
-    it { is_expected.to eq utc_start_time }
-  end
-
   describe '#evaluate' do
-    subject(:notification_time) { promotion.evaluate }
+    subject(:evaluation) { promotion.evaluate(timezone:) }
 
     let(:promotion) { create(:promotion, :cbj_moo_moo_carwash, api_methods:) }
     let(:api_methods) { ['scored_in?'] }
     let(:yesterday_games) do
-      { 'cbj' => BaseClient::GameResult.new(won?: won, goals: cbj_goals, away?: false, opponent: 'OTT') }
+      {
+        'cbj' => BaseClient::GameResult.new(
+          won?: won, goals: cbj_goals, away?: false, opponent: 'OTT', utc_start_time:
+        )
+      }
     end
     let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
     let(:won) { false }
@@ -92,8 +85,12 @@ RSpec.describe Promotion do
       let(:api_methods) { ['first_goal?'] }
       let(:yesterday_games) do
         {
-          'cbj' => BaseClient::GameResult.new(won?: true, goals: cbj_goals, away?: false, opponent: 'OTT'),
-          'ott' => BaseClient::GameResult.new(won?: false, goals: ott_goals, away?: true, opponent: 'CBJ')
+          'cbj' => BaseClient::GameResult.new(
+            won?: true, goals: cbj_goals, away?: false, opponent: 'OTT', utc_start_time:
+          ),
+          'ott' => BaseClient::GameResult.new(
+            won?: false, goals: ott_goals, away?: true, opponent: 'CBJ', utc_start_time:
+          )
         }
       end
       let(:cbj_goals) do
