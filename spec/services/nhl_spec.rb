@@ -8,9 +8,23 @@ RSpec.describe Nhl::Client do
   let(:client) { described_class.new(args: params) }
   let(:method) { :won? }
   let(:params) { base_params.merge(additional_params) }
-  let(:base_params) { { timezone: 'America/New_York', short_name: 'cbj' } }
+  let(:base_params) { { timezone:, short_name: 'cbj' } }
+  let(:timezone) { 'America/New_York' }
   let(:additional_params) { {} }
   let(:yesterday_start) { Time.current.yesterday }
+  let(:won) { true }
+  let(:away) { false }
+  let(:opponent) { 'OTT' }
+  let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
+  let(:ott_goals) { [BaseClient::Goal.new(period: 3, time: '07:25')] }
+  let(:utc_start_time) { Time.use_zone(timezone) { Time.current.end_of_day }.utc }
+  let(:freeze_time) { Time.use_zone(timezone) { Time.current.change(hour: 18) }.utc }
+  let(:schedule_cache) do
+    [
+      BaseClient::TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
+      BaseClient::TodayGame.new(away?: false, team_abbrev: 'arz', utc_start_time:)
+    ]
+  end
   let(:results_cache) do
     {
       'cbj' => BaseClient::GameResult.new(
@@ -23,21 +37,14 @@ RSpec.describe Nhl::Client do
       )
     }
   end
-  let(:won) { true }
-  let(:away) { false }
-  let(:opponent) { 'OTT' }
-  let(:cbj_goals) { [BaseClient::Goal.new(period: 1, time: '00:15'), BaseClient::Goal.new(period: 3, time: '05:21')] }
-  let(:ott_goals) { [BaseClient::Goal.new(period: 3, time: '07:25')] }
-  let(:utc_start_time) { Time.now.utc.end_of_day - 3.hours }
-  let(:schedule_cache) do
-    [
-      BaseClient::TodayGame.new(away?: true, team_abbrev: 'cbj', utc_start_time:),
-      BaseClient::TodayGame.new(away?: false, team_abbrev: 'arz', utc_start_time:)
-    ]
-  end
 
   before do
+    Timecop.freeze(freeze_time)
     allow(client).to receive_messages(results_cache:, schedule_cache:)
+  end
+
+  after do
+    Timecop.return
   end
 
   describe '#call' do

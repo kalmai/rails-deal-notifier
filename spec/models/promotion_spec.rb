@@ -5,13 +5,17 @@ require 'rails_helper'
 RSpec.describe Promotion do
   let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
   let(:cache) { Rails.cache }
-  let(:utc_start_time) { 5.hours.ago }
+  let(:utc_start_time) { Time.current.yesterday }
+  let(:freeze_time) { Time.use_zone(timezone) { Time.current.change(hour: 18) }.utc }
+  let(:timezone) { 'America/New_York' }
 
   before do
+    Timecop.freeze(freeze_time)
     allow(Rails).to receive(:cache).and_return(memory_store)
   end
 
   after do
+    Timecop.return
     Rails.cache.clear
   end
 
@@ -21,11 +25,10 @@ RSpec.describe Promotion do
   it { is_expected.to have_many(:users).through(:subscriptions) }
 
   describe '#evaluate' do
-    subject(:notification_time) { promotion.evaluate(timezone: 'America/New_York') }
+    subject(:evaluation) { promotion.evaluate(timezone:) }
 
     let(:promotion) { create(:promotion, :cbj_moo_moo_carwash, api_methods:) }
     let(:api_methods) { ['scored_in?'] }
-    let(:utc_start_time) { 5.hours.ago }
     let(:yesterday_games) do
       {
         'cbj' => BaseClient::GameResult.new(
