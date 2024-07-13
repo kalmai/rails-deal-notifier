@@ -5,7 +5,7 @@ class User < ApplicationRecord
 
   has_many :contact_methods, dependent: :destroy do
     def detail_for(type:)
-      find_by(contact_type: type).contact_detail
+      find_by(contact_type: type)&.contact_detail
     end
   end
   has_many :subscriptions, dependent: :destroy

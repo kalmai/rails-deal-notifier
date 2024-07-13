@@ -16,3 +16,53 @@ League.create!(full_name: 'national hockey league', short_name: 'nhl', start_mon
 # League.create!(full_name: 'national basketball association', short_name: 'nba', start_month: 9, end_month: '5+') # October to April
 League.create!(full_name: 'major league soccer', short_name: 'mls', start_month: 2, end_month: '11') # late March/early April to late September/early October
 # League.create!(full_name: 'canadian football league', short_name: 'cfl', start_month: 5, end_month: '11') # June 6 – October 26, 2024
+
+Wikipedia.seed_teams
+
+### Ohio Soccer Team Start
+Promotion.create!(
+  company: 'Moo Moo Express Car Wash',
+  name: 'Moo Moo Express Clean Sheets = Clean Car',
+  promo_type: 'free_gifts',
+  promo_code: nil,
+  source_url: 'https://www.columbuscrew.com/supporters/promotions',
+  redemption_limiter: 'monthly',
+  redemption_count: 0,
+  hours_valid: 48,
+  timing_methods: ['playing_at'],
+  timing_parameters: { minutes_before: 60 },
+  api_methods: %w[home? perfect_defence?],
+  api_parameters: {},
+  team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
+)
+Promotion.create!(
+  company: 'Donatos',
+  name: 'Donatos - Victory Pizza',
+  promo_type: 'order_discounts',
+  promo_code: 'CREW',
+  source_url: 'https://www.columbuscrew.com/supporters/promotions',
+  redemption_limiter: 0,
+  redemption_count: 0,
+  hours_valid: 24,
+  timing_methods: [],
+  timing_parameters: {},
+  api_methods: ['won?'],
+  api_parameters: {},
+  team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
+)
+Promotion.create!(
+  company: 'Tim Hortons',
+  name: 'Tim Hortons - Free Coffee',
+  promo_type: 'free_gifts',
+  promo_code: nil,
+  source_url: 'https://www.columbuscrew.com/supporters/promotions',
+  redemption_limiter: 0,
+  redemption_count: 0,
+  hours_valid: 24,
+  timing_methods: [],
+  timing_parameters: {},
+  api_methods: %w[home? goal_count_equal_or_above?],
+  api_parameters: { goals_count: 1 },
+  team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
+)
+### Ohio Soccer Team End

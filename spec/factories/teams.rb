@@ -8,7 +8,7 @@ FactoryBot.define do
 
     full_name { Faker::Sports::Football.team.downcase }
     short_name { full_name.split.map(&:first).join }
-    region { Faker::Address.state.downcase }
+    region { Faker::Address.state_abbr.downcase }
     country { 'us' }
 
     league

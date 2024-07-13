@@ -1,0 +1,6 @@
+notify_actionable_promotions:
+  cron: 0 9 * * * # or 5 am ET
+  class: NotifyActionablePromotionJob
+time_sensitive_notifications:
+  cron: 0 9 * * * # or 5 am ET
+  class: Notify::Email::TimeSensitiveNotificationJob

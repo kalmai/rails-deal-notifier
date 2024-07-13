@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+      <style>
+        table, td, th {
+          border: 1px solid black;
+          border-collapse: collapse;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        tr:nth-child(odd), .promotion:nth-child(even) {
+          background-color: #eee;
+          border-collapse: collapse;
+        }
+      </style>
+  </head>
+  <body>
+    <h1>Actionable Promotions</h1>
+    <p>The following promotions are active!</p>
+    <table style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Hours Valid</th>
+        <th>Source*</th>
+      </tr>
+      <% params[:promotions].each do |promotion| %>
+        <tr>
+          <td>
+            <%= promotion.name %>
+          </td>
+          <td>
+            <%= promotion.company %>
+          </td>
+          <td>
+            <%= promotion.promo_type %>
+          </td>
+          <td>
+            <%= promotion.promo_code %>
+          </td>
+          <td>
+            add way to calc this: <%= promotion.hours_valid %>
+          </td>
+          <td>
+            <a href="<%= promotion.source_url %>" target="_blank">link</a>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <p>*other restrictions may apply, please confirm eligability with the provided promotion source before acting upon any of the above promotions!</p>
+  </body>
+</html>

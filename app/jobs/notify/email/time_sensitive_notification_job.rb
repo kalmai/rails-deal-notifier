@@ -7,13 +7,11 @@ module Notify
 
       def perform
         Promotion.where.not(timing_methods: nil).each do |promotion|
-          notification_time = promotion.utc_notification_time
-          next unless notification_time
-
-          users_to_be_notified = promotion.users
-          users_to_be_notified.each do |user|
-            next unless today_for_user?(notification_time, user.timezone)
-
+          promotion.users.each do |user|
+            notification_time = promotion.evaluate(
+              timezone: user.timezone,
+              single_method: :playing_today_at
+            )
             wait_until = hours_till_notification(notification_time).hours.from_now
             TimeSensitiveMailer.with(user:, promotion:).notify.deliver_later(wait_until:)
           end
@@ -22,13 +20,8 @@ module Notify
 
       private
 
-      def today_for_user?(utc_time, user_timezone)
-        time = utc_time.in_time_zone(user_timezone)
-        time.before?(Time.now.end_of_day)
-      end
-
-      def hours_till_notification(utc_time)
-        ((utc_time - Time.current) / 3600).round
+      def hours_till_notification(time)
+        ((time - Time.current) / 3600).round
       end
     end
   end

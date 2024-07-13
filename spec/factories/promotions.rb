@@ -36,5 +36,31 @@ FactoryBot.define do
       #   ]
       # end
     end
+
+    trait :with_league_team_and_users do
+      transient do
+        league_abbr { 'mls' }
+        team_abbr { 'col' }
+        user_region { 'ny' }
+        region { 'ny' }
+        user_count { 1 }
+      end
+
+      after(:create) do |promotion, evaluator|
+        league = League.find_by(short_name: evaluator.league_abbr) || create(:league, short_name: evaluator.league_abbr)
+        Team.find_by(
+          short_name: evaluator.team_abbr,
+          league: League.find_by(short_name: evaluator.league_abbr)
+        ) || create(:team, short_name: evaluator.team_abbr, region: evaluator.region, league:, promotions: [promotion])
+
+        create_list(
+          :user,
+          evaluator.user_count,
+          :with_contact_methods,
+          region: evaluator.region
+        )
+        promotion.reload
+      end
+    end
   end
 end
