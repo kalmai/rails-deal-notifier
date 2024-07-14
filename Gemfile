@@ -24,6 +24,7 @@ gem 'rspec-rails'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
 gem 'simplecov-cobertura'
+gem 'sorbet-static-and-runtime'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'
@@ -48,9 +49,11 @@ gem 'rexml', '>= 3.2.8'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
+  gem 'tapioca', require: false
 end
 
 group :development do
