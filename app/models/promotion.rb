@@ -35,8 +35,8 @@ class Promotion < ApplicationRecord
 
   sig { params(timezone: String).returns(T::Hash[String, String]) }
   def client_params(timezone)
-    { short_name: team.try(:short_name), timezone: }.merge!(api_parameters, try(:timing_parameters)).with_indifferent_access
-    # %i[timing_parameters api_parameters].map { p.try _1 }.reduce({}, :merge)
+    # { short_name: team.try(:short_name), timezone: }.merge!(api_parameters, try(:timing_parameters)).with_indifferent_access
+    %i[timing_parameters api_parameters].map { try _1 }.reduce({ short_name: team.try(:short_name), timezone: }, :merge)
   end
 
   sig { params(timezone: String).returns(T.any(Mls::Client, Nhl::Client)) }
