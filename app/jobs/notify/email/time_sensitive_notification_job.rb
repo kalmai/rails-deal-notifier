@@ -8,7 +8,7 @@ module Notify
       def perform
         Promotion.where.not(timing_methods: nil).each do |promotion|
           promotion.users.each do |user|
-            notification_time = promotion.evaluate(
+            notification_time = promotion.evaluate_single_method(
               timezone: user.timezone,
               single_method: :playing_today_at
             )

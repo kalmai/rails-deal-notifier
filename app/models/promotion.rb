@@ -26,7 +26,7 @@ class Promotion < ApplicationRecord
     T.must(api_methods).all? { |method| client(timezone).call(method) }
   end
 
-  sig { params(timezone: String, single_method: String).returns(T::Boolean) }
+  sig { params(timezone: String, single_method: T.any(Symbol, String)).returns(T.anything) }
   def evaluate_single_method(timezone:, single_method:)
     client(timezone).call(single_method)
   end
@@ -35,8 +35,9 @@ class Promotion < ApplicationRecord
 
   sig { params(timezone: String).returns(T::Hash[String, String]) }
   def client_params(timezone)
-    # { short_name: team.try(:short_name), timezone: }.merge!(api_parameters, try(:timing_parameters)).with_indifferent_access
-    %i[timing_parameters api_parameters].map { try _1 }.reduce({ short_name: team.try(:short_name), timezone: }, :merge)
+    %i[timing_parameters api_parameters].map do |attr|
+      try attr
+    end.reduce({ short_name: team.try(:short_name), timezone: }, :merge).with_indifferent_access
   end
 
   sig { params(timezone: String).returns(T.any(Mls::Client, Nhl::Client)) }
