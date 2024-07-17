@@ -1,13 +1,19 @@
 # frozen_string_literal: true
+# typed: true
 
 require 'rest-client'
+require 'sorbet-runtime'
 
 module Mls
   class Client
     include BaseClient
+    extend T::Sig
 
+    # REDIS2PSQL
+    # need to convert a lot of args and such for mls and nhl
     BASE_URL = 'https://sportapi.mlssoccer.com/api'
 
+    sig { params(args: T::Hash[String, String]).void }
     def initialize(args:) = @args = args
 
     def schedule_cache = games_for_today
@@ -49,8 +55,9 @@ module Mls
       }.transform_keys(&:downcase)
     end
 
+    sig { params(data: T::Hash[String, Integer]).returns(T::Boolean) }
     def home_victory?(data)
-      (data['homeScore'] <=> data['awayScore']) == 1
+      (data.try(:[], 'homescore') <=> data.try(:[], 'awayScore')) == 1
     end
 
     def aggregate_match_data

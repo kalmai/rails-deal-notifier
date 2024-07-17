@@ -62,3 +62,5 @@ jobs:
         run: bundle exec brakeman -q -w2
       - name: Lint Ruby files
         run: bundle exec rubocop --parallel
+      - name: Sorbet Type Check files
+        run: bundle exec srb tc

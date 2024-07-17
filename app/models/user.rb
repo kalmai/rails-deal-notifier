@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+# typed: true
+
+require 'sorbet-runtime'
 
 class User < ApplicationRecord
+  extend T::Sig
+
   validates :postal, :region, :country, :timezone, presence: true
 
-  has_many :contact_methods, dependent: :destroy do
-    def detail_for(type:)
-      find_by(contact_type: type)&.contact_detail
-    end
-  end
+  has_many :contact_methods, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :promotions, through: :subscriptions
   accepts_nested_attributes_for :contact_methods
@@ -17,7 +18,11 @@ class User < ApplicationRecord
 
   private
 
+  sig { returns(T::Boolean) }
   def populate_default_promotions
-    promotions << Team.where(region:)&.map(&:promotions)&.flatten
+    transaction { promotions << Team.where(region:).map(&:promotions).flatten }
+    true
+  rescue ActiveRecord::RecordInvalid
+    false
   end
 end

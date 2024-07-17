@@ -15,6 +15,7 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
 gem 'pry'
+gem 'pry-rails'
 gem 'puma', '>= 5.0'
 gem 'rails', '7.1.3.4' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
@@ -24,6 +25,7 @@ gem 'rspec-rails'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
 gem 'simplecov-cobertura'
+gem 'sorbet-static-and-runtime'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'
@@ -51,10 +53,10 @@ gem 'rexml', '>= 3.2.8'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri windows]
+  gem 'tapioca', require: false
 end
 
 group :development do
-  gem 'pry-rails'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
