@@ -9,7 +9,7 @@ module BaseClient
       self.utc_start_time = utc_start_time
     end
   end
-  Goal = Struct.new(:period, :time, keyword_init: true)
+  # Goal = Struct.new(:period, :time, keyword_init: true)
   TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true)
 
   # perhaps adding a bulk call would be useful?
