@@ -6,26 +6,24 @@ module Notify
       queue_as :high_priority
 
       def perform
-        Promotion.where('array_length(timing_methods, 1) is not null').each do |promotion|
-          promotion.users.each do |user|
-            time_results = time_method_results(timezone: user.timezone, promotion:)
+        Promotion.where.not(timing_parameters: {}).each do |promotion|
+          start_time = promotion.next_game&.utc_start_time
+          offset = promotion.timing_parameters['minutes_before'].to_i
+          next unless start_time.present? && promotion.evaluate_next_game
 
-            wait_until = hours_till_notification(time_results.delete('playing_today_at')).hours.from_now
-            next unless time_results.values.all?
-
-            TimeSensitiveMailer.with(user:, promotion:).notify.deliver_later(wait_until:)
-          end
+          handle_enqueing(promotion:, start_time:, offset:)
         end
       end
 
       private
 
-      def time_method_results(timezone:, promotion:)
-        promotion.timing_methods.index_with { |single_method| promotion.evaluate(timezone:, single_method:) }
-      end
+      def handle_enqueing(promotion:, start_time:, offset:)
+        promotion.users.each do |user|
+          notification_time = start_time.in_time_zone(user.timezone) - offset.minutes
+          next unless notification_time.in_time_zone(user.timezone).today?
 
-      def hours_till_notification(time)
-        ((time - Time.current) / 3600).round
+          TimeSensitiveMailer.with(user:, promotion:).notify.deliver_later(wait_until: notification_time)
+        end
       end
     end
   end

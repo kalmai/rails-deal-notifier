@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe TimeSensitiveMailer do
   subject(:mail) { described_class.with(user:, promotion:).notify.deliver_now }
 
-  let(:promotion) { create(:promotion, :with_league_team_and_users) }
+  let(:promotion) { create(:promotion, :with_users, team:) }
+  let!(:team) { create(:team, region: 'ny') }
   let(:user) { promotion.users.first }
   let(:email_address) { user.contact_methods.detail_for(type: :email) }
 

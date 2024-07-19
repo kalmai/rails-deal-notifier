@@ -36,7 +36,8 @@ RSpec.describe 'Registrations' do
   end
 
   describe '#create' do
-    let!(:promotion) { create(:promotion, :with_league_team_and_users, user_count: 0) }
+    let!(:promotion) { create(:promotion, :with_users, team:) }
+    let(:team) { create(:team, region: 'ny') }
     let(:params) do
       {
         user: {

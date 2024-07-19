@@ -27,7 +27,7 @@ mls:
 nhl:
   wiki_specific_params:
     page: National_Hockey_League
-    section: 11
+    section: 9
   sport_api:
     url: https://api-web.nhle.com/v1/standings/now
     data_path:

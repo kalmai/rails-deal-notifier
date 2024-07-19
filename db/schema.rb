@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_29_011738) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_05_033543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -23,6 +23,34 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_011738) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_contact_methods_on_user_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.datetime "utc_start_time", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "league_id", null: false
+    t.bigint "home_team_id", null: false
+    t.bigint "away_team_id", null: false
+    t.hstore "league_specifics", default: {}
+    t.boolean "has_consumed_results", default: false
+    t.string "slug", null: false
+    t.index ["away_team_id"], name: "index_games_on_away_team_id"
+    t.index ["has_consumed_results"], name: "index_games_on_has_consumed_results"
+    t.index ["home_team_id"], name: "index_games_on_home_team_id"
+    t.index ["league_id"], name: "index_games_on_league_id"
+    t.index ["slug"], name: "index_games_on_slug"
+  end
+
+  create_table "goals", force: :cascade do |t|
+    t.integer "period", null: false
+    t.datetime "utc_scored_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "game_id", null: false
+    t.bigint "team_id", null: false
+    t.index ["game_id"], name: "index_goals_on_game_id"
+    t.index ["team_id"], name: "index_goals_on_team_id"
   end
 
   create_table "leagues", force: :cascade do |t|
