@@ -8,11 +8,82 @@ module Mls
 
     BASE_URL = 'https://sportapi.mlssoccer.com/api'
 
-    def initialize(args:) = @args = args
+    def initialize(args: {}) = @args = args
 
     def schedule_cache = games_for_today
 
     def results_cache = results_for_yesterday
+    # GameResult = Struct.new(:won?, :goals, :away?, :opponent, :utc_start_time, keyword_init: true) do
+    #   def initialize(*)
+    #     super
+    #     self.utc_start_time = utc_start_time
+    #   end
+    # end
+    # Goal = Struct.new(:period, :time, keyword_init: true)
+    # TodayGame = Struct.new(:away?, :team_abbrev, :utc_start_time, keyword_init: true)
+    # attrs:
+    # GAME utc_start_time, team, opponent, goals, home_game (true, false), won (true, false)
+    # GOAL period, score_time
+
+    def store_games
+      data = week_ago_week_from_now_data
+      game_data = fetch_game_data(data)
+      build_games(game_data)
+    end
+
+    def build_games(data)
+      league_id = League.find_by(short_name: self.class.module_parent.to_s.downcase).id
+      data.each do |datum|
+        home_team = Team.find_by(short_name: datum.dig('home', 'abbreviation').downcase)
+        away_team = Team.find_by(short_name: datum.dig('away', 'abbreviation').downcase)
+        start_time = Time.parse(datum['matchDate'])
+        team_goals = datum['goals']
+        home_goals = team_goals[home_team.short_name]
+        away_goals = team_goals[away_team.short_name]
+        home_win = home_victory?(datum)
+        home_game = Game.new(
+          utc_start_time: start_time,
+          league_id:,
+          team_id: home_team.id,
+          opponent_id: away_team.id,
+          home_game: true,
+          won: home_win,
+          goals: home_goals.map { |goal| Goal.new(**goal) }
+        )
+        away_game = Game.new(
+          utc_start_time: start_time,
+          league_id:,
+          team_id: away_team.id,
+          opponent_id: home_team.id,
+          home_game: false,
+          won: !home_win,
+          goals: home_goals.map { |goal| Goal.new(**goal) }
+        )
+        home_game.save
+        away_game.save
+        binding.pry
+      end
+    end
+
+    def fetch_game_data(data)
+      opta_ids = data.map do |datum|
+        datum['optaId'] if Time.parse(datum['matchDate']).between?(2.days.ago, Time.current)
+      end.compact
+
+      opta_ids.map do |opta_id|
+        raw_response = RestClient.get("#{BASE_URL}/matches/#{opta_id}")
+        JSON.parse(raw_response).merge!('goals' => goals_for(game_id: opta_id))
+      end
+    end
+
+    def week_ago_week_from_now_data
+      last_week_str = 2.day.ago.strftime('%Y-%m-%d') # TODO: change this back to week from day after figuring out
+      next_week_str = 2.day.from_now.strftime('%Y-%m-%d')
+      raw_response = RestClient.get(
+        "#{BASE_URL}/matches?culture=en-us&dateFrom=#{last_week_str}&dateTo=#{next_week_str}"
+      )
+      data = JSON.parse(raw_response)
+    end
 
     private
 
@@ -67,10 +138,11 @@ module Mls
 
     def goals_for(game_id:)
       get_goal_data(game_id).each_with_object(Hash.new { |h, k| h[k] = [] }) do |goal_data, hsh|
-        team_abbr = goal_data.dig('club', 'abbreviation')
-        goal = BaseClient::Goal.new(
-          period: goal_data['period'] == 'FirstHalf' ? 1 : 2, time: Time.at(goal_data['timestamp'] / 1000).utc
-        )
+        team_abbr = goal_data.dig('club', 'abbreviation').downcase
+        goal = {
+          'period' => goal_data['period'] == 'FirstHalf' ? 1 : 2,
+          'utc_scored_at' => Time.at(goal_data['timestamp'] / 1000).utc
+        }
         hsh[team_abbr] = hsh[team_abbr].push(goal)
       end
     end

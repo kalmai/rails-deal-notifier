@@ -17,7 +17,6 @@ gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
 gem 'rails', '7.1.3.4' # set for bundler-audit
-gem 'redis', '>= 4.0.1'
 gem 'rest-client'
 gem 'rspec'
 gem 'rspec-rails'
