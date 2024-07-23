@@ -26,24 +26,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_050419) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.datetime "utc_start_time"
+    t.datetime "utc_start_time", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "league_id"
-    t.bigint "home_team_id"
-    t.bigint "away_team_id"
+    t.bigint "league_id", null: false
+    t.bigint "home_team_id", null: false
+    t.bigint "away_team_id", null: false
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["league_id"], name: "index_games_on_league_id"
   end
 
   create_table "goals", force: :cascade do |t|
-    t.integer "period"
-    t.datetime "utc_scored_at"
+    t.integer "period", null: false
+    t.datetime "utc_scored_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "game_id"
-    t.bigint "team_id"
+    t.bigint "game_id", null: false
+    t.bigint "team_id", null: false
     t.index ["game_id"], name: "index_goals_on_game_id"
     t.index ["team_id"], name: "index_goals_on_team_id"
   end
