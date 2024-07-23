@@ -27,25 +27,25 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_29_011738) do
 
   create_table "games", force: :cascade do |t|
     t.datetime "utc_start_time"
-    t.bigint "league_id"
-    t.bigint "team_id"
-    t.boolean "home_game"
-    t.boolean "won"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "opponent_id"
+    t.bigint "league_id"
+    t.bigint "home_team_id"
+    t.bigint "away_team_id"
+    t.index ["away_team_id"], name: "index_games_on_away_team_id"
+    t.index ["home_team_id"], name: "index_games_on_home_team_id"
     t.index ["league_id"], name: "index_games_on_league_id"
-    t.index ["opponent_id"], name: "index_games_on_opponent_id"
-    t.index ["team_id"], name: "index_games_on_team_id"
   end
 
   create_table "goals", force: :cascade do |t|
     t.integer "period"
     t.datetime "utc_scored_at"
-    t.bigint "game_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "game_id"
+    t.bigint "team_id"
     t.index ["game_id"], name: "index_goals_on_game_id"
+    t.index ["team_id"], name: "index_goals_on_team_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

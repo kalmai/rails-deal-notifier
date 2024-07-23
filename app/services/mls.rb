@@ -32,7 +32,7 @@ module Mls
     end
 
     def build_games(data)
-      league_id = League.find_by(short_name: self.class.module_parent.to_s.downcase).id
+      league = League.find_by(short_name: self.class.module_parent.to_s.downcase)
       data.each do |datum|
         home_team = Team.find_by(short_name: datum.dig('home', 'abbreviation').downcase)
         away_team = Team.find_by(short_name: datum.dig('away', 'abbreviation').downcase)
@@ -43,18 +43,18 @@ module Mls
         home_win = home_victory?(datum)
         home_game = Game.new(
           utc_start_time: start_time,
-          league_id:,
-          team_id: home_team.id,
-          opponent_id: away_team.id,
+          league:,
+          team: home_team,
+          opponent: away_team.id,
           home_game: true,
           won: home_win,
           goals: home_goals.map { |goal| Goal.new(**goal) }
         )
         away_game = Game.new(
           utc_start_time: start_time,
-          league_id:,
-          team_id: away_team.id,
-          opponent_id: home_team.id,
+          league:,
+          team: away_team,
+          opponent: home_team.id,
           home_game: false,
           won: !home_win,
           goals: home_goals.map { |goal| Goal.new(**goal) }
