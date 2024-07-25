@@ -18,6 +18,7 @@ class Promotion < ApplicationRecord
 
   def evaluate(timezone:, single_method: nil)
     eval_client = client(timezone)
+    binding.pry
     single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
   end
 

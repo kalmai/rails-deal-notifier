@@ -9,10 +9,22 @@ class Game < ApplicationRecord
 
   has_many :goals, -> { order('utc_scored_at') }
 
-  def scored_in?
-    return false unless played? && results_cache[@args[:short_name]].try(:goals).present?
+  def teams
+    @teams ||= [away_team, home_team]
+  end
 
-    results_cache[@args[:short_name]].goals&.any? { _1.period == @args[:period].to_i }
+  def team(short_name:)
+    teams.find { |t| t.short_name.eql?(short_name) }
+  end
+
+  def played?(timezone:)
+    @played ||= Time.use_zone(timezone) { utc_start_time.in_time_zone(timezone)&.yesterday? } || false
+  end
+
+  def scored_in?(timezone:, period:)
+    return false unless played?(timezone:) && goals.present?
+
+    goals.any? { _1.period == period.to_i }
   end
 
   def first_goal?
@@ -23,10 +35,6 @@ class Game < ApplicationRecord
     return false if defender.goals.empty?
 
     scored_first_goal?(defender, opponent)
-  end
-
-  def played?(timezone:)
-    Time.use_zone(timezone) { utc_start_time.in_time_zone(timezone)&.yesterday? } || false
   end
 
   def scored_first_goal?(defender, attacker)
