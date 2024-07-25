@@ -14,11 +14,20 @@ module BaseClient
 
   # perhaps adding a bulk call would be useful?
   # example output would be like: { won?: true, playing?: false } ({method: (method.eval)})
-  def call(method) = send(method)
+  def call(method)
+    call_on_model(method)
+    # send(method)
+  end
 
   def results_cache = raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
 
   def schedule_cache = raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+
+  def call_on_model(method)
+    method_query = "#{method.to_s.gsub('?', '')}_query"
+    send(method_query)
+    binding.pry
+  end
 
   private
 
@@ -44,6 +53,10 @@ module BaseClient
     return false if defender.goals.empty?
 
     scored_first_goal?(defender, opponent)
+  end
+
+  def played_query
+    [create(:game)]
   end
 
   def played?
