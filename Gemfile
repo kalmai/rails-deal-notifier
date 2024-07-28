@@ -43,7 +43,8 @@ gem 'bootsnap', require: false
 gem 'nokogiri', '>= 1.16.5'
 gem 'rack', '~> 2.2.8'
 gem 'rdoc', '>= 6.6.3.1'
-gem 'rexml', '>= 3.2.8'
+gem 'rexml', '>= 3.3.2'
+# Security pinning
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

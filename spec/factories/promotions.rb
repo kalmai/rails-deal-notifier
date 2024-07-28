@@ -17,26 +17,6 @@ FactoryBot.define do
 
     team
 
-    trait :cbj_moo_moo_carwash do
-      company { 'Moo Moo Express Car Wash' }
-      promo_type { 'free_gifts' }
-      name { 'Moo Moo Express Car Wash 3rd Period Goal' }
-      promo_code { nil }
-      source_url { 'https://www.nhl.com/bluejackets/fans/gameday-central' }
-      api_methods { %w[scored_in?] }
-      api_parameters { { period: 3 } }
-      timing_methods { %w[playing_at] }
-      timing_parameters { { minutes_before: 60 } }
-      team { association :team, short_name: 'cbj', region: 'ohio', league: create(:league, short_name: 'nhl') }
-      # requirements do
-      #   [
-      #     'sign up on gameday', 'one hour before the start of the game',
-      #     'or till end of game', 'sign up here: https://moomoocarwash.com/cbj/',
-      #     'enter cellphone number'
-      #   ]
-      # end
-    end
-
     trait :with_league_team_and_users do
       transient do
         league_abbr { 'mls' }
