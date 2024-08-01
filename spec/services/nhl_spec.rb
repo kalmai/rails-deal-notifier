@@ -133,8 +133,8 @@ RSpec.describe Nhl::Client do
       end
     end
 
-    describe '#home?' do
-      let(:method) { 'home?' }
+    describe '#was_home?' do
+      let(:method) { 'was_home?' }
 
       it { is_expected.to be true }
 
@@ -145,8 +145,8 @@ RSpec.describe Nhl::Client do
       end
     end
 
-    describe '#away?' do
-      let(:method) { 'away?' }
+    describe '#was_away?' do
+      let(:method) { 'was_away?' }
 
       it { is_expected.to be false }
 

@@ -22,14 +22,7 @@ module BaseClient
 
   private
 
-  def playing_today_at
-    Time.use_zone(@args[:timezone]) do
-      schedule_cache.find do |game|
-        game.team_abbrev == @args[:short_name] && game.utc_start_time.in_time_zone(@args[:timezone]).today?
-      end&.utc_start_time
-    end
-  end
-
+  ### results_cache dependents
   def scored_in?
     return false unless played? && results_cache[@args[:short_name]].try(:goals).present?
 
@@ -69,15 +62,28 @@ module BaseClient
     opponent.goals.empty?
   end
 
+  def won? = played? && results_cache[@args[:short_name]].try(:won?) == true
+
   def goal_count_equal_or_above?
     return false unless played?
 
     results_cache[@args[:short_name]].goals.size >= @args[:goals_count]
   end
 
-  def home? = played? && results_cache[@args[:short_name]].try(:away?) == false
+  def was_home? = played? && results_cache[@args[:short_name]].try(:away?) == false
+  def was_away? = played? && results_cache[@args[:short_name]].try(:away?) == true
+  ### results_cache dependents
 
-  def away? = played? && results_cache[@args[:short_name]].try(:away?)
+  ### schedule_cache dependents
+  def playing_today_at
+    Time.use_zone(@args[:timezone]) do
+      schedule_cache.find do |game|
+        game.team_abbrev == @args[:short_name] && game.utc_start_time.in_time_zone(@args[:timezone]).today?
+      end&.utc_start_time
+    end
+  end
 
-  def won? = played? && results_cache[@args[:short_name]].try(:won?) == true
+  def future_home_game? = schedule_cache.find { |game| game.team_abbrev == @args[:short_name] }.try(:away?) == false
+  def future_away_game? = schedule_cache.find { |game| game.team_abbrev == @args[:short_name] }.try(:away?) == true
+  ### schedule_cache dependents
 end

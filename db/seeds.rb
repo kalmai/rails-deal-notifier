@@ -29,9 +29,9 @@ Promotion.create!(
   redemption_limiter: 'monthly',
   redemption_count: 0,
   hours_valid: 48,
-  timing_methods: ['playing_at'],
+  timing_methods: ['playing_today_at'],
   timing_parameters: { minutes_before: 60 },
-  api_methods: %w[home? perfect_defence?],
+  api_methods: %w[was_home? perfect_defence?],
   api_parameters: {},
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )
@@ -61,7 +61,7 @@ Promotion.create!(
   hours_valid: 24,
   timing_methods: [],
   timing_parameters: {},
-  api_methods: %w[home? goal_count_equal_or_above?],
+  api_methods: %w[was_home? goal_count_equal_or_above?],
   api_parameters: { goals_count: 1 },
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )

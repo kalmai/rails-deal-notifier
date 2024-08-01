@@ -27,8 +27,18 @@ RSpec.describe Promotion do
   describe '#evaluate' do
     subject(:evaluation) { promotion.evaluate(timezone:) }
 
-    let(:promotion) { create(:promotion, :cbj_moo_moo_carwash, api_methods:) }
+    let(:promotion) do
+      create(
+        :promotion,
+        :with_league_team_and_users,
+        team_abbr: 'cbj',
+        league_abbr: 'nhl',
+        api_methods:,
+        api_parameters:
+      )
+    end
     let(:api_methods) { ['scored_in?'] }
+    let(:api_parameters) { { period: 3 } }
     let(:yesterday_games) do
       {
         'cbj' => BaseClient::GameResult.new(
