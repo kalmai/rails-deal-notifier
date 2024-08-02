@@ -1,5 +1,5 @@
 notify_actionable_promotions:
-  cron: 0 9 * * * # or 5 am ET
+  cron: 0 * * * *
   class: NotifyActionablePromotionJob
 time_sensitive_notifications:
   cron: 0 9 * * * # or 5 am ET
