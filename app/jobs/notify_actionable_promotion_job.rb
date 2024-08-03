@@ -14,9 +14,19 @@ class NotifyActionablePromotionJob < ApplicationJob
 
   private
 
+  # we run this job every hour, check to see which time zones are 05:00 AM,
+  # US time zones don't have 30 hour timezones like India so we're good.
+  def timezones_to_evaluate(users:)
+    user_timezones = users.select('DISTINCT timezone').map(&:timezone)
+    user_timezones.sort { |_, tz| tz.utc_offset.abs }
+    user_timezones.select { |tz| tz if ActiveSupport::TimeZone.find_tzinfo(tz).now.in(1.hour).hour == 6 }
+  end
+
   def gather_users_and_promotions
     Promotion.all.each.with_object(Hash.new([])) do |promotion, hsh|
-      promotion.users.each do |user|
+      users = promotion.users
+      timezones = timezones_to_evaluate(users:)
+      users.where(timezone: timezones).each do |user|
         hsh[user.id] = hsh[user.id].push(promotion) if promotion.evaluate(timezone: user.timezone)
       end
     end
