@@ -16,7 +16,6 @@ gem 'jbuilder'
 gem 'pg'
 gem 'pry'
 gem 'puma', '>= 5.0'
-gem 'rails', '7.1.3.4' # set for bundler-audit
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
 gem 'rexml'
@@ -43,6 +42,7 @@ gem 'bootsnap', require: false
 # Security pinning
 gem 'nokogiri', '>= 1.16.5'
 gem 'rack', '~> 2.2.8'
+gem 'rails', '7.1.3.4'
 gem 'rdoc', '>= 6.6.3.1'
 # Security pinning
 
