@@ -1,10 +1,12 @@
 services:
-  postgres:
+  db:
     image: postgres
     restart: always
+    # set shared memory limit when using docker-compose
     shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
@@ -21,13 +23,13 @@ services:
     tmpfs:
       - /tmp/pids/
     depends_on:
-      - postgres # add all dependant container
+      - db  # add all dependant container
       - redis
     tty: true
     stdin_open: true
     environment:
       PIDFILE: /tmp/pids/server.pid
-      DATABASE_HOST: postgres
+      DATABASE_HOST: db
       DATABASE_PORT: 5432
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
@@ -44,5 +46,5 @@ services:
             driver: none
 
 volumes:
-  postgres:
+  db:
   redis:
