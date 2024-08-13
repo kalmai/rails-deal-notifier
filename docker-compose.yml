@@ -10,6 +10,10 @@ services:
     environment:
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
+    user: rails
+    ports:
+      - '5432:5432'
+
   rails:
     build:
       context: .
@@ -34,6 +38,9 @@ services:
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
       RAILS_ENV: "${RAILS_ENV-development}"
+    links:
+      - db:db
+      - redis:redis
 
   redis:
     image: redis
