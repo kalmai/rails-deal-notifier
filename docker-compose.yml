@@ -13,6 +13,8 @@ services:
     user: postgres
     ports:
       - '5432:5432'
+    networks:
+      - deal-notifier-network
   rails:
     build:
       context: .
@@ -21,6 +23,8 @@ services:
     restart: always
     ports:
       - '3000:3000'
+    networks:
+      - deal-notifier-network
     volumes:
       - .:/rails
     tmpfs:
@@ -45,9 +49,13 @@ services:
       - redis:/data
     ports:
       - 6379
+    networks:
+      - deal-notifier-network
     logging:
             driver: none
 
 volumes:
   postgres:
   redis:
+networks:
+  deal-notifier-network:
