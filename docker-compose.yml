@@ -1,20 +1,13 @@
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
-    # set shared memory limit when using docker-compose
     shm_size: 128mb
-    # or set shared memory limit when deploy via swarm stack
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
-    user: postgres
-    ports:
-      - '5432:5432'
-    networks:
-      - deal-notifier-network
   rails:
     build:
       context: .
@@ -23,20 +16,18 @@ services:
     restart: always
     ports:
       - '3000:3000'
-    networks:
-      - deal-notifier-network
     volumes:
       - .:/rails
     tmpfs:
       - /tmp/pids/
     depends_on:
-      - db  # add all dependant container
+      - postgres # add all dependant container
       - redis
     tty: true
     stdin_open: true
     environment:
       PIDFILE: /tmp/pids/server.pid
-      DATABASE_HOST: db
+      DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       POSTGRES_USER: "${DATABASE_USER-postgres}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
@@ -49,13 +40,9 @@ services:
       - redis:/data
     ports:
       - 6379
-    networks:
-      - deal-notifier-network
     logging:
             driver: none
 
 volumes:
   postgres:
   redis:
-networks:
-  deal-notifier-network:
