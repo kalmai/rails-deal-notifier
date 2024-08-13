@@ -10,6 +10,6 @@ Rails.application.configure do
   config.good_job.poll_interval = 30 # seconds
   config.good_job.shutdown_timeout = 25 # seconds
   config.good_job.enable_cron = Rails.env.production?
-  config.good_job.cron = YAML.load_file('good_job_cron.yml')
+  config.good_job.cron = YAML.load_file('good_job_cron.yml').deep_symbolize_keys
   # config.good_job.dashboard_default_locale = :en
 end
