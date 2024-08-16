@@ -4,6 +4,8 @@ require 'rails_helper'
 
 RSpec.describe NotifyActionablePromotionJob do
   let(:promotions) { [create(:promotion, :with_league_team_and_users, team_abbr: 'clb')] }
+  let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+  let(:cache) { Rails.cache }
   let(:user) { promotions.first.users.first }
   let(:freeze_time) { Time.current.in_time_zone(user.timezone).change(time_adjustments) }
   let(:time_adjustments) { { hour: 5 } }
@@ -30,6 +32,7 @@ RSpec.describe NotifyActionablePromotionJob do
   end
 
   before do
+    allow(Rails).to receive(:cache).and_return(memory_store)
     Timecop.freeze(freeze_time)
     allow(Mls::Client).to receive(:new).and_return(client)
     allow(client).to receive(:results_cache).and_return(results_cache)
@@ -37,6 +40,7 @@ RSpec.describe NotifyActionablePromotionJob do
 
   after do
     Timecop.return
+    Rails.cache.clear
   end
 
   describe '#perform' do
@@ -60,6 +64,16 @@ RSpec.describe NotifyActionablePromotionJob do
       let(:time_adjustments) { { hour: 2 } }
 
       it 'does not notify the users yet' do
+        expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
+      end
+    end
+
+    context 'when the user has already been notified' do
+      before do
+        Rails.cache.write('notified_user_ids', [user.id])
+      end
+
+      it 'does not notify the user again' do
         expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
       end
     end

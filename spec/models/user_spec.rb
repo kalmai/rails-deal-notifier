@@ -8,6 +8,24 @@ RSpec.describe User do
     it { is_expected.to validate_presence_of :region }
     it { is_expected.to validate_presence_of :country }
     it { is_expected.to validate_presence_of :timezone }
+
+    describe '#valid_notification_time?' do
+      subject(:user) { build(:user) }
+
+      it { is_expected.to be_valid }
+
+      context 'with an invalid hour' do
+        subject(:user) { build(:user, notification_hour: 200) }
+
+        it { is_expected.not_to be_valid }
+      end
+
+      context 'with an invalid minute' do
+        subject(:user) { build(:user, notification_minute: 200) }
+
+        it { is_expected.not_to be_valid }
+      end
+    end
   end
 
   describe 'associations' do

@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   validates :postal, :region, :country, :timezone, presence: true
+  validate :valid_notification_time?
 
   has_many :contact_methods, dependent: :destroy do
     def detail_for(type:)
@@ -11,7 +12,6 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :promotions, through: :subscriptions
   accepts_nested_attributes_for :contact_methods
-  # TODO: add roles with permissions i.e. admin:god, moderator:high, consumer:normal, visitor:low
 
   after_create :populate_default_promotions
 
@@ -19,5 +19,13 @@ class User < ApplicationRecord
 
   def populate_default_promotions
     promotions << Team.where(region:)&.map(&:promotions)&.flatten
+  end
+
+  def valid_notification_time?
+    if !notification_minute.between?(0, 60)
+      errors.add(:notification_minute, 'must be between 0 and 60')
+    elsif !notification_hour.between?(0, 23)
+      errors.add(:notification_hour, 'must be between 0 and 23')
+    end
   end
 end
