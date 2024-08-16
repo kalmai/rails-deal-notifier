@@ -47,7 +47,11 @@ RSpec.describe NotifyActionablePromotionJob do
     it 'enqueues the email with all the actionable promotions' do
       expect { described_class.new.perform }.to have_enqueued_mail(ActionablePromotionMailer, :notify)
         .with(params: { user:, promotions: }, args: []).on_queue(:default)
-        .at(Time.use_zone(user.timezone) { Time.current.at_beginning_of_day + 6.hours }).exactly(:once)
+        .at(
+          Time.use_zone(user.timezone) do
+            Time.current.change(hours: user.notification_hour, minutes: user.notification_minute)
+          end
+        ).exactly(:once)
     end
 
     context 'when the job is kicked off a few minutes late' do
@@ -56,7 +60,11 @@ RSpec.describe NotifyActionablePromotionJob do
       it 'notifies the user at 6am' do
         expect { described_class.new.perform }.to have_enqueued_mail(ActionablePromotionMailer, :notify)
           .with(params: { user:, promotions: }, args: []).on_queue(:default)
-          .at(Time.use_zone(user.timezone) { Time.current.at_beginning_of_day + 6.hours }).exactly(:once)
+          .at(
+            Time.use_zone(user.timezone) do
+              Time.current.change(hours: user.notification_hour, minutes: user.notification_minute)
+            end
+          ).exactly(:once)
       end
     end
 
@@ -75,6 +83,56 @@ RSpec.describe NotifyActionablePromotionJob do
 
       it 'does not notify the user again' do
         expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
+      end
+    end
+
+    context 'when the user specifies a non-default hour' do
+      let(:promotions) do
+        [
+          create(
+            :promotion,
+            :with_league_team_and_users,
+            team_abbr: 'clb',
+            notification_hour:,
+            notification_minute:
+          )
+        ]
+      end
+      let(:notification_hour) { 7 }
+      let(:notification_minute) { 0 }
+
+      it 'enqueues the email at the desired time' do
+        expect { described_class.new.perform }.to have_enqueued_mail(ActionablePromotionMailer, :notify)
+          .with(params: { user:, promotions: }, args: []).on_queue(:default)
+          .at(
+            Time.use_zone(user.timezone) do
+              Time.current.change(hours: user.notification_hour, minutes: user.notification_minute)
+            end
+          ).exactly(:once)
+      end
+
+      context 'when the user has already been notified' do
+        before do
+          Rails.cache.write('notified_user_ids', [user.id])
+        end
+
+        it 'does not notify the user again' do
+          expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
+        end
+      end
+
+      context 'when the user additionally specifies minutes' do
+        let(:notification_minute) { 30 }
+
+        it 'enqueues the email at the desired time' do
+          expect { described_class.new.perform }.to have_enqueued_mail(ActionablePromotionMailer, :notify)
+            .with(params: { user:, promotions: }, args: []).on_queue(:default)
+            .at(
+              Time.use_zone(user.timezone) do
+                Time.current.change(hours: user.notification_hour, minutes: user.notification_minute)
+              end
+            ).exactly(:once)
+        end
       end
     end
   end

@@ -24,6 +24,8 @@ FactoryBot.define do
         user_region { 'ny' }
         region { 'ny' }
         user_count { 1 }
+        notification_hour { 6 }
+        notification_minute { 0 }
       end
 
       after(:create) do |promotion, evaluator|
@@ -37,7 +39,9 @@ FactoryBot.define do
           :user,
           evaluator.user_count,
           :with_contact_methods,
-          region: evaluator.region
+          region: evaluator.region,
+          notification_hour: evaluator.notification_hour,
+          notification_minute: evaluator.notification_minute
         )
         promotion.reload
       end

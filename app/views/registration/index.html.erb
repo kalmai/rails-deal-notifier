@@ -5,6 +5,14 @@
   <%= form.label :postal, "Enter zipcode:" %>
   <%= form.text_field :postal, value: session.dig(:geocode_data, 'postal'), autocomplete: "off" %> Assumed zipcode based off of your IP Address, update if necessary!
   <br>
+  <span data-controller="registration">
+    <%= form.label :notification_hour, "Enter desired notification time (military time):" %>
+    <%= form.number_field :notification_hour, value: '06', min: 0, max: 23, autocomplete: "off", size: 2, maxlength: 2, data: { action: "change->registration#padNumber" } %>
+    :
+    <%= form.number_field :notification_minute, value: '00', min: 0, max: 59, autocomplete: "off", size: 2, maxlength: 2, data: { action: "change->registration#padNumber" } %>
+    <br>
+  </span>
+  <br>
   <%= form.submit "Register" %>
   <% flash.each do |_type, msg| %>
     <%= msg %>

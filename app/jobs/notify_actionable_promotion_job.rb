@@ -5,19 +5,25 @@ class NotifyActionablePromotionJob < ApplicationJob
 
   def perform
     user_promotions = gather_users_and_promotions
-    user_promotions.each do |user_id, promotions|
-      next unless user_id.in?(Rails.cache.read('notified_user_ids'))
-
-      user = User.find(user_id)
-      wait_until = Time.use_zone(user.timezone) { Time.current.at_beginning_of_day + 6.hours }
-      ActionablePromotionMailer.with(user:, promotions:).notify.deliver_later(wait_until:)
-    end
-    updated_notified_user_id_list(user_promotions:)
+    schedule_notifications(user_promotions:)
+    update_notified_user_id_list(user_promotions:)
   end
 
   private
 
-  def updated_notified_user_id_list(user_promotions:)
+  def schedule_notifications(user_promotions:)
+    user_promotions.each do |user_id, promotions|
+      next if user_id.in?(Rails.cache.read('notified_user_ids').to_a)
+
+      user = User.find(user_id)
+      wait_until = Time.use_zone(user.timezone) do
+        Time.current.change(hours: user.notification_hour, minutes: user.notification_minute)
+      end
+      ActionablePromotionMailer.with(user:, promotions:).notify.deliver_later(wait_until:)
+    end
+  end
+
+  def update_notified_user_id_list(user_promotions:)
     Rails.cache.write('notified_user_ids', Rails.cache.read('notified_user_ids').to_a + user_promotions.keys)
   end
 

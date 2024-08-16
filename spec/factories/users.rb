@@ -10,6 +10,8 @@ FactoryBot.define do
     region { 'ny' }
     country { 'us' }
     timezone { 'America/New_York' }
+    notification_hour { 6 }
+    notification_minute { 0 }
 
     trait :with_contact_methods do
       after(:create) do |user, evaluator|
