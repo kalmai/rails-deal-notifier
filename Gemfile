@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.3.3'
+ruby '3.3.4'
 
 gem 'brakeman'
 gem 'bundler-audit'
@@ -19,7 +19,6 @@ gem 'puma', '>= 5.0'
 gem 'rails', '7.2.0'
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
-gem 'rexml'
 gem 'rspec'
 gem 'rspec-rails'
 gem 'rubocop'
@@ -41,9 +40,11 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
 
 # Security pinning
+gem 'fugit', '>= 1.11.1'
 gem 'nokogiri', '>= 1.16.5'
 gem 'rack', '~> 2.2.8'
 gem 'rdoc', '>= 6.6.3.1'
+gem 'rexml', '>= 3.3.6'
 # Security pinning
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -55,7 +56,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'pry-rails'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 

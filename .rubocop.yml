@@ -19,8 +19,6 @@ RSpec/MultipleMemoizedHelpers:
   Enabled: false
 RSpec/SpecFilePathFormat:
   Enabled: false
-RSpec/FilePath:
-  SpecSuffixOnly: true
 RSpec/NestedGroups:
   Enabled: false
 RSpec/ExampleLength:
