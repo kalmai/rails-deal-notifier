@@ -67,7 +67,7 @@ module BaseClient
   def goal_count_equal_or_above?
     return false unless played?
 
-    results_cache[@args[:short_name]].goals.size >= @args[:goals_count]
+    results_cache[@args[:short_name]].try(:goals).try(:size).to_i >= @args[:goals_count].to_i
   end
 
   def was_home? = played? && results_cache[@args[:short_name]].try(:away?) == false

@@ -50,4 +50,7 @@
     </table>
     <p>You can modify your local teams to receive more accurate promotion notifications by here. POST-MVP-GOAL</p>
   </body>
+  <% if params[:actionable_promotions].present? %>
+    <%= render partial: "/actionable_promotions", promotions: params[:actionable_promotions] %>
+  <% end %>
 </html>
