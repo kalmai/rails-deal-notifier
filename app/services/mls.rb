@@ -17,6 +17,8 @@ module Mls
     private
 
     def results_for_yesterday
+      return writen_empty_hash(cache_location: "#{self.class.module_parent}_yesterday") unless should_check_api?
+
       results = Rails.cache.read("#{self.class.module_parent}_yesterday")
       return results unless results.nil?
 
@@ -99,6 +101,8 @@ module Mls
     end
 
     def league_schedule_today
+      return writen_empty_hash(cache_location: "#{self.class.module_parent}_today") unless should_check_api?
+
       data = schedule_and_results
       today_games = build_today_games(data)
       Rails.cache.write("#{self.class.module_parent}_today", today_games, expires_at: Time.now.end_of_day)
@@ -120,6 +124,15 @@ module Mls
         arr << BaseClient::TodayGame.new(away?: true, team_abbrev: game.dig('away', 'abbreviation').downcase,
                                          utc_start_time: time)
       end
+    end
+
+    def should_check_api?
+      League.find_by(short_name: self.class.module_parent.to_s.downcase).season_range.include?(Time.zone.now)
+    end
+
+    def writen_empty_hash(cache_location:)
+      Rails.cache.write(cache_location, {}, expires_at: Time.now.end_of_day)
+      {}
     end
   end
 end

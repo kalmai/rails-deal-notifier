@@ -24,6 +24,8 @@ module Nhl
     end
 
     def league_results
+      return writen_empty_hash(cache_location: "#{self.class.module_parent}_yesterday") unless should_check_api?
+
       result_hash = build_result_hash(results_from_two_days)
       Rails.cache.write("#{self.class.module_parent}_yesterday", result_hash, expires_at: Time.now.end_of_day + 3.hours)
       result_hash
@@ -80,7 +82,22 @@ module Nhl
       league_schedule_today
     end
 
+    def should_check_api?
+      League.find_by(short_name: self.class.module_parent.to_s.downcase).season_range.include?(Time.zone.now)
+    end
+
+    def writen_empty_hash(cache_location:)
+      Rails.cache.write(cache_location, {}, expires_at: Time.now.end_of_day)
+      {}
+    end
+
     def league_schedule_today
+      return writen_empty_hash(cache_location: "#{self.class.module_parent}_today") unless should_check_api?
+
+      today_games_data
+    end
+
+    def today_games_data
       data = nhl_schedule
       games = data['gameWeek'].select { |hsh| hsh['date'] == Time.zone.now.strftime('%Y-%m-%d') }.first['games']
       games_today = build_today_games(games)

@@ -39,16 +39,16 @@ RSpec.describe Nhl::Client do
     }
   end
 
-  before do
-    Timecop.freeze(freeze_time)
-    allow(client).to receive_messages(results_cache:, schedule_cache:)
-  end
-
   after do
     Timecop.return
   end
 
   describe '#call' do
+    before do
+      Timecop.freeze(freeze_time)
+      allow(client).to receive_messages(results_cache:, schedule_cache:)
+    end
+
     it { is_expected.to be true }
 
     context 'when the team did not play yesterday' do
