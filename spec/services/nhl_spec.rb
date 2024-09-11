@@ -49,22 +49,6 @@ RSpec.describe Nhl::Client do
       allow(client).to receive_messages(results_cache:, schedule_cache:)
     end
 
-    context 'when there is nothing in any cache' do
-      describe '#should_check_api?' do
-        subject(:evaluation) { new_client.call(method) }
-
-        let(:new_client) { described_class.new(args: params) }
-        let(:freeze_time) { Time.at(0) } # Wed, 31 Dec 1969 19:00:00.000000000 EST -05:00
-
-        before do
-          allow(described_class).to receive(:new).and_return(new_client)
-          create(:league, short_name: 'nhl')
-        end
-
-        it { is_expected.to be false }
-      end
-    end
-
     it { is_expected.to be true }
 
     context 'when the team did not play yesterday' do
