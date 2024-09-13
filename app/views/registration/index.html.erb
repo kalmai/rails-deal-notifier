@@ -1,12 +1,29 @@
-<%= form_with url: '/registration', method: :post do |form| %>
-  <%= form.label :contact_detail, "Enter email:" %>
-  <%= form.text_field :contact_detail %>
-  <br>
-  <%= form.label :postal, "Enter zipcode:" %>
-  <%= form.text_field :postal, value: session.dig(:geocode_data, 'postal'), autocomplete: "off" %> Assumed zipcode based off of your IP Address, update if necessary!
-  <br>
-  <%= form.submit "Register" %>
-  <% flash.each do |_type, msg| %>
-    <%= msg %>
+<div class="container max-w-sm my-8">
+  <%= render_card(title: "Deal Notifier", subtitle: "At a Glance", body: "Get notified of local game day promotions you can use to save some cash.", footer: nil, class: "w-full pb-8") %>
+  <%= render_card(title: "Sounds Good", subtitle: "Register below", body: nil, footer: nil, class: "w-full my-4") do %>
+    <%= render_form_with(url: '/registration', method: :post, model: @user, class: "w-full") do |form| %>
+      <%= form.fields_for :contact_methods do |builder| %>
+        <div class="grid grid-cols-3 items-baseline pr-8">
+          <%= builder.label :contact_detail, class: "text-right mr-4 text-md", label: 'Email' %>
+          <%= builder.email_field :contact_detail, class: "mb-4 col-span-2", label: 'Zipcode' %>
+          <div></div>
+        </div>
+      <% end %>
+      <div class="grid grid-cols-3 items-baseline mb-4 pr-8">
+        <%= form.label :postal, class: "text-right mr-4 text-md" %>
+        <%= form.text_field :postal, class: "mb-4 col-span-2", value: session.dig(:geocode_data, 'postal'), autocomplete: "off" %>
+      </div>
+      <div class="flex justify-center mb-6">
+        <%= form.submit "Register" %>
+      </div>
+    <% end %>
+    <% if flash[:notice] %>
+      <%= render_toast header: flash['notice']['successful'] ? 'Success!' : 'Whoops!', description: flash['notice']['message'], id: "default_toast", class: "hidden" %>
+    <% end %>
   <% end %>
-<% end %>
+  <div class="flex items-center justify-center space-x-4">
+    <%= link_to(render_badge(text: image_tag("github", size: "20"), variant: 'ghost'), "https://github.com/kalmai", target: :_blank, class: "h-[20px] w-auto flex items-center justify-center") %>
+    <%= link_to(render_badge(text: image_tag("linkedin", size: "20"), variant: 'ghost'), "https://www.linkedin.com/in/zachary-kolker/", target: :_blank, class: "h-[20px] w-auto flex items-center justify-center") %>
+    <%= link_to(render_badge(text: image_tag("envelope-at-fill", size: "20"), variant: 'ghost'), "mailto:zacharykolker93@gmail.com", target: :_blank, class: "h-[20px] w-auto flex items-center justify-center") %>
+  </div>
+</div>

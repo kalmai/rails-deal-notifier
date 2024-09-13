@@ -15,7 +15,6 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
 gem 'pry'
-gem 'puma', '>= 5.0'
 gem 'rails', '7.2.0'
 gem 'redis', '>= 4.0.1'
 gem 'rest-client'
@@ -23,10 +22,12 @@ gem 'rspec'
 gem 'rspec-rails'
 gem 'rubocop'
 gem 'rubocop-rspec', require: false
+gem 'shadcn-ui', '~> 0.0.15'
 gem 'simplecov-cobertura'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'
+gem 'tailwindcss-rails', '~> 2.7'
 gem 'turbo-rails'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -42,9 +43,11 @@ gem 'bootsnap', require: false
 # Security pinning
 gem 'fugit', '>= 1.11.1'
 gem 'nokogiri', '>= 1.16.5'
+gem 'puma', '>= 6.4.3'
 gem 'rack', '~> 2.2.8'
 gem 'rdoc', '>= 6.6.3.1'
 gem 'rexml', '>= 3.3.6'
+gem 'webrick', '>= 1.8.2'
 # Security pinning
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

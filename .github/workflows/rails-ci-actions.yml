@@ -39,8 +39,14 @@ jobs:
       - name: Set up database schema
         run: bin/rails db:schema:load
       # Add or replace test runners here
+      - name: Install yarn
+        run: |
+          yarn install
+          bundle exec rails yarn:install
+      - name: Prepare assets for tests
+        run: bin/rails tailwindcss:build
       - name: Run tests
-        run: bundle exec rspec
+        run: HEADLESS=1 bundle exec rspec
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:

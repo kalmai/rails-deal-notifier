@@ -21,8 +21,11 @@ ENV RAILS_ENV=$RAILS_ENV \
 FROM base as build
 
 # Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev nodejs && \
+    npm install -g yarn && \
+    yarn add tailwindcss-animate
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./

@@ -3,13 +3,22 @@
 class RegistrationController < ApplicationController
   def index
     session[:geocode_data] = request.location.data
+    @user = User.new
+    @user.contact_methods.build
     render :index
   end
 
   def create
-    create_user_contact_method if registration_params[:contact_detail] && registration_params[:postal]
-    Registration::NotifyJob.perform_later(user: @user) if @user
-    redirect_to root_path, notice: 'Success!'
+    @user = User.new
+    notice = { successful: false, message: 'Something went wrong, please try again.' }
+    if params.dig(:user, :contact_methods_attributes, '0', :contact_detail) && params.dig(:user, :postal)
+      create_user_contact_method
+    end
+    if @user.persisted?
+      Registration::NotifyJob.perform_later(user: @user)
+      notice = { successful: true, message: 'You will be receiving a welcome email shortly.' }
+    end
+    redirect_to root_path, notice:
   end
 
   private
@@ -21,7 +30,7 @@ class RegistrationController < ApplicationController
   end
 
   def user_data
-    postal = registration_params[:postal]
+    postal = registration_params.dig(:user, :postal)
     { postal:, contact_methods_attributes: }.merge(location_data(postal:))
   end
 
@@ -37,10 +46,10 @@ class RegistrationController < ApplicationController
   end
 
   def contact_methods_attributes
-    [{ contact_detail: registration_params[:contact_detail], contact_type: :email, user: @user, enabled: true }]
+    [registration_params.dig(:user, :contact_methods_attributes, '0').merge!(contact_type: :email, enabled: true)]
   end
 
   def registration_params
-    params.permit(:contact_detail, :postal)
+    params.permit(user: [:postal, { contact_methods_attributes: :contact_detail }])
   end
 end

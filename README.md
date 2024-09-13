@@ -54,12 +54,12 @@ ruby 3.3.4
 * ~~seed MLS teams from their api standings api.~~
 * ~~calculate which deals the subscriber should be notified of~~
 * ~~send a notification email which contains actionable deals~~
-* glam up user interface
+* ~~glam up user interface~~
 * ~~add sidekiq to then implement cron jobs and notify users of deals they can act upon~~ went with good_job cause free
   * ~~make this timezone aware~~
   * ~~add the notification for time sensitive deals i.e. moomoocarwash's 1 hour before game deal~~
 * remove current GitHub Page and replace with this application
-  * render.io seems to be the new heroku, just have to get docker image to work and then figure out how to point my github page to it? or just provide render.io url for portfolio.
+  * render.com seems to be the new heroku, just have to get docker image to work and then figure out how to point my github page to it? or just provide render.io url for portfolio.
 * calculate effort level of deal so subscriber can choose the level of effort they want to exert for the discount
   * ~~add notification email regarding users who have subscribed to time sensitive deals~~
   * ~~this will most likely entail getting the games that will be happening today versus results from yesterday and calculating which deals are time sensitive?~~
@@ -73,3 +73,11 @@ ruby 3.3.4
 * ~~bulk time sensitive emails in order bulking time sensitive emails into one email and sending the rest in order~~
 * utilize league start and end times to only call them when they are relatively in season.
   * create a job that checks the teams playing this season and update if necessary
+* figure out a better solution for getting timezone/states
+  * currently we grab their location data on loading the page which leads to inaccurate information if they update any information or enter a postal code we cannot find with geoapify
+    * figure out how to ask for location with browser permissions
+    * likely need to update ui to ask for state/postal
+      * should likely persist lat/lon as well in the future
+* if peoples are interested, register and add https://buymeacoffee.com/ as a badge
+* fix time sensitive notification job, believe it sends it exactly at the end of the notification time, updating it to check minutes versus hours might fix everything, don't think we actually do any math to subtract when we need to in some situations
+* should probably figure out why build times in docker are kinda butt
