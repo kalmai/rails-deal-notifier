@@ -34,23 +34,26 @@ module Mls
         home_abbrev = datum.dig('home', 'abbreviation')
         away_abbrev = datum.dig('away', 'abbreviation')
         team_goals = datum['goals']
-        home_win = home_victory?(datum)
+        victory_hash = victory_hash(datum)
         start_time = Time.parse(datum['matchDate'])
-        result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, home_win, start_time))
+        result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, victory_hash, start_time))
       end
     end
 
-    def build_goal_results(home_team, away_team, team_goals, home_win, utc_start_time)
+    def build_goal_results(home_team, away_team, team_goals, victory_hash, utc_start_time)
       {
-        home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: home_win,
+        home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: victory_hash[:home],
                                                 opponent: away_team, utc_start_time:),
-        away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: !home_win,
+        away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: victory_hash[:away],
                                                 opponent: home_team, utc_start_time:)
       }.transform_keys(&:downcase)
     end
 
-    def home_victory?(data)
-      (data['homeScore'] <=> data['awayScore']) == 1
+    def victory_hash(data)
+      {
+        home: (data['homeScore'] <=> data['awayScore']) == 1,
+        away: (data['awayScore'] <=> data['homeScore']) == 1
+      }
     end
 
     def aggregate_match_data

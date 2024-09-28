@@ -10,6 +10,7 @@ AllCops:
     - !ruby/regexp /old_and_unused\.rb$/
     - 'vendor/**/*'
     - 'vendor/'
+    - 'app/helpers/components/*'
 
 Style/Documentation:
   Enabled: false

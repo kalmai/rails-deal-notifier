@@ -6,9 +6,10 @@ module Notify
       queue_as :high_priority
 
       def perform
-        Promotion.where.not(timing_methods: nil).each do |promotion|
+        Promotion.where('array_length(timing_methods, 1) is not null').each do |promotion|
           promotion.users.each do |user|
             time_results = time_method_results(timezone: user.timezone, promotion:)
+
             wait_until = hours_till_notification(time_results.delete('playing_today_at')).hours.from_now
             next unless time_results.values.all?
 

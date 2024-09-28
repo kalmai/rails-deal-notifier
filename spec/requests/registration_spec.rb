@@ -30,20 +30,30 @@ RSpec.describe 'Registrations' do
     it 'renders page and implies the postal code of the user' do
       get '/', headers: { 'REMOTE_ADDR' => new_york_ip }
 
-      expect(response.body).to include 'Enter email:'
+      expect(response.body).to include 'Email'
       expect(session[:geocode_data]).to eq new_york_info
     end
   end
 
   describe '#create' do
     let!(:promotion) { create(:promotion, :with_league_team_and_users, user_count: 0) }
+    let(:params) do
+      {
+        user: {
+          postal: postal_code,
+          contact_methods_attributes: {
+            '0' => {
+              contact_detail: 'email@domain.com'
+            }
+          }
+        }
+      }
+    end
 
     it 'saves a new user' do
-      assert_enqueued_with(job: Registration::NotifyJob) do
-        post '/registration', params: { postal: postal_code, contact_detail: 'email@domain.com' }
-      end
+      assert_enqueued_with(job: Registration::NotifyJob) { post '/registration', params: }
       expect(response).to redirect_to '/'
-      expect(flash[:notice]).to eq 'Success!'
+      expect(flash[:notice][:message]).to eq 'You will be receiving a welcome email shortly.'
       expect(User.last.postal).to eq postal_code
       expect(User.last.promotions.first).to eq promotion
     end
@@ -56,7 +66,7 @@ RSpec.describe 'Registrations' do
           post '/registration', params: { postal: postal_code, contact_detail: existing_contact_method.contact_detail }
         end
         expect(response).to redirect_to '/'
-        expect(flash[:notice]).to eq 'Success!'
+        expect(flash[:notice][:message]).to eq 'Something went wrong, please try again.'
         expect(ContactMethod.where(contact_detail: existing_contact_method.contact_detail).count).to eq 1
       end
     end

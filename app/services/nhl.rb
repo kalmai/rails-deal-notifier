@@ -41,19 +41,23 @@ module Nhl
         home_abbrev = datum.dig('homeTeam', 'abbrev')
         away_abbrev = datum.dig('awayTeam', 'abbrev')
         team_goals = build_goals(datum['goals'])
-        home_win = home_victory?(datum)
+        victory_hash = victory_hash(datum)
         start_time = Time.parse(datum['startTimeUTC'])
 
-        result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, home_win, start_time))
+        result.merge!(build_goal_results(home_abbrev, away_abbrev, team_goals, victory_hash, start_time))
       end
     end
 
-    def build_goal_results(home_team, away_team, team_goals, home_win, utc_start_time)
+    def build_goal_results(home_team, away_team, team_goals, victory_hash, utc_start_time)
       {
-        home_team => BaseClient::GameResult.new(away?: false, goals: team_goals[home_team], won?: home_win,
-                                                opponent: away_team, utc_start_time:),
-        away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: !home_win,
-                                                opponent: home_team, utc_start_time:)
+        home_team => BaseClient::GameResult.new(
+          away?: false, goals: team_goals[home_team], won?: victory_hash[:home],
+          opponent: away_team, utc_start_time:
+        ),
+        away_team => BaseClient::GameResult.new(
+          away?: true, goals: team_goals[away_team], won?: victory_hash[:away],
+          opponent: home_team, utc_start_time:
+        )
       }.transform_keys(&:downcase)
     end
 
@@ -69,8 +73,11 @@ module Nhl
       end
     end
 
-    def home_victory?(data)
-      (data.dig('homeTeam', 'score') <=> data.dig('awayTeam', 'score')) == 1
+    def victory_hash(data)
+      {
+        home: (data.dig('homeTeam', 'score') <=> data.dig('awayTeam', 'score')) == 1,
+        away: (data.dig('awayTeam', 'score') <=> data.dig('homeTeam', 'score')) == 1
+      }
     end
 
     def games_for_today
