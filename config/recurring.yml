@@ -1,0 +1,12 @@
+default: &default
+  notify_actionable_promotions:
+    schedule: 0 * * * *
+    class: NotifyActionablePromotionJob
+  time_sensitive_notifications:
+    schedule: 0 9 * * * # or 5 am ET
+    class: Notify::Email::TimeSensitiveNotificationJob
+
+development:
+  <<: *default
+production:
+  <<: *default
