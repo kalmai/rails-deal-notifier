@@ -34,13 +34,20 @@ test:
 
 production:
   <<: *default
-  database: deal_notifier_prod
+  prepared_statements: false
+  advisory_locks: false
+  database: postgres
+  username: <%= Rails.application.credentials.prod_db_username %>
+  password: <%= Rails.application.credentials.prod_db_password %>
+  port: 6543
+  host: <%= Rails.application.credentials.prod_db_host %>
+  timeout: 5000
+  database: postgres
   primary: &primary_prod
     <<: *default
-    database: deal_notifier_prod
-    username: deal_notifier
-    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+    database: postgres
+    username: <%= Rails.application.credentials.prod_db_username %>
+    password: <%= Rails.application.credentials.prod_db_password %>
   queue:
     <<: *primary_prod
-    database: deal_notifier_prod_queue
-    migrations_paths: db/queue_migrate
+    database: postgres_queue
