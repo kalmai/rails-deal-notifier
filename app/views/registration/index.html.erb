@@ -18,7 +18,7 @@
       </div>
     <% end %>
     <% if flash[:notice] %>
-      <%= render_toast header: flash['notice']['successful'] ? 'Success!' : 'Whoops!', description: flash['notice']['message'], id: "default_toast", class: "hidden" %>
+      <%= render_toast header: flash['notice']['successful'] ? 'Success!' : 'Whoops!', description: flash['notice']['message'], id: "default_toast", variant: flash['notice']['successful'] ? nil : :destructive, class: "hidden" %>
     <% end %>
   <% end %>
   <div class="flex items-center justify-center space-x-4">

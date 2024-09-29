@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class RegistrationController < ApplicationController
+  before_action :validate_params, only: :create
+
   def index
     session[:geocode_data] = request.location.data
     @user = User.new
@@ -11,9 +13,8 @@ class RegistrationController < ApplicationController
   def create
     @user = User.new
     notice = { successful: false, message: 'Something went wrong, please try again.' }
-    if params.dig(:user, :contact_methods_attributes, '0', :contact_detail) && params.dig(:user, :postal)
-      create_user_contact_method
-    end
+
+    create_user_contact_method
     if @user.persisted?
       Registration::NotifyJob.perform_later(user: @user)
       notice = { successful: true, message: 'You will be receiving a welcome email shortly.' }
@@ -22,6 +23,16 @@ class RegistrationController < ApplicationController
   end
 
   private
+
+  def validate_params
+    message = 'Something went wrong, please try again.'
+    notice = { successful: false, message: }
+    if registration_params.dig(:user, :contact_methods_attributes, '0',
+                               :contact_detail).present? && registration_params.dig(:user, :postal).present?
+      binding.pry
+    end
+    redirect_to root_path, notice:
+  end
 
   def create_user_contact_method
     User.transaction { @user = User.create!(user_data) }
