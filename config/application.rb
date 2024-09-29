@@ -28,8 +28,6 @@ module DealNotifier
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    # https://github.com/bensheldon/good_job?tab=readme-ov-file#configuration-options
-    config.active_job.queue_adapter = :good_job
+    config.active_job.queue_adapter = :solid_queue
   end
 end

@@ -10,6 +10,13 @@ default: &default
 development:
   <<: *default
   database: deal_notifier_dev
+  primary: &primary_dev
+    <<: *default
+    database: deal_notifier_dev
+  queue:
+    <<: *primary_dev
+    database: deal_notifier_dev_queue
+    migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -17,7 +24,23 @@ development:
 test:
   <<: *default
   database: deal_notifier_test
+  primary: &primary_test
+    <<: *default
+    database: deal_notifier_test
+  queue:
+    <<: *primary_test
+    database: deal_notifier_test_queue
+    migrations_paths: db/queue_migrate
 
 production:
   <<: *default
   database: deal_notifier_prod
+  primary: &primary_prod
+    <<: *default
+    database: deal_notifier_prod
+    username: deal_notifier
+    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+  queue:
+    <<: *primary_prod
+    database: deal_notifier_prod_queue
+    migrations_paths: db/queue_migrate
