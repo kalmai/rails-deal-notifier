@@ -32,37 +32,25 @@ module Mls
     end
 
     def build_games(data)
-      league = League.find_by(short_name: self.class.module_parent.to_s.downcase)
       data.each do |datum|
-        home_team = Team.find_by(short_name: datum.dig('home', 'abbreviation').downcase)
-        away_team = Team.find_by(short_name: datum.dig('away', 'abbreviation').downcase)
-        start_time = Time.parse(datum['matchDate'])
-        team_goals = datum['goals']
-        home_goals = team_goals[home_team.short_name]
-        away_goals = team_goals[away_team.short_name]
-        home_win = home_victory?(datum)
-        home_game = Game.new(
-          utc_start_time: start_time,
-          league:,
-          team: home_team,
-          opponent: away_team.id,
-          home_game: true,
-          won: home_win,
-          goals: home_goals.map { |goal| Goal.new(**goal) }
+        home_team = find_team_record(short_name: datum.dig('home', 'abbreviation').downcase)
+        away_team = find_team_record(short_name: datum.dig('away', 'abbreviation').downcase)
+        home_goals = { team: home_team, goals: datum.dig('goals', home_team.short_name) }
+        away_goals = { team: away_team, goals: datum.dig('goals', away_team.short_name) }
+        game = Game.create!(
+          utc_start_time: Time.parse(datum['matchDate']),
+          league: home_team.league, home_team:, away_team:
         )
-        away_game = Game.new(
-          utc_start_time: start_time,
-          league:,
-          team: away_team,
-          opponent: home_team.id,
-          home_game: false,
-          won: !home_win,
-          goals: home_goals.map { |goal| Goal.new(**goal) }
-        )
-        home_game.save
-        away_game.save
-        binding.pry
+        [home_goals, away_goals].each { create_goals_for(game:, data: _1) }
       end
+    end
+
+    def create_goals_for(game:, data:)
+      data[:goals].each { |goals| Goal.create!(game:, team: data[:team], **goals) }
+    end
+
+    def find_team_record(short_name:)
+      Team.joins(:league).where(teams: { short_name: }, leagues: { short_name: 'mls' }).first
     end
 
     def fetch_game_data(data)
@@ -118,13 +106,6 @@ module Mls
         away_team => BaseClient::GameResult.new(away?: true, goals: team_goals[away_team], won?: victory_hash[:away],
                                                 opponent: home_team, utc_start_time:)
       }.transform_keys(&:downcase)
-    end
-
-    def victory_hash(data)
-      {
-        home: (data['homeScore'] <=> data['awayScore']) == 1,
-        away: (data['awayScore'] <=> data['homeScore']) == 1
-      }
     end
 
     def aggregate_match_data

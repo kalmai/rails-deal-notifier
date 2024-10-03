@@ -14,7 +14,7 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'pg'
 gem 'pry'
-gem 'rails', '7.1.3.4' # set for bundler-audit
+gem 'rails', '7.2.0'
 gem 'rest-client'
 gem 'rspec'
 gem 'rspec-rails'
