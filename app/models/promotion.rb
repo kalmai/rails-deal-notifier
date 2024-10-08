@@ -18,14 +18,13 @@ class Promotion < ApplicationRecord
 
   def evaluate(timezone:, single_method: nil)
     eval_client = client(timezone)
-    binding.pry
     single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
   end
 
   private
 
   def client_params(timezone)
-    { short_name: team.short_name, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
+    { team:, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
   end
 
   def client(timezone)

@@ -26,6 +26,13 @@ module BaseClient
   def call_on_model(method)
     method_query = "#{method.to_s.gsub('?', '')}_query"
     send(method_query)
+  end
+
+  def was_home_query
+    binding.pry
+  end
+
+  def won_query
     binding.pry
   end
 

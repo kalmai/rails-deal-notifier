@@ -2,19 +2,18 @@
 
 class Game < ApplicationRecord
   validates :utc_start_time, presence: true
+  validates :slug, uniqueness: true
 
-  belongs_to :away_team, class_name: 'Team'
-  belongs_to :home_team, class_name: 'Team'
   belongs_to :league
+  belongs_to :home_team, class_name: 'Team'
+  belongs_to :away_team, class_name: 'Team'
+  has_many :goals, -> { order('utc_scored_at') }, dependent: :destroy
 
-  has_many :goals, -> { order('utc_scored_at') }
+  # not sure if we'll need this
+  def self.find_games_for(team_id:)
+    raise ArgumentError unless team.is_a?(Integer)
 
-  def teams
-    @teams ||= [away_team, home_team]
-  end
-
-  def team(short_name:)
-    teams.find { |t| t.short_name.eql?(short_name) }
+    where(home_team_id: team_id).or(where(away_team_id: team_id))
   end
 
   def played?(timezone:)
