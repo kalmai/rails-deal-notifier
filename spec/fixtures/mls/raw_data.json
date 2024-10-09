@@ -1,0 +1,204 @@
+[
+  {
+    "optaId": 2415061,
+    "slug": "clbvsne-10-12-2024",
+    "leagueMatchTitle": "",
+    "home": {
+      "optaId": 454,
+      "fullName": "Columbus Crew",
+      "slug": "columbus-crew",
+      "shortName": "Columbus",
+      "abbreviation": "CLB",
+      "backgroundColor": "#757575",
+      "logoBWSlug": "webcomp_1817d3e8-428d-4250-b4f0-59c58760d46a",
+      "logoColorSlug": "webcomp_03c98b7e-976f-4a33-a626-995b89aa7e80",
+      "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1621373535/assets/logos/CLB-Logo-New-480.png",
+      "crestColorSlug": "webcomp_9c0c3eba-b78c-408c-af11-5587360ad173"
+    },
+    "away": {
+      "optaId": 928,
+      "fullName": "New England Revolution",
+      "slug": "new-england-revolution",
+      "shortName": "New England",
+      "abbreviation": "NE",
+      "backgroundColor": "#0C2340",
+      "logoBWSlug": "webcomp_6eb2275d-b3d2-4311-b4a6-73d0055946d1",
+      "logoColorSlug": "webcomp_c9f96b12-6107-4b4a-bbb4-b75ce3d1347d",
+      "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1639491780/assets/ner/logos/NE-Logo-New-480px-v2.png",
+      "crestColorSlug": "webcomp_b83046f6-a2dd-4f24-9d96-08703c422042"
+    },
+    "venue": {
+      "venueOptaId": "15521",
+      "backgroundImageSlug": "",
+      "name": "Lower.com Field",
+      "city": "Columbus, Ohio"
+    },
+    "season": {
+      "slug": "us-major-league-soccer-season-2024-2025",
+      "optaId": 2024,
+      "competitionId": 98,
+      "name": "Season 2024/2025"
+    },
+    "competition": {
+      "optaId": 98,
+      "name": "MLS Regular Season",
+      "slug": "mls-regular-season",
+      "shortName": "Regular Season",
+      "matchType": "Regular",
+      "logoLight": {
+        "slug": ""
+      },
+      "logoDark": {
+        "slug": ""
+      },
+      "blockHeaderName": "",
+      "mgmId": "",
+      "playerHeadshotThumbnailField": ""
+    },
+    "broadcasters": [
+      {
+        "broadcasterTypeLabel": "",
+        "broadcasterName": "Apple TV - MLS Season Pass",
+        "broadcasterStreamingURL": "https://tv.apple.com/channel/tvs.sbd.7000",
+        "broadcasterType": "International Streaming"
+      }
+    ],
+    "sponsorImage": {},
+    "matchDate": "2024-10-12T23:30:00.0000000Z",
+    "firstPartyTickets": {
+      "url": "https://www.ticketmaster.com/columbus-crew-vs-new-england-revolution-columbus-ohio-05-29-2024/event/05006025C281341D",
+      "openInNewTab": true,
+      "isVisible": false
+    },
+    "tags": [],
+    "homeClubBroadcasters": [],
+    "awayClubBroadcasters": [],
+    "clubBroadcasters": [],
+    "isTimeTbd": false,
+    "mgmId": "",
+    "appleStreamURL": "https://tv.apple.com/sporting-event/columbus-crew-vs-new-england-revolution/umc.cse.6bs7yhrxtq3eakpt77ur2wr8c?itsct=s_mls_partner_gp&itscg=80320",
+    "appleSubscriptionTier": "",
+    "appleAdvertisementCategory": "",
+    "roundName": "",
+    "competitionPhase": "",
+    "homeClubRank": "",
+    "awayClubRank": "",
+    "roundNumber": 1,
+    "roundGroup": "",
+    "matchDay": "17",
+    "delayedMatch": false
+  },
+  {
+    "optaId": 2415226,
+    "slug": "vanvslafc-10-13-2024",
+    "leagueMatchTitle": "",
+    "home": {
+      "optaId": 1708,
+      "fullName": "Vancouver Whitecaps FC",
+      "slug": "vancouver-whitecaps-fc",
+      "shortName": "Vancouver",
+      "abbreviation": "VAN",
+      "backgroundColor": "#002244",
+      "logoBWSlug": "webcomp_32b98038-9825-4376-9484-c46a4443394f",
+      "logoColorSlug": "webcomp_cb5dfcb6-1002-4510-b279-0c108d8401d9",
+      "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1614970751/assets/logos/1708-vancouver-logo_znac8n.png",
+      "crestColorSlug": "webcomp_47dd04e2-186b-4ef0-a2e7-b2e5050e265e"
+    },
+    "away": {
+      "optaId": 11690,
+      "fullName": "Los Angeles Football Club",
+      "slug": "los-angeles-football-club",
+      "shortName": "LAFC",
+      "abbreviation": "LAFC",
+      "backgroundColor": "#212121",
+      "logoBWSlug": "webcomp_1a2ee9e1-cac2-4f2b-b771-620376f002ee",
+      "logoColorSlug": "webcomp_6f982df3-b4a5-44f2-a950-a2a3148a914c",
+      "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1620998598/assets/logos/LAFC-Logo-480px.png",
+      "crestColorSlug": "webcomp_d81f7b0b-8c59-49ce-8c59-ee5afe10aa03"
+    },
+    "venue": {
+      "venueOptaId": "7740",
+      "backgroundImageSlug": "",
+      "name": "BC Place",
+      "city": "Vancouver, BC"
+    },
+    "season": {
+      "slug": "us-major-league-soccer-season-2024-2025",
+      "optaId": 2024,
+      "competitionId": 98,
+      "name": "Season 2024/2025"
+    },
+    "competition": {
+      "optaId": 98,
+      "name": "MLS Regular Season",
+      "slug": "mls-regular-season",
+      "shortName": "Regular Season",
+      "matchType": "Regular",
+      "logoLight": {
+        "slug": ""
+      },
+      "logoDark": {
+        "slug": ""
+      },
+      "blockHeaderName": "",
+      "mgmId": "",
+      "playerHeadshotThumbnailField": ""
+    },
+    "broadcasters": [
+      {
+        "broadcasterTypeLabel": "",
+        "broadcasterName": "Apple TV - MLS Season Pass",
+        "broadcasterStreamingURL": "https://tv.apple.com/channel/tvs.sbd.7000",
+        "broadcasterType": "International Streaming"
+      }
+    ],
+    "sponsorImage": {},
+    "matchDate": "2024-10-13T23:30:00.0000000Z",
+    "firstPartyTickets": {
+      "url": "https://www.ticketmaster.ca/vancouver-whitecaps-fc-vs-los-angeles-vancouver-british-columbia-08-24-2024/event/1100602DCAA72487",
+      "openInNewTab": true,
+      "isVisible": false
+    },
+    "tags": [
+      {
+        "type": "tag",
+        "_translationId": "094823a8-3337-4c8c-b6b7-4a50cba7f72c",
+        "_entityId": "ff647a7e-7923-4667-b806-6c0e1cbc05e4",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/flux-test",
+        "title": "flux-test",
+        "slug": "flux-test",
+        "neutralSlug": "flux-test",
+        "externalSourceReference": {},
+        "fields": {}
+      },
+      {
+        "type": "tag",
+        "_translationId": "79efbe7d-8b6d-4094-b52a-9f2619a8f434",
+        "_entityId": "c9f0119b-8636-488b-8f05-343e975c52fe",
+        "selfUrl": "https://forge-dapi.mls-prd.deltatre.digital/v2/content/en-us/tags/flux-testv2",
+        "title": "flux-testv2",
+        "slug": "flux-testv2",
+        "neutralSlug": "flux-testv2",
+        "externalSourceReference": {},
+        "fields": {}
+      }
+    ],
+    "homeClubBroadcasters": [],
+    "awayClubBroadcasters": [],
+    "clubBroadcasters": [],
+    "isTimeTbd": false,
+    "mgmId": "",
+    "appleStreamURL": "https://tv.apple.com/sporting-event/vancouver-whitecaps-fc-vs-los-angeles-football-club/umc.cse.1oyqj6j4683cwn67313pwla7b?itsct=tv_box&itscg=30200",
+    "appleSubscriptionTier": "",
+    "appleAdvertisementCategory": "",
+    "roundName": "",
+    "competitionPhase": "",
+    "homeClubRank": "",
+    "awayClubRank": "",
+    "roundNumber": 1,
+    "roundGroup": "",
+    "matchDay": "29",
+    "delayedMatch": false
+  }
+]
+

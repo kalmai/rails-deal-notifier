@@ -1,0 +1,101 @@
+{
+  "optaId": 2415301,
+  "slug": "atlvsmtl-10-02-2024",
+  "leagueMatchTitle": "",
+  "home": {
+    "optaId": 11091,
+    "fullName": "Atlanta United",
+    "slug": "atlanta-united",
+    "shortName": "Atlanta",
+    "abbreviation": "ATL",
+    "backgroundColor": "#9D2235",
+    "logoBWSlug": "webcomp_0b739f0a-d006-4f9a-8f4a-50da344c7682",
+    "logoColorSlug": "webcomp_3179d38a-a997-4c57-ae8a-68bac03335eb",
+    "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1620997957/assets/logos/ATL-Logo-480px.png",
+    "crestColorSlug": "webcomp_1ceb0722-eaf6-45b3-945d-c07586c978dc"
+  },
+  "away": {
+    "optaId": 1616,
+    "fullName": "CF Montréal",
+    "slug": "cf-montreal",
+    "shortName": "Montréal",
+    "abbreviation": "MTL",
+    "backgroundColor": "#212121",
+    "logoBWSlug": "webcomp_3745d5e8-fb0f-4f0e-9074-12f12193441f",
+    "logoColorSlug": "webcomp_686e6f85-003c-45ae-9958-44e4d7683f22",
+    "logoColorUrl": "https://images.mlssoccer.com/image/upload/{formatInstructions}/v1668018026/assets/mtl/logos/Montreal-Primary-480x480.png",
+    "crestColorSlug": "webcomp_f8f6c220-01ba-404b-9086-28188675f222"
+  },
+  "resultType": "NormalResult",
+  "venue": {
+    "venueOptaId": "12492",
+    "backgroundImageSlug": "",
+    "name": "Mercedes-Benz Stadium",
+    "city": "Atlanta, GA"
+  },
+  "season": {
+    "slug": "us-major-league-soccer-season-2024-2025",
+    "optaId": 2024,
+    "competitionId": 98,
+    "name": "Season 2024/2025"
+  },
+  "competition": {
+    "optaId": 98,
+    "name": "MLS Regular Season",
+    "slug": "mls-regular-season",
+    "shortName": "Regular Season",
+    "matchType": "Regular",
+    "logoLight": {
+      "slug": ""
+    },
+    "logoDark": {
+      "slug": ""
+    },
+    "blockHeaderName": "",
+    "mgmId": "",
+    "playerHeadshotThumbnailField": ""
+  },
+  "broadcasters": [
+    {
+      "broadcasterTypeLabel": "",
+      "broadcasterName": "Apple TV - MLS Season Pass",
+      "broadcasterStreamingURL": "https://tv.apple.com/channel/tvs.sbd.7000",
+      "broadcasterType": "International Streaming"
+    }
+  ],
+  "sponsorImage": {},
+  "matchDate": "2024-10-02T23:30:00.0000000Z",
+  "firstPartyTickets": {
+    "url": "https://www.ticketmaster.com/atlanta-united-fc-vs-cf-montreal-atlanta-georgia-10-02-2024/event/0E005F929736154A",
+    "openInNewTab": true,
+    "isVisible": false
+  },
+  "period": "FullTime",
+  "winnerOptaId": 1616,
+  "homeScore": 1,
+  "awayScore": 2,
+  "tags": [],
+  "aggregate": {
+    "aggregate": "",
+    "aggregateShort": "",
+    "aggregateAbbr": "",
+    "date": "2024-10-02T23:30:00.0000000Z"
+  },
+  "homeClubBroadcasters": [],
+  "awayClubBroadcasters": [],
+  "clubBroadcasters": [],
+  "isTimeTbd": false,
+  "mgmId": "",
+  "appleStreamURL": "https://tv.apple.com/sporting-event/atlanta-united-vs-cf-montreal/umc.cse.39kbqa5y0v6k2ik859iq7895m?itsct=s_mls_partner_gp&itscg=80320",
+  "appleSubscriptionTier": "",
+  "appleAdvertisementCategory": "",
+  "roundName": "",
+  "competitionPhase": "",
+  "homeClubRank": "",
+  "awayClubRank": "",
+  "roundNumber": 1,
+  "roundGroup": "",
+  "matchDay": "36",
+  "delayedMatch": false
+}
+
