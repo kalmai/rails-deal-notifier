@@ -9,9 +9,7 @@ module Interactor
 
     class << self
       def store_games
-        data = week_ago_week_from_now_data
-        game_data = fetch_game_data(data)
-        build_games(game_data)
+        build_games(week_ago_week_from_now_data)
       end
 
       # this will turn into a job in the future to run maybe every hour or two
@@ -63,15 +61,6 @@ module Interactor
 
       def find_team_record(short_name:)
         Team.joins(:league).where(teams: { short_name: }, leagues: { short_name: 'mls' }).first
-      end
-
-      def fetch_game_data(data)
-        opta_ids = data.map { |datum| datum['optaId'] }.compact
-
-        opta_ids.map do |opta_id|
-          raw_response = RestClient.get("#{BASE_URL}/matches/#{opta_id}")
-          JSON.parse(raw_response).merge!('goals' => goals_for(game_id: opta_id))
-        end
       end
 
       def week_ago_week_from_now_data
