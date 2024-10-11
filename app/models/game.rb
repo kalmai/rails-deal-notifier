@@ -9,11 +9,12 @@ class Game < ApplicationRecord
   belongs_to :away_team, class_name: 'Team'
   has_many :goals, -> { order('utc_scored_at') }, dependent: :destroy
 
-  # not sure if we'll need this
-  def self.find_games_for(team_id:)
-    raise ArgumentError unless team.is_a?(Integer)
+  def home_goals
+    goals.where(team_id: home_team.id)
+  end
 
-    where(home_team_id: team_id).or(where(away_team_id: team_id))
+  def away_goals
+    goals.where(team_id: away_team.id)
   end
 
   def played?(timezone:)
@@ -69,5 +70,15 @@ class Game < ApplicationRecord
 
   def won?
     played? && results_cache[@args[:short_name]].try(:won?) == true
+  end
+
+  class << self
+    def most_recent_game(team_id:)
+      find_games_for(team_id:).order(:utc_start_time).reverse_order.where(has_consumed_results: true).first
+    end
+
+    def find_games_for(team_id:)
+      where(home_team_id: team_id).or(where(away_team_id: team_id))
+    end
   end
 end
