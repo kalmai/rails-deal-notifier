@@ -4,12 +4,25 @@ FactoryBot.define do
   factory :game do
     transient do
       home_goal_count { 1 }
+      away_goal_count { 1 }
+      league_short_name { 'mls' }
+      home_short_name { 'atl' }
+      away_short_name { 'mtl' }
     end
-    utc_start_time { Time.current }
+    utc_start_time { Time.parse('2024-10-02T23:30:00.0000000Z') }
+    league_specifics { { opta_id: '2415301' } }
+    has_consumed_results { false }
+    slug { "#{home_short_name}vs#{away_short_name}-#{utc_start_time.strftime('%m-%d-%Y')}" }
 
-    league { create(:league) }
-    home_team { create(:team, short_name: 'home') }
-    away_team { create(:team) }
-    goals { create_list(:goal, home_goal_count, game: instance, team: home_team) }
+    league { create(:league, short_name: league_short_name) }
+    home_team { create(:team, league:, short_name: home_short_name) }
+    away_team { create(:team, league:, short_name: away_short_name) }
+
+    trait :with_goals do
+      after(:create) do |game, evaluator|
+        create_list(:goal, evaluator.home_goal_count, team: home_team, game:)
+        create_list(:goal, evaluator.away_goal_count, team: away_team, game:)
+      end
+    end
   end
 end

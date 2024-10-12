@@ -19,4 +19,22 @@ RSpec.describe Interactor::Mls do
       expect { execution }.to change(Game, :count).by(2)
     end
   end
+
+  describe '#update_games' do
+    subject(:execution) { described_class.store_games }
+
+    before do
+      stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
+        .to_return(status: 200, body: file_fixture('mls_raw_data.json').read)
+      stub_request(:get, %r{#{described_class::GOAL_DATA_URL}/matches/*})
+        .to_return(status: 200, body: file_fixture('mls_goal_update_data.json').read)
+      # create a factory for the games
+      # create(:team, short_name: 'atl')
+      # create(:team, short_name: 'mtl')
+    end
+
+    it 'updates the games' do
+      expect { execution }.to change(Game, :count).by(2)
+    end
+  end
 end
