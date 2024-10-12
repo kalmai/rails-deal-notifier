@@ -37,6 +37,8 @@ module Interactor
 
       def build_games(data)
         data.each do |datum|
+          next unless Game.find_by(slug: datum['slug']).blank?
+
           home_team = find_team_record(short_name: datum.dig('home', 'abbreviation').downcase)
           away_team = find_team_record(short_name: datum.dig('away', 'abbreviation').downcase)
           Game.create! \
