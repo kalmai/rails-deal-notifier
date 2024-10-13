@@ -8,17 +8,9 @@ module Evaluator
       @game = game
     end
 
-    def home_goals
-      @game.home_goals
-    end
-
-    def away_goals
-      @game.game_goals
-    end
-
     def played?
       @played ||= Time.use_zone(@timezone) do
-        game.has_consumed_results && utc_start_time.in_time_zone(@timezone)&.yesterday?
+        @game.has_consumed_results && @game.utc_start_time.in_time_zone(@timezone).yesterday?
       end || false
     end
 

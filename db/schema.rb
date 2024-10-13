@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_05_033543) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_13_153856) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_05_033543) do
     t.string "end_month"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "average_match_minutes", null: false
   end
 
   create_table "promotions", force: :cascade do |t|
