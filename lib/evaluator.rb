@@ -2,48 +2,53 @@
 
 module Evaluator
   class Client
-    def initialize(timezone:, team_id:, game:)
-      @timezone = timezone
-      @team_id = team_id
-      @game = game
+    def initialize(promotion:)
+      @game = promotion.most_recent_game
+      @promotion = promotion
     end
+
+    def evaluate
+      @promotion.api_methods.all? { |method| send(method) }
+    end
+
+    private
 
     def played?
-      @played ||= Time.use_zone(@timezone) do
-        @game.has_consumed_results && @game.utc_start_time.in_time_zone(@timezone).yesterday?
-      end || false
+      @game.try(:has_consumed_results) == true
     end
 
-    def scored_in?(period:)
+    def scored_in?
       return false unless played? && @game.goals.present?
 
-      @game.goals.any? { _1.period == period.to_i }
+      @game.goals.where(team_id: @promotion.team.id).any? do |goal|
+        goal.period == @promotion.api_parameters['period'].to_i
+      end
     end
 
     def first_goal?
-      return false unless played?
+      return false unless played? && @game.goals.present?
 
-      @game.goals.first.team_id == @team_id
+      @game.goals.first.team_id == @promotion.team.id
     end
 
     def perfect_defence?
       return false unless played?
 
-      @game.away_goals.blank?
+      home? ? @game.away_goals.blank? : @game.home_goals.blank?
     end
 
     def goal_count_equal_or_above?
       return false unless played?
 
-      @game.goals.where(team_id: @team_id)
+      @game.goals.where(team_id: @promotion.team.id).count >= @promotion.api_parameters['goals_count'].to_i
     end
 
     def home?
-      @game.home_team_id == @team_id
+      @game.home_team_id == @promotion.team.id
     end
 
     def away?
-      @game.away_team_id == @team_id
+      @game.away_team_id == @promotion.team.id
     end
 
     def won?

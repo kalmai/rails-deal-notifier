@@ -9,6 +9,7 @@ FactoryBot.define do
       home_short_name { 'atl' }
       away_short_name { 'mtl' }
     end
+
     utc_start_time { Time.parse('2024-10-02T23:30:00.0000000Z') }
     league_specifics { { opta_id: '2415301' } }
     has_consumed_results { false }
@@ -17,12 +18,5 @@ FactoryBot.define do
     league { create(:league, short_name: league_short_name) }
     home_team { create(:team, league:, short_name: home_short_name) }
     away_team { create(:team, league:, short_name: away_short_name) }
-
-    trait :with_goals do
-      after(:create) do |game, evaluator|
-        create_list(:goal, evaluator.home_goal_count, team: home_team, game:)
-        create_list(:goal, evaluator.away_goal_count, team: away_team, game:)
-      end
-    end
   end
 end

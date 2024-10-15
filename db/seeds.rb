@@ -10,11 +10,11 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-League.create!(full_name: 'national hockey league', short_name: 'nhl', start_month: 9, end_month: '7+', average_match_minutes: 150) # October 10, 2023 – June 2024
+League.create!(full_name: 'national hockey league', short_name: 'nhl', start_month: 9, end_month: '7+') # October 10, 2023 – June 2024
 # League.create!(full_name: 'national football league', short_name: 'nfl', start_month: 8, end_month: '2+') # September 5, 2024 – January 5, 2025
 # League.create!(full_name: 'major league baseball', short_name: 'mlb', start_month: 4, end_month: '10') # March 20 – September 29, 2024
 # League.create!(full_name: 'national basketball association', short_name: 'nba', start_month: 9, end_month: '5+') # October to April
-League.create!(full_name: 'major league soccer', short_name: 'mls', start_month: 2, end_month: '11', average_match_minutes: 120) # late March/early April to late September/early October
+League.create!(full_name: 'major league soccer', short_name: 'mls', start_month: 2, end_month: '11') # late March/early April to late September/early October
 # League.create!(full_name: 'canadian football league', short_name: 'cfl', start_month: 5, end_month: '11') # June 6 – October 26, 2024
 
 Wikipedia.seed_teams
@@ -31,7 +31,7 @@ Promotion.create!(
   hours_valid: 48,
   timing_methods: ['playing_today_at'],
   timing_parameters: { minutes_before: 60 },
-  api_methods: %w[was_home? perfect_defence?],
+  api_methods: %w[home? perfect_defence?],
   api_parameters: {},
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )
@@ -61,7 +61,7 @@ Promotion.create!(
   hours_valid: 24,
   timing_methods: [],
   timing_parameters: {},
-  api_methods: %w[was_home? goal_count_equal_or_above?],
+  api_methods: %w[home? goal_count_equal_or_above?],
   api_parameters: { goals_count: 1 },
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )

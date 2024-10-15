@@ -16,18 +16,32 @@ class Promotion < ApplicationRecord
   has_many :subscriptions
   has_many :users, through: :subscriptions
 
-  def evaluate(timezone:, single_method: nil)
-    eval_client = client(timezone)
-    single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
+  def most_recent_game
+    Game.most_recent_game(team_id: team.id)
   end
 
-  private
-
-  def client_params(timezone)
-    { team:, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
+  def evaluate(timezone:)
+    Evaluator::Client.new(game: most_recent_game, promotion: self, timezone:)
   end
+  # def evaluate(timezone:, single_method: nil)
+  #   eval_client = client(timezone)
+  #   single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
+  # end
 
-  def client(timezone)
-    "#{team.league.short_name.titleize}::Client".constantize.new(args: client_params(timezone))
-  end
+  # def evaluate(timezone:, options = {})
+  #   Evaluator::Client.new()
+
+  #   eval_client = client(timezone)
+  #   single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
+  # end
+
+  # private
+
+  # def client_params(timezone)
+  #   { team:, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
+  # end
+
+  # def client(timezone)
+  #   "#{team.league.short_name.titleize}::Client".constantize.new(args: client_params(timezone))
+  # end
 end
