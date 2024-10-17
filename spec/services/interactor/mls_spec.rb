@@ -8,7 +8,7 @@ RSpec.describe Interactor::Mls do
 
     before do
       stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
-        .to_return(status: 200, body: file_fixture('mls_raw_data.json').read)
+        .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
       create(:team, short_name: 'clb')
       create(:team, short_name: 'ne')
       create(:team, short_name: 'van')
@@ -35,9 +35,9 @@ RSpec.describe Interactor::Mls do
 
     before do
       stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
-        .to_return(status: 200, body: file_fixture('mls_raw_update_data.json').read)
+        .to_return(status: 200, body: file_fixture('mls/raw_update_data.json').read)
       stub_request(:get, %r{#{described_class::GOAL_DATA_URL}/*})
-        .to_return(status: 200, body: file_fixture('mls_goal_update_data.json').read)
+        .to_return(status: 200, body: file_fixture('mls/goal_update_data.json').read)
     end
 
     it 'updates the games' do
