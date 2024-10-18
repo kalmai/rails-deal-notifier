@@ -22,7 +22,7 @@ module Interactor
       # might make sense to just call Mls::Client.update_games instead of having
       # the job maintain the query
       def update_games
-        Game.where(has_consumed_results: false).each do |game|
+        Game.where(has_consumed_results: false, league_id: League.find_by(short_name: 'mls')).each do |game|
           data = aggregate_match_data(opta_id: game.league_specifics['opta_id'])
           next unless data['period'] == 'FullTime'
 
