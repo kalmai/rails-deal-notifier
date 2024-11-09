@@ -12,7 +12,7 @@ class RegistrationMailer < ApplicationMailer
 
   def actionable_promotions(user)
     user.promotions.map do |promotion|
-      promotion.attributes.with_indifferent_access if promotion.evaluate(timezone: user.timezone)
+      promotion.attributes.with_indifferent_access if promotion.evaluate_most_recent_game
     end.compact
   end
 end

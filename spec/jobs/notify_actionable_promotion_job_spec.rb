@@ -3,41 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe NotifyActionablePromotionJob do
-  let(:promotions) { [create(:promotion, :with_league_team_and_users, team_abbr: 'clb')] }
+  let(:promotions) { [create(:promotion, :with_users, team:)] }
+  let!(:team) { create(:team, region: 'ny') }
   let(:user) { promotions.first.users.first }
   let(:freeze_time) { Time.current.in_time_zone(user.timezone).change(time_adjustments) }
   let(:time_adjustments) { { hour: 5 } }
-  let(:client) { Mls::Client.new(args: { timezone: user.timezone, short_name: promotions.first.team.short_name }) }
-  let(:jam_goals) { [BaseClient::Goal.new(period: 3, time: '07:25')] }
-  let(:yesterday_start) { Time.current.yesterday }
-  let(:clb_goals) do
-    [
-      BaseClient::Goal.new(period: 1, time: '00:15'),
-      BaseClient::Goal.new(period: 3, time: '05:21')
-    ]
-  end
-  let(:results_cache) do
-    {
-      'clb' => BaseClient::GameResult.new(
-        won?: true, goals: clb_goals, away?: false, opponent: 'JAM',
-        utc_start_time: yesterday_start
-      ),
-      'jam' => BaseClient::GameResult.new(
-        won?: false, goals: jam_goals, away?: true, opponent: 'CLB',
-        utc_start_time: yesterday_start
-      )
-    }
-  end
+  let(:game) { create(:game, home_team: team, has_consumed_results: true) }
 
   before do
+    create(:goal, game:, team:)
     Timecop.freeze(freeze_time)
-    allow(Mls::Client).to receive(:new).and_return(client)
-    allow(client).to receive(:results_cache).and_return(results_cache)
   end
 
-  after do
-    Timecop.return
-  end
+  after { Timecop.return }
 
   describe '#perform' do
     it 'enqueues the email with all the actionable promotions' do

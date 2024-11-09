@@ -16,18 +16,23 @@ class Promotion < ApplicationRecord
   has_many :subscriptions
   has_many :users, through: :subscriptions
 
-  def evaluate(timezone:, single_method: nil)
-    eval_client = client(timezone)
-    single_method ? eval_client.call(single_method) : api_methods.all? { |method| eval_client.call(method) }
+  def most_recent_game
+    Game.most_recent_game(team_id: team.id)
   end
 
-  private
-
-  def client_params(timezone)
-    { short_name: team.short_name, timezone: }.merge!(api_parameters, timing_parameters).with_indifferent_access
+  def next_game
+    Game.next_game(team_id: team.id)
   end
 
-  def client(timezone)
-    "#{team.league.short_name.titleize}::Client".constantize.new(args: client_params(timezone))
+  def evaluate_most_recent_game
+    return false if most_recent_game.nil?
+
+    Evaluator::Client.new(promotion: self, game: most_recent_game).evaluate(api_methods)
+  end
+
+  def evaluate_next_game
+    return false if next_game.nil?
+
+    Evaluator::Client.new(promotion: self, game: next_game).evaluate(timing_methods)
   end
 end

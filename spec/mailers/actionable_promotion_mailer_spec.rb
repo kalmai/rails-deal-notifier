@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe ActionablePromotionMailer do
   subject(:mail) { described_class.with(user:, promotions:).notify.deliver_now }
 
-  let(:promotions) { [create(:promotion, :with_league_team_and_users)] }
+  let(:promotions) { [create(:promotion, :with_users, team:)] }
+  let!(:team) { create(:team, region: 'ny') }
   let(:user) { promotions.first.users.first }
   let(:email_address) { user.contact_methods.detail_for(type: :email) }
 

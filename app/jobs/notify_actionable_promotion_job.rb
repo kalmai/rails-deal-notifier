@@ -27,8 +27,12 @@ class NotifyActionablePromotionJob < ApplicationJob
       users = promotion.users
       timezones = timezones_to_evaluate(users:)
       users.where(timezone: timezones).each do |user|
-        hsh[user.id] = hsh[user.id].push(promotion) if promotion.evaluate(timezone: user.timezone)
+        hsh[user.id] = hsh[user.id].push(promotion) if evaluation(promotion)
       end
     end
+  end
+
+  def evaluation(promotion)
+    Evaluator::Client.new(promotion:, game: promotion.most_recent_game).evaluate(promotion.api_methods)
   end
 end

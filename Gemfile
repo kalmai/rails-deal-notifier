@@ -8,15 +8,20 @@ gem 'brakeman'
 gem 'bundler-audit'
 gem 'factory_bot_rails'
 gem 'faker'
+gem 'fugit'
 gem 'fuzzy_match'
 gem 'geocoder'
 gem 'importmap-rails'
 gem 'jbuilder'
+gem 'nokogiri'
 gem 'pg'
 gem 'pry'
-gem 'rails', '7.2.0'
-gem 'redis', '>= 4.0.1'
+gem 'puma'
+gem 'rack'
+gem 'rails', '7.2.1.1'
+gem 'rdoc'
 gem 'rest-client'
+gem 'rexml'
 gem 'rspec'
 gem 'rspec-rails'
 gem 'rubocop'
@@ -29,6 +34,7 @@ gem 'stimulus-rails'
 gem 'strong_migrations'
 gem 'tailwindcss-rails', '~> 2.7'
 gem 'turbo-rails'
+gem 'webrick'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
@@ -40,15 +46,10 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
-# Security pinning
-gem 'fugit', '>= 1.11.1'
-gem 'nokogiri', '>= 1.16.5'
-gem 'puma', '>= 6.4.3'
-gem 'rack', '~> 2.2.8'
-gem 'rdoc', '>= 6.6.3.1'
-gem 'rexml', '>= 3.3.6'
-gem 'webrick', '>= 1.8.2'
-# Security pinning
+########################
+### Security pinning ###
+# himom
+########################
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

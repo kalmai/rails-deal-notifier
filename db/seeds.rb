@@ -29,9 +29,9 @@ Promotion.create!(
   redemption_limiter: 'monthly',
   redemption_count: 0,
   hours_valid: 48,
-  timing_methods: ['playing_today_at'],
+  timing_methods: ['home?'],
   timing_parameters: { minutes_before: 60 },
-  api_methods: %w[was_home? perfect_defence?],
+  api_methods: %w[home? perfect_defence?],
   api_parameters: {},
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )
@@ -61,8 +61,71 @@ Promotion.create!(
   hours_valid: 24,
   timing_methods: [],
   timing_parameters: {},
-  api_methods: %w[was_home? goal_count_equal_or_above?],
+  api_methods: %w[home? goal_count_equal_or_above?],
   api_parameters: { goals_count: 1 },
   team: Team.find_by(short_name: 'clb', region: 'oh', league: League.find_by(short_name: 'mls'))
 )
 ### Ohio Soccer Team End
+
+### Ohio Hockey Team Start
+Promotion.create!(
+  company: 'Moo Moo Express Car Wash',
+  name: 'Moo Moo Express Car Wash 3rd Period Goal',
+  promo_type: 'free_gifts',
+  promo_code: nil,
+  source_url: 'https://www.nhl.com/bluejackets/fans/gameday-central',
+  redemption_limiter: 1,
+  redemption_count: 0,
+  hours_valid: 48,
+  timing_methods: ['home?'],
+  timing_parameters: { minutes_before: 60 },
+  api_methods: %w[home? scored_in?],
+  api_parameters: { period: 3 },
+  team: Team.find_by(short_name: 'cbj', region: 'oh', league: League.find_by(short_name: 'nhl'))
+)
+Promotion.create!(
+  company: "Jet's Pizza",
+  name: "Jet's Pizza Score Twice Half Price",
+  promo_type: 'order_discounts',
+  promo_code: 'CBJ50',
+  source_url: 'https://www.nhl.com/bluejackets/fans/gameday-central',
+  redemption_limiter: 0,
+  redemption_count: 0,
+  hours_valid: 24,
+  timing_methods: [],
+  timing_parameters: {},
+  api_methods: %w[home? goal_count_equal_or_above?],
+  api_parameters: { goals_count: 2 },
+  team: Team.find_by(short_name: 'cbj', region: 'oh', league: League.find_by(short_name: 'nhl'))
+)
+Promotion.create!(
+  company: 'Roosters',
+  name: 'Free Roosters Chili',
+  promo_type: 'free_gifts',
+  promo_code: nil,
+  source_url: 'https://www.nhl.com/bluejackets/fans/gameday-central',
+  redemption_limiter: 0,
+  redemption_count: 0,
+  hours_valid: 24,
+  timing_methods: [],
+  timing_parameters: {},
+  api_methods: %w[home? goal_count_equal_or_above?],
+  api_parameters: { goals_count: 3 },
+  team: Team.find_by(short_name: 'cbj', region: 'oh', league: League.find_by(short_name: 'nhl'))
+)
+Promotion.create!(
+  company: 'Tim Hortons',
+  name: 'Tim Hortons - Free Coffee',
+  promo_type: 'free_gifts',
+  promo_code: nil,
+  source_url: 'https://www.nhl.com/bluejackets/fans/gameday-central',
+  redemption_limiter: 0,
+  redemption_count: 0,
+  hours_valid: 24,
+  timing_methods: [],
+  timing_parameters: {},
+  api_methods: %w[home? won?],
+  api_parameters: { goals_count: 3 },
+  team: Team.find_by(short_name: 'cbj', region: 'oh', league: League.find_by(short_name: 'nhl'))
+)
+### Ohio Hockey Team End

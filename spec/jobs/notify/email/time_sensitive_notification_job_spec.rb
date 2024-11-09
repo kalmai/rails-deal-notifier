@@ -3,55 +3,45 @@
 require 'rails_helper'
 
 RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
-  let!(:promotion) { create(:promotion, :with_league_team_and_users, team_abbr:, league_abbr: 'nhl', timing_methods:) }
-  let(:timing_methods) { ['playing_today_at'] }
+  let!(:promotion) { create(:promotion, :with_users, team:, timing_methods:, timing_parameters:) }
+  let!(:team) { create(:team, region: 'ny') }
+  let(:timing_methods) { [] }
+  let(:timing_parameters) { { minutes_before: 60 } }
   let(:user) { promotion.users.first }
-  let(:client) { Nhl::Client.new(args: { timezone:, short_name: team_abbr }) }
-  let(:team_abbr) { 'cbj' }
   let(:timezone) { 'America/New_York' }
-  let(:freeze_time) { Time.at(0) }
-  let(:utc_start_time) { freeze_time.in(1.hour) }
-  let(:schedule_cache) do
-    [
-      BaseClient::TodayGame.new(away?: false, team_abbrev: 'cbj', utc_start_time:),
-      BaseClient::TodayGame.new(away?: true, team_abbrev: 'arz', utc_start_time:)
-    ]
-  end
+  let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
+  let(:utc_start_time) { Time.parse('2024-10-02T23:30:00.0000000Z') }
 
   before do
     Timecop.freeze(freeze_time)
-    allow(Nhl::Client).to receive(:new).and_return(client)
-    allow(client).to receive(:schedule_cache).and_return(schedule_cache)
+    create(:game, home_team: team, has_consumed_results: false, utc_start_time:)
   end
 
-  after do
-    Timecop.return
-  end
+  after { Timecop.return }
 
   describe '#perform' do
     it 'enqueues the email' do
       expect { described_class.new.perform }.to have_enqueued_mail(TimeSensitiveMailer, :notify)
         .with(params: { user:, promotion: }, args: [])
-        .on_queue(:default).at(1.hour.from_now).exactly(:once)
+        .on_queue(:default).at(utc_start_time - 1.hour).exactly(:once)
     end
 
     context 'when there are location requirements for the promotion' do
-      let(:timing_methods) { %w[playing_today_at future_home_game?] }
+      let(:timing_methods) { ['home?'] }
 
       it 'enqueues the email' do
         expect { described_class.new.perform }.to have_enqueued_mail(TimeSensitiveMailer, :notify)
           .with(params: { user:, promotion: }, args: [])
-          .on_queue(:default).at(1.hour.from_now).exactly(:once)
+          .on_queue(:default).at(utc_start_time - 1.hour).exactly(:once)
       end
 
       context 'when the it is an away game expectation' do
-        let(:timing_methods) { %w[playing_today_at future_away_game?] }
         let(:team_abbr) { 'arz' }
 
         it 'enqueues the email' do
           expect { described_class.new.perform }.to have_enqueued_mail(TimeSensitiveMailer, :notify)
             .with(params: { user:, promotion: }, args: [])
-            .on_queue(:default).at(1.hour.from_now).exactly(:once)
+            .on_queue(:default).at(utc_start_time - 1.hour).exactly(:once)
         end
       end
     end
