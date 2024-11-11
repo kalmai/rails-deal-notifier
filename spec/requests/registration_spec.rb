@@ -52,7 +52,7 @@ RSpec.describe 'Registrations' do
     end
 
     it 'saves a new user' do
-      assert_enqueued_with(job: Registration::NotifyJob) { post '/registration', params: }
+      assert_enqueued_with(job: Notify::WelcomeJob) { post '/registration', params: }
       expect(response).to redirect_to '/'
       expect(flash[:notice][:message]).to eq 'You will be receiving a welcome email shortly.'
       expect(User.last.postal).to eq postal_code

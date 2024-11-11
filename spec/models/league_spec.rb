@@ -14,8 +14,8 @@ RSpec.describe League do
     it { is_expected.to have_many(:teams).dependent(:destroy) }
   end
 
-  describe '#season_range' do
-    subject(:range) { build(:league, end_month:).season_range }
+  describe '#in_season?' do
+    subject(:range) { build(:league, end_month:).in_season? }
 
     let(:end_month) { '11' }
 

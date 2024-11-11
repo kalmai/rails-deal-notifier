@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe NotifyActionablePromotionJob do
+RSpec.describe Notify::ActionablePromotionJob do
   let(:promotions) { [create(:promotion, :with_users, team:)] }
   let!(:team) { create(:team, region: 'ny') }
   let(:user) { promotions.first.users.first }

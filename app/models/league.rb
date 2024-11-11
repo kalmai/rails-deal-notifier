@@ -5,8 +5,8 @@ class League < ApplicationRecord
 
   has_many :teams, dependent: :destroy
 
-  def season_range
-    season_start_date..season_end_date
+  def in_season?
+    Time.current.between?(season_start_date, season_end_date)
   end
 
   private
