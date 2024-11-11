@@ -12,15 +12,6 @@ module Interactor
         build_games(week_ago_week_from_now_data)
       end
 
-      # this will turn into a job in the future to run maybe every hour or two
-      # which means we will add an argument to this method to just take games from
-      # the job we start that fulfil the desired conditions like has it already
-      # consumed results and is it within two days of the start time
-      #
-      # can likely aggregate_match_data before we enter to loop to speed up execution
-      #
-      # might make sense to just call Mls::Client.update_games instead of having
-      # the job maintain the query
       def update_games
         Game.where(has_consumed_results: false, league_id: League.find_by(short_name: 'mls')).each do |game|
           data = aggregate_match_data(opta_id: game.league_specifics['opta_id'])
