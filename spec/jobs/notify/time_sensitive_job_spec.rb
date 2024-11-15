@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Notify::Email::TimeSensitiveNotificationJob do
+RSpec.describe Notify::TimeSensitiveJob do
   let!(:promotion) { create(:promotion, :with_users, team:, timing_methods:, timing_parameters:) }
   let!(:team) { create(:team, region: 'ny') }
   let(:timing_methods) { [] }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Registration::NotifyJob do
+RSpec.describe Notify::WelcomeJob do
   subject(:job) { described_class.new }
 
   let(:user) { create(:user, :with_contact_methods) }

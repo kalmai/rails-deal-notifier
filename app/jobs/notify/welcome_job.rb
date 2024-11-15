@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Registration
-  class NotifyJob < ApplicationJob
+module Notify
+  class WelcomeJob < ApplicationJob
     queue_as :low_priority
 
     def perform(user:)

@@ -1,10 +1,16 @@
 default: &default
-  notify_actionable_promotions:
+  update_games:
+    schedule: 0 * * * * # every hour
+    class: Interactor::UpdateGamesJob
+  store_games:
     schedule: 0 * * * *
-    class: NotifyActionablePromotionJob
-  time_sensitive_notifications:
-    schedule: 0 9 * * * # or 5 am ET
-    class: Notify::Email::TimeSensitiveNotificationJob
+    class: Interactor::StoreGamesJob
+  actionable_promotion:
+    schedule: 0 * * * *
+    class: Notify::ActionablePromotionJob
+  time_sensitive:
+    schedule: 30 16 * * * # 16:30 UTC
+    class: Notify::TimeSensitiveJob
 
 development:
   <<: *default

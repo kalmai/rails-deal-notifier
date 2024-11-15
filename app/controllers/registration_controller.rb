@@ -15,7 +15,7 @@ class RegistrationController < ApplicationController
       create_user_contact_method
     end
     if @user.persisted?
-      Registration::NotifyJob.perform_later(user: @user)
+      Notify::WelcomeJob.perform_later(user: @user)
       notice = { successful: true, message: 'You will be receiving a welcome email shortly.' }
     end
     redirect_to root_path, notice:
