@@ -33,7 +33,6 @@ services:
       - /tmp/pids/
     depends_on:
       - db
-      - redis
     tty: true
     stdin_open: true
     environment:
@@ -44,17 +43,6 @@ services:
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD-postgres}"
       RAILS_ENV: "${RAILS_ENV-development}"
 
-  redis:
-    image: redis
-    command: redis-server
-    volumes:
-      - redis:/data
-    ports:
-      - 6379
-    logging:
-            driver: none
-
 volumes:
   bundle_cache:
   postgres:
-  redis:

@@ -37,17 +37,17 @@ production:
   prepared_statements: false
   advisory_locks: false
   database: postgres
-  username: <%= Rails.application.credentials.prod_db_username %>
-  password: <%= Rails.application.credentials.prod_db_password %>
+  username: <%= Rails.application.credentials.db&.username %>
+  password: <%= Rails.application.credentials.db&.password %>
   port: 6543
-  host: <%= Rails.application.credentials.prod_db_host %>
+  host: <%= Rails.application.credentials.db&.host %>
   timeout: 5000
   database: postgres
   primary: &primary_prod
     <<: *default
     database: postgres
-    username: <%= Rails.application.credentials.prod_db_username %>
-    password: <%= Rails.application.credentials.prod_db_password %>
+    username: <%= Rails.application.credentials.db&.username %>
+    password: <%= Rails.application.credentials.db&.password %>
   queue:
     <<: *primary_prod
     database: postgres_queue
