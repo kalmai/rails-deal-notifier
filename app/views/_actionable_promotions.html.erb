@@ -28,7 +28,7 @@
         <th>Hours Valid</th>
         <th>Source*</th>
       </tr>
-      <% params[:actionable_promotions].each do |promotion| %>
+      <% @actionable_promotions.each do |promotion| %>
         <tr>
           <td>
             <%= promotion[:name] %>

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RegistrationMailerHelper
+module WelcomeMailerHelper
   # TODO: refactor this into smaller methods?
   # rubocop:disable Metrics/AbcSize
   def defaulted_promotions(user)
