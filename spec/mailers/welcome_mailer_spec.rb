@@ -2,14 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationMailer do
-  subject(:mail) { described_class.with(user:).welcome_email.deliver_now }
+RSpec.describe WelcomeMailer do
+  subject(:mail) { described_class.with(user:).send_email.deliver_now }
 
   let!(:promotion) { create(:promotion, :with_users, team:, api_methods: ['won?']) }
   let!(:team) { create(:team, region: 'ny') }
   let!(:game) { create(:game, home_team: promotion.team, has_consumed_results: true) }
   let(:user) { promotion.users.first }
   let(:email_address) { user.contact_methods.detail_for(type: :email) }
+
+  before do
+    create(:goal, game:, team: game.home_team, utc_scored_at: Time.current)
+  end
 
   it 'renders the body and headers' do
     expect(mail.subject).to eq('Welcome to Sports DealNotifier')

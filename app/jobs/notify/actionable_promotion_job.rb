@@ -24,7 +24,7 @@ module Notify
     end
 
     def gather_users_and_promotions
-      Promotion.all.each.with_object(Hash.new([])) do |promotion, hsh|
+      in_season_promotions.each.with_object(Hash.new([])) do |promotion, hsh|
         users = promotion.users
         timezones = timezones_to_evaluate(users:)
         users.where(timezone: timezones).each do |user|
@@ -34,7 +34,14 @@ module Notify
     end
 
     def evaluation(promotion)
-      Evaluator::Client.new(promotion:, game: promotion.most_recent_game).evaluate(promotion.api_methods)
+      game = promotion.most_recent_game
+      return false unless game
+
+      Evaluator::Client.new(promotion:, game:).evaluate(promotion.api_methods)
+    end
+
+    def in_season_promotions
+      Promotion.all.select { |promo| promo.team.league.in_season? }
     end
   end
 end

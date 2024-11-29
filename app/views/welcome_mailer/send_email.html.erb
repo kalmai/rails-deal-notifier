@@ -18,10 +18,10 @@
   </head>
   <body>
     <h1>Welcome to Sports DealNotifier!</h1>
-    <p>You have successfully signed up with: <%= params[:email] %>.</p>
+    <p>You have successfully signed up with: <%= @email %>.</p>
     <p>By default based on your location, your local teams are as follows:</p>
     <table style="width:100%">
-      <% defaulted_promotions(params[:user]).each do |league, teams| %>
+      <% defaulted_promotions(@user).each do |league, teams| %>
         <tr>
           <th>League</th>
           <th>Team</th>
@@ -50,7 +50,7 @@
     </table>
     <p>You can modify your local teams to receive more accurate promotion notifications by here. POST-MVP-GOAL</p>
   </body>
-  <% if params[:actionable_promotions].present? %>
-    <%= render partial: "/actionable_promotions", promotions: params[:actionable_promotions] %>
+  <% if @actionable_promotions.present? %>
+    <%= render partial: "/actionable_promotions", promotions: @actionable_promotions %>
   <% end %>
 </html>

@@ -5,6 +5,7 @@ FactoryBot.define do
     transient do
       promotion_count { 2 }
       league_name { 'mls' }
+      league_options { { start_month: Time.current.month - 1, end_month: "#{Time.current.month}+" } }
     end
 
     full_name { Faker::Sports::Football.team.downcase }
@@ -21,7 +22,7 @@ FactoryBot.define do
     end
 
     after(:create) do |team, evaluator|
-      league = create(:league, short_name: evaluator.league_name)
+      league = create(:league, short_name: evaluator.league_name, **evaluator.league_options)
       league.teams.push(team)
     end
   end

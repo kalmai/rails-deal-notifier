@@ -17,7 +17,7 @@ RSpec.describe User do
 
   describe '#populate_default_promotions' do
     context 'when there are multiple promotions in different regions' do
-      let(:region) { 'ohio' }
+      let(:region) { 'oh' }
 
       before do
         create(:team, :with_promotions, region:, promotion_count: 1)
