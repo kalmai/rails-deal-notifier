@@ -8,7 +8,7 @@ ARG RAILS_MASTER_KEY
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-bookworm as base
 
 # Rails app lives here
-WORKDIR /rails
+WORKDIR /rd-notifier
 
 # Set environment
 ENV RAILS_ENV=$RAILS_ENV \
@@ -53,18 +53,18 @@ RUN apt-get update -qq && \
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+COPY --from=build /rd-notifier /rd-notifier
 
 # Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
+RUN useradd rd-notifier --create-home --shell /bin/bash && \
+    chown -R rd-notifier:rd-notifier db log storage tmp
+USER rd-notifier:rd-notifier
 
 # Uncomment this to make MacOS work...?
 # RUN mkdir -p /tmp/pids/ && chown -R rails:rails /tmp/pids/
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/rd-notifier/bin/docker-entrypoint"]
 
 EXPOSE 3000
 
