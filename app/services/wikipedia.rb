@@ -8,7 +8,7 @@ module Wikipedia
         teams = build_initial_team_hash(html, league)
         modify_location_data(teams)
         add_abbrev_data(teams, league.short_name)
-        teams.each { Team.create!(**_1) }
+        teams.each { Team.create!(**self.it) }
       end
     end
 
