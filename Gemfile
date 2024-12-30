@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.3.4'
+ruby '3.4.1'
 
 gem 'brakeman'
 gem 'bundler-audit'
@@ -13,12 +13,13 @@ gem 'fuzzy_match'
 gem 'geocoder'
 gem 'importmap-rails'
 gem 'jbuilder'
+gem 'net-pop', github: 'ruby/net-pop'
 gem 'nokogiri'
 gem 'pg'
 gem 'pry'
 gem 'puma'
 gem 'rack'
-gem 'rails', '8.0.0'
+gem 'rails', '8.0.0.1'
 gem 'rdoc'
 gem 'rest-client'
 gem 'rexml'

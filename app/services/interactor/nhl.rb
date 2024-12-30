@@ -85,7 +85,7 @@ module Interactor
 
       def fetch_week_of_game_data(from:)
         raw_response = RestClient.get("#{BASE_URL}/v1/schedule/#{from.strftime('%Y-%m-%d')}")
-        JSON.parse(raw_response)['gameWeek'].map { _1['games'] }.flatten
+        JSON.parse(raw_response)['gameWeek'].map { it['games'] }.flatten
       end
 
       def find_team_record(short_name:)
