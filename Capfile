@@ -28,9 +28,9 @@ install_plugin Capistrano::SCM::Git
 #
 # require "capistrano/rvm"
 require 'capistrano/rbenv'
-# require 'capistrano/puma'
-# install_plugin Capistrano::Puma
-# install_plugin Capistrano::Puma::Systemd
+require 'capistrano/puma'
+install_plugin Capistrano::Puma
+install_plugin Capistrano::Puma::Systemd
 # require "capistrano/chruby"
 require 'capistrano/rails'
 require 'capistrano/bundler'
