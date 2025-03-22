@@ -4,7 +4,7 @@ default: &default
   username: 'postgres'
   password: 'postgres'
   port: <%= ENV['DATABASE_PORT'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
+  host: 'localhost'
   timeout: 5000
 
 development:
@@ -36,13 +36,13 @@ production:
   <<: *default
   prepared_statements: false
   advisory_locks: false
-  database: postgres
   username: <%= Rails.application.credentials.prod_db_username %>
   password: <%= Rails.application.credentials.prod_db_password %>
-  port: 6543
+  port: 5432
   host: <%= Rails.application.credentials.prod_db_host %>
   timeout: 5000
   database: postgres
+  sslmode: require
   primary: &primary_prod
     <<: *default
     database: postgres
