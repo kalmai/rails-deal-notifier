@@ -47,6 +47,12 @@ gem 'tzinfo-data', platforms: %i[windows jruby]
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 gem 'passenger'
+gem 'capistrano'
+gem 'capistrano3-puma', github: 'seuros/capistrano-puma'
+gem 'capistrano-bundler'
+gem 'capistrano-passenger'
+gem 'capistrano-rails'
+gem 'capistrano-rvm'
 
 ########################
 ### Security pinning ###
@@ -62,12 +68,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'capistrano'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rbenv'
-  gem 'capistrano-passenger'
-  gem 'capistrano3-puma', github: "seuros/capistrano-puma"
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
