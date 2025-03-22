@@ -18,13 +18,13 @@ server fetch(:aws_ec2_ip), port: 22, roles: %i[web app db], primary: true
 
 set :default_env, { 'RAILS_MASTER_KEY' => File.read('config/master.key').strip }
 set :rbenv_type, :user
-set :rbenv_ruby, '3.4.1'
+#set :rbenv_ruby, '3.4.1'
 set :rbenv_path, '~/.rbenv'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 set :rbenv_roles, :all # default value
 set :passenger_in_gemfile, true
-# set :passenger_environment_variables, { rbenv_version: '3.4.1' }
+set :passenger_environment_variables, { rbenv_version: '3.4.1' }
 
 set :application, 'deal-notifier'
 set :repo_url, 'git@github.com:kalmai/rails-deal-notifier.git'
@@ -75,7 +75,7 @@ set :deploy_to, "~/deploy/#{fetch(:application)}"
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 5
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
