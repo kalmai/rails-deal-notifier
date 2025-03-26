@@ -67,7 +67,22 @@ set :deploy_to, "~/deploy/#{fetch(:application)}"
 # append :linked_files, "config/database.yml", 'config/master.key'
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage"
+append :linked_dirs, *%w(tmp/pids tmp/sockets log)
+
+append :linked_files, "config/master.key"
+
+namespace :deploy do
+  namespace :check do
+    before :linked_files, :set_master_key do
+      on roles(:app) do
+        shared_path = '/home/ubuntu/deploy/deal-notifier/shared'
+        unless test("[ -f #{shared_path}/config/master.key ]")
+          upload! 'config/master.key', "#{shared_path}/config/master.key"
+        end
+      end
+    end
+  end
+end
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
