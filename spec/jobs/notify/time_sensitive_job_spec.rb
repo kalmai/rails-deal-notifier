@@ -11,10 +11,11 @@ RSpec.describe Notify::TimeSensitiveJob do
   let(:timezone) { 'America/New_York' }
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
   let(:utc_start_time) { Time.parse('2024-10-02T23:30:00.0000000Z') }
+  let(:next_game) { build(:game, home_team: team, has_consumed_results: false, utc_start_time:) }
 
   before do
     Timecop.freeze(freeze_time)
-    create(:game, home_team: team, has_consumed_results: false, utc_start_time:)
+    next_game.save!
   end
 
   after { Timecop.return }
@@ -35,13 +36,12 @@ RSpec.describe Notify::TimeSensitiveJob do
           .on_queue(:default).at(utc_start_time - 1.hour).exactly(:once)
       end
 
-      context 'when the it is an away game expectation' do
+      context 'when the it does not fulfill the location requirements' do
         let(:team_abbr) { 'arz' }
+        let(:next_game) { build(:game, away_team: team, has_consumed_results: false, utc_start_time:) }
 
-        it 'enqueues the email' do
-          expect { described_class.new.perform }.to have_enqueued_mail(TimeSensitiveMailer, :notify)
-            .with(params: { user:, promotion: }, args: [])
-            .on_queue(:default).at(utc_start_time - 1.hour).exactly(:once)
+        it 'does not enque the email' do
+          expect { described_class.new.perform }.not_to have_enqueued_mail(TimeSensitiveMailer, :notify)
         end
       end
     end

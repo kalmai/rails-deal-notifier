@@ -9,14 +9,15 @@ mls:
     page: Major_League_Soccer
     section: 3
   sport_api:
-    url: https://sportapi.mlssoccer.com/api/standings/live?isLive=true&competitionId=98
+    url: https://stats-api.mlssoccer.com/competitions/MLS-COM-000001/seasons/MLS-SEA-0001K9/standings?is_live=true
     data_path:
+    - tables
+    - 0
+    - entries
     abbrev_path:
-    - club
-    - abbreviation
+    - team_three_letter_code
     full_name_path:
-    - club
-    - fullName
+    - team
     additional_params:
       seasonId: null
   options:
