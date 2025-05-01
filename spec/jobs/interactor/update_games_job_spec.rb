@@ -18,8 +18,6 @@ RSpec.describe Interactor::UpdateGamesJob do
     before do
       stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/matches/*})
         .to_return(status: 200, body: file_fixture('mls/raw_update_data.json').read)
-      stub_request(:get, %r{#{Interactor::Mls::GOAL_DATA_URL}/*})
-        .to_return(status: 200, body: file_fixture('mls/goal_update_data.json').read)
     end
 
     it 'performs the job successfully' do
@@ -28,9 +26,9 @@ RSpec.describe Interactor::UpdateGamesJob do
         game.reload
       end
         .to change(game, :has_consumed_results).from(false).to(true)
-        .and change { game.goals.count }.from(0).to(3)
+        .and change { game.goals.count }.from(0).to(5)
         .and change { game.home_goals.count }.from(0).to(1)
-        .and change { game.away_goals.count }.from(0).to(2)
+        .and change { game.away_goals.count }.from(0).to(4)
     end
 
     context 'when the league is out of season' do

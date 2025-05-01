@@ -4,12 +4,12 @@ FactoryBot.define do
   factory :game do
     transient do
       league_short_name { 'mls' }
-      home_short_name { 'atl' }
-      away_short_name { 'mtl' }
+      home_short_name { 'la' }
+      away_short_name { 'por' }
     end
 
-    utc_start_time { Time.parse('2024-10-02T23:30:00.0000000Z') }
-    league_specifics { { opta_id: '2415301' } }
+    utc_start_time { Time.parse('2025-04-26T00:00:00Z') }
+    league_specifics { { match_id: 'MLS-MAT-0005XM' } }
     has_consumed_results { false }
     slug { "#{home_short_name}vs#{away_short_name}-#{utc_start_time.strftime('%m-%d-%Y')}" }
 
