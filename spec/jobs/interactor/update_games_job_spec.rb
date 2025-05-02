@@ -16,7 +16,7 @@ RSpec.describe Interactor::UpdateGamesJob do
     let!(:game) { create(:game) }
 
     before do
-      stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_update_data.json').read)
     end
 

@@ -7,7 +7,7 @@ RSpec.describe Interactor::Mls do
     subject(:execution) { described_class.store_games }
 
     before do
-      stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{described_class::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
       create(:team, short_name: 'atl')
       create(:team, short_name: 'la')
@@ -34,7 +34,7 @@ RSpec.describe Interactor::Mls do
     let(:game) { create(:game) }
 
     before do
-      stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{described_class::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_update_data.json').read)
     end
 
