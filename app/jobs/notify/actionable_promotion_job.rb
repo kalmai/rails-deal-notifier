@@ -24,7 +24,7 @@ module Notify
     end
 
     def gather_users_and_promotions
-      in_season_promotions.each.with_object(Hash.new([])) do |promotion, hsh|
+      in_season_promotions.each.with_object(Hash.new([])) do |promotion, hsh| # rubocop:disable Lint/SharedMutableDefault
         users = promotion.users
         timezones = timezones_to_evaluate(users:)
         users.where(timezone: timezones).each do |user|

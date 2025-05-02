@@ -18,12 +18,12 @@ RSpec.describe Interactor::StoreGamesJob do
 
   describe '#perform' do
     before do
-      stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
-      create(:team, short_name: 'clb')
-      create(:team, short_name: 'ne')
-      create(:team, short_name: 'van')
-      create(:team, short_name: 'lafc')
+      create(:team, short_name: 'atl')
+      create(:team, short_name: 'la')
+      create(:team, short_name: 'nsh')
+      create(:team, short_name: 'por')
     end
 
     it 'performs the job successfully' do

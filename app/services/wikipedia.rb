@@ -70,7 +70,7 @@ module Wikipedia
 
     def build_initial_team_hash(html, league)
       parsed_html_data(html).map do |row|
-        row_data = row.elements.to_a.map(&:text).map { _1.downcase.strip }
+        row_data = row.elements.to_a.map(&:text).map { it.downcase.strip }
         row_data.shift while row_data.first.in?(seed_config.dig(league.short_name, :options, :excluded_wiki_columns))
         # assuming the data always follows the pattern |team|location|
         { full_name: row_data.first, location_string: row_data.second, league: }

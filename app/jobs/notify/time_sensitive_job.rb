@@ -7,9 +7,9 @@ module Notify
     def perform
       Promotion.where.not(timing_parameters: {}).each do |promotion|
         start_time = promotion.next_game&.utc_start_time
-        offset = promotion.timing_parameters['minutes_before'].to_i
         next unless start_time.present? && promotion.evaluate_next_game
 
+        offset = promotion.timing_parameters['minutes_before'].to_i
         handle_enqueing(promotion:, start_time:, offset:)
       end
     end

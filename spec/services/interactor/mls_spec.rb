@@ -7,12 +7,12 @@ RSpec.describe Interactor::Mls do
     subject(:execution) { described_class.store_games }
 
     before do
-      stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{described_class::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
-      create(:team, short_name: 'clb')
-      create(:team, short_name: 'ne')
-      create(:team, short_name: 'van')
-      create(:team, short_name: 'lafc')
+      create(:team, short_name: 'atl')
+      create(:team, short_name: 'la')
+      create(:team, short_name: 'nsh')
+      create(:team, short_name: 'por')
     end
 
     it 'stores the games' do
@@ -20,7 +20,7 @@ RSpec.describe Interactor::Mls do
     end
 
     context 'when the game has already been stored' do
-      before { create(:game, slug: 'clbvsne-10-12-2024') }
+      before { create(:game, slug: 'atlvsnsh-05-03-2025') }
 
       it 'skips the existing game and continues writing newer games' do
         expect { execution }.to change(Game, :count).by(1)
@@ -34,10 +34,8 @@ RSpec.describe Interactor::Mls do
     let(:game) { create(:game) }
 
     before do
-      stub_request(:get, %r{#{described_class::BASE_URL}/matches/*})
+      stub_request(:get, %r{#{described_class::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_update_data.json').read)
-      stub_request(:get, %r{#{described_class::GOAL_DATA_URL}/*})
-        .to_return(status: 200, body: file_fixture('mls/goal_update_data.json').read)
     end
 
     it 'updates the games' do
@@ -46,9 +44,9 @@ RSpec.describe Interactor::Mls do
         game.reload
       end
         .to change(game, :has_consumed_results).from(false).to(true)
-        .and change { game.goals.count }.from(0).to(3)
+        .and change { game.goals.count }.from(0).to(5)
         .and change { game.home_goals.count }.from(0).to(1)
-        .and change { game.away_goals.count }.from(0).to(2)
+        .and change { game.away_goals.count }.from(0).to(4)
     end
   end
 end

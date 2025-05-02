@@ -79,5 +79,4 @@ ruby 3.4.1
     * likely need to update ui to ask for state/postal
       * should likely persist lat/lon as well in the future
 * if peoples are interested, register and add https://buymeacoffee.com/ as a badge
-* fix time sensitive notification job, believe it sends it exactly at the end of the notification time, updating it to check minutes versus hours might fix everything, don't think we actually do any math to subtract when we need to in some situations
 * should probably figure out why build times in docker are kinda butt
