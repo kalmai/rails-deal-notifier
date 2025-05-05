@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.4.1'
+ruby '3.4.2'
 
 gem 'brakeman'
 gem 'bundler-audit'
@@ -34,6 +34,7 @@ gem 'sprockets-rails'
 gem 'stimulus-rails'
 gem 'strong_migrations'
 gem 'tailwindcss-rails', '~> 2.7'
+gem 'tailwindcss-ruby', '~> 4.1'
 gem 'turbo-rails'
 gem 'webrick'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]

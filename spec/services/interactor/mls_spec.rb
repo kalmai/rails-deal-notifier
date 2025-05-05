@@ -29,9 +29,7 @@ RSpec.describe Interactor::Mls do
   end
 
   describe '#update_games' do
-    subject(:execution) { described_class.update_games }
-
-    let(:game) { create(:game) }
+    subject!(:game) { create(:game) }
 
     before do
       stub_request(:get, %r{#{described_class::BASE_URL}/*})
@@ -40,13 +38,26 @@ RSpec.describe Interactor::Mls do
 
     it 'updates the games' do
       expect do
-        execution
+        described_class.update_games
         game.reload
       end
         .to change(game, :has_consumed_results).from(false).to(true)
         .and change { game.goals.count }.from(0).to(5)
         .and change { game.home_goals.count }.from(0).to(1)
         .and change { game.away_goals.count }.from(0).to(4)
+    end
+
+    context 'when the game has no update yet' do
+      before do
+        stub_request(:get, %r{#{described_class::BASE_URL}/*}).to_raise(RestClient::ExceptionWithResponse.new)
+      end
+
+      it 'does not update the game and rescues' do
+        described_class.update_games
+        game.reload
+        expect(game.has_consumed_results).to be false
+        expect(game.goals.count).to eq(0)
+      end
     end
   end
 end
