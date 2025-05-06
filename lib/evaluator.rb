@@ -8,6 +8,8 @@ module Evaluator
     end
 
     def evaluate(methods)
+      return false unless Time.current.between?(@game.utc_start_time, @game.utc_start_time + @promotion.hours_valid)
+
       methods.all? { |method| send(method) }
     end
 
