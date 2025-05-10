@@ -41,8 +41,8 @@ RSpec.describe Interactor::Mls do
         described_class.update_games
         game.reload
       end
-        .to change(game, :has_consumed_results).from(false).to(true)
-        .and change { game.goals.count }.from(0).to(5)
+        .to change(game, :finalized).from(false).to(true)
+        .and change { game.events.count }.from(0).to(5)
         .and change { game.home_goals.count }.from(0).to(1)
         .and change { game.away_goals.count }.from(0).to(4)
     end
@@ -55,8 +55,8 @@ RSpec.describe Interactor::Mls do
       it 'does not update the game and rescues' do
         described_class.update_games
         game.reload
-        expect(game.has_consumed_results).to be false
-        expect(game.goals.count).to eq(0)
+        expect(game.finalized).to be false
+        expect(game.events.count).to eq(0)
       end
     end
   end

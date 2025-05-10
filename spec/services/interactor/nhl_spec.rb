@@ -46,8 +46,8 @@ RSpec.describe Interactor::Nhl do
         execution
         game.reload
       end
-        .to change(game, :has_consumed_results).from(false).to(true)
-        .and change { game.goals.count }.from(0).to(5)
+        .to change(game, :finalized).from(false).to(true)
+        .and change { game.events.count }.from(0).to(5)
         .and change { game.home_goals.count }.from(0).to(1)
         .and change { game.away_goals.count }.from(0).to(4)
     end

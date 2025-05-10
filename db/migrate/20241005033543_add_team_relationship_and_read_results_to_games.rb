@@ -7,8 +7,8 @@ class AddTeamRelationshipAndReadResultsToGames < ActiveRecord::Migration[7.2]
       remove_column :games, :away_team, :bigint, if_exists: true
       remove_column :games, :away_team_id, :bigint, if_exists: true
 
-      add_reference :games, :home_team, index: { algorithm: :concurrently }
-      add_reference :games, :away_team, index: { algorithm: :concurrently }
+      add_reference :games, :home_team, index: { algorithm: :concurrently }, if_not_exists: true
+      add_reference :games, :away_team, index: { algorithm: :concurrently }, if_not_exists: true
       change_column_null :games, :home_team_id, false
       change_column_null :games, :away_team_id, false
     end

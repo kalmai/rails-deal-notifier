@@ -8,29 +8,27 @@ module Evaluator
     end
 
     def evaluate(methods)
-      return false unless Time.current.between?(@game.utc_start_time, @game.utc_start_time + @promotion.hours_valid)
-
       methods.all? { |method| send(method) }
     end
 
     private
 
     def played?
-      @game.try(:has_consumed_results) == true
+      @game.try(:finalized) == true
     end
 
     def scored_in?
-      return false unless played? && @game.goals.present?
+      return false unless played? && @game.events.present?
 
-      @game.goals.where(team_id: @promotion.team.id).any? do |goal|
+      @game.events.where(team_id: @promotion.team.id).any? do |goal|
         goal.period == @promotion.api_parameters['period'].to_i
       end
     end
 
     def first_goal?
-      return false unless played? && @game.goals.present?
+      return false unless played? && @game.events.present?
 
-      @game.goals.first.team_id == @promotion.team.id
+      @game.events.first.team_id == @promotion.team.id
     end
 
     def perfect_defence?
@@ -42,7 +40,7 @@ module Evaluator
     def goal_count_equal_or_above?
       return false unless played?
 
-      @game.goals.where(team_id: @promotion.team.id).count >= @promotion.api_parameters['goals_count'].to_i
+      @game.events.where(team_id: @promotion.team.id).count >= @promotion.api_parameters['goals_count'].to_i
     end
 
     def home?

@@ -10,7 +10,7 @@ FactoryBot.define do
 
     utc_start_time { Time.parse('2025-04-26T00:00:00Z') }
     league_specifics { { match_id: 'MLS-MAT-0005XM' } }
-    has_consumed_results { false }
+    finalized { false }
     slug { "#{home_short_name}vs#{away_short_name}-#{utc_start_time.strftime('%m-%d-%Y')}" }
 
     league { create(:league, short_name: league_short_name) }

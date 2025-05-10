@@ -12,13 +12,12 @@ module Interactor
       end
 
       def update_games
-        Game.where(has_consumed_results: false, league_id: League.find_by(short_name: 'mls')).each do |game|
+        Game.where(finalized: false, league_id: League.find_by(short_name: 'mls')).each do |game|
           data = match_data(match_id: game.league_specifics['match_id'])
-          next unless data['data_status'] == 'postmatch'
 
-          game.update(has_consumed_results: true)
+          game.update(finalized: true) if data['data_status'] == 'postmatch'
           [game.home_team, game.away_team].each do |team|
-            create_goals_for(game:, data: { team:, goals: data.dig('goals', team.short_name) })
+            create_goals_for(game:, data: { team:, events: data.dig('goals', team.short_name) })
           end
         end
       end
@@ -56,7 +55,12 @@ module Interactor
       end
 
       def create_goals_for(game:, data:)
-        data[:goals].each { |goals| Goal.create!(game:, team: data[:team], **goals) }
+        slugs = game.events.map(&:slug)
+        data[:events]&.each do |goals|
+          next if slugs.include?(goals['slug'])
+
+          Event.create!(game:, team: data[:team], **goals)
+        end
       end
 
       def find_team_record(short_name:)
@@ -87,9 +91,11 @@ module Interactor
       def goal_data(event_data)
         event_data.each_with_object(Hash.new { |h, k| h[k] = [] }) do |goal_data, hsh|
           team_abbr = goal_data['three_letter_code'].downcase
+          timestamp = Time.parse(goal_data['event_time'])
           goal = {
             'period' => goal_data['game_section'] == 'firstHalf' ? 1 : 2,
-            'utc_scored_at' => Time.parse(goal_data['event_time'])
+            'slug' => "#{team_abbr}_#{timestamp.to_i}",
+            'utc_occurred_at' => timestamp, 'event_type' => 'goal'
           }
           hsh[team_abbr] = hsh[team_abbr].push(goal)
         end

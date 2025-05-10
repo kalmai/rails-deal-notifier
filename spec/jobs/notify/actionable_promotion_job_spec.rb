@@ -8,10 +8,10 @@ RSpec.describe Notify::ActionablePromotionJob do
   let(:user) { promotions.first.users.first }
   let(:freeze_time) { Time.current.in_time_zone(user.timezone).change(time_adjustments) }
   let(:time_adjustments) { { hour: 5 } }
-  let(:game) { create(:game, home_team: team, has_consumed_results: true) }
+  let(:game) { create(:game, home_team: team, finalized: true) }
 
   before do
-    create(:goal, game:, team:)
+    create(:event, game:, team:)
     Timecop.freeze(freeze_time)
   end
 

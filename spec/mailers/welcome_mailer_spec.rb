@@ -7,12 +7,12 @@ RSpec.describe WelcomeMailer do
 
   let!(:promotion) { create(:promotion, :with_users, team:, api_methods: ['won?']) }
   let!(:team) { create(:team, region: 'ny') }
-  let!(:game) { create(:game, home_team: promotion.team, has_consumed_results: true) }
+  let!(:game) { create(:game, home_team: promotion.team, finalized: true) }
   let(:user) { promotion.users.first }
   let(:email_address) { user.contact_methods.detail_for(type: :email) }
 
   before do
-    create(:goal, game:, team: game.home_team, utc_scored_at: Time.current)
+    create(:event, game:, team: game.home_team, utc_occurred_at: Time.current)
   end
 
   it 'renders the body and headers' do
@@ -25,7 +25,7 @@ RSpec.describe WelcomeMailer do
   end
 
   context 'when there are actionable results' do
-    before { create(:goal, game:, team: game.home_team) }
+    before { create(:event, game:, team: game.home_team) }
 
     it 'renders the promotions additionally' do
       expect(CGI.unescape_html(mail.body.encoded)).to include(

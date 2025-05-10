@@ -25,12 +25,11 @@ module Interactor
 
       def update_games
         date_results = {}
-        Game.where(has_consumed_results: false, league: League.find_by(short_name: 'nhl')).each do |game|
+        Game.where(finalized: false, league: League.find_by(short_name: 'nhl')).each do |game|
           date_results = upsert_results(results: date_results, on: game.utc_start_time)
           datum = find_datum(results: date_results, slug: game.slug, on: game.utc_start_time)
-          next unless datum['gameOutcome'].present?
+          game.update(finalized: true) if datum['gameOutcome'].present?
 
-          game.update(has_consumed_results: true)
           [game.home_team, game.away_team].each { |team| create_goals_for(game:, team:, goal_data: datum) }
         end
       end
@@ -40,13 +39,16 @@ module Interactor
       def create_goals_for(game:, team:, goal_data:)
         team_goals = goal_data['goals'].select { |goal| goal if goal['teamAbbrev'].downcase.eql?(team.short_name) }
         team_goals.each do |goal|
-          Goal.create! \
+          assumed_event_time = assumed_utc_occurred_time(game_start_time: game.utc_start_time, goal_data: goal)
+          Event.create! \
             game:, team:, period: goal['period'],
-            utc_scored_at: assumed_utc_score_time(game_start_time: game.utc_start_time, goal_data: goal)
+            utc_occurred_at: assumed_event_time,
+            slug: "#{team.short_name}_#{assumed_event_time.to_i}",
+            event_type: :goal
         end
       end
 
-      def assumed_utc_score_time(game_start_time:, goal_data:)
+      def assumed_utc_occurred_time(game_start_time:, goal_data:)
         minutes, seconds = goal_data['timeInPeriod'].split(':').map(&:to_i)
         game_start_time + (((goal_data['period'] - 1) * 20) + minutes).minutes + seconds.seconds
       end
