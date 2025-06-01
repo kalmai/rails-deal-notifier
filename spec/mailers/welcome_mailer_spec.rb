@@ -7,13 +7,17 @@ RSpec.describe WelcomeMailer do
 
   let!(:promotion) { create(:promotion, :with_users, team:, api_methods: ['won?']) }
   let!(:team) { create(:team, region: 'ny') }
-  let!(:game) { create(:game, home_team: promotion.team, finalized: true) }
+  let!(:game) { create(:game, home_team: promotion.team, finalized: true, utc_start_time: freeze_time - 1.hour) }
   let(:user) { promotion.users.first }
   let(:email_address) { user.contact_methods.detail_for(type: :email) }
+  let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
 
   before do
+    Timecop.freeze(freeze_time)
     create(:event, game:, team: game.home_team, utc_occurred_at: Time.current)
   end
+
+  after { Timecop.return }
 
   it 'renders the body and headers' do
     expect(mail.subject).to eq('Welcome to Sports DealNotifier')
