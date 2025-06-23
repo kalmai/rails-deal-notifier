@@ -68,10 +68,8 @@ module Interactor
       end
 
       def week_ago_week_from_now_data
-        today = Time.now.strftime('%Y-%m-%d')
-        [[7.day.ago.strftime('%Y-%m-%d'), today], [today, 7.day.from_now.strftime('%Y-%m-%d')]].map do |set|
-          JSON.parse(RestClient.get(game_schedule_url(*set)))['schedule']
-        end.flatten.uniq
+        resp = RestClient.get(game_schedule_url(7.day.ago.strftime('%Y-%m-%d'), 7.day.from_now.strftime('%Y-%m-%d')))
+        JSON.parse(resp)['schedule']
       end
 
       def game_schedule_url(beg, fin)

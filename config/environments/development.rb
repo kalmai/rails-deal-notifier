@@ -81,6 +81,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :development } }
   config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
+  config.log_level = :info
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true

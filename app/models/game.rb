@@ -17,6 +17,10 @@ class Game < ApplicationRecord
     events.where(team_id: away_team.id)
   end
 
+  def teams
+    [home_team, away_team]
+  end
+
   class << self
     def next_game(team_id:)
       find_games_for(team_id:).order(:utc_start_time).where(finalized: false).first

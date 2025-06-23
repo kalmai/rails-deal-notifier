@@ -11,8 +11,10 @@ class WelcomeMailer < ApplicationMailer
   private
 
   def actionable_promotions(user)
-    user.promotions.map do |promotion|
-      promotion.attributes.with_indifferent_access if promotion.evaluate_most_recent_game
-    end.compact
+    Time.use_zone(user.timezone) do
+      user.promotions.map do |promotion|
+        promotion.attributes.with_indifferent_access if promotion.evaluate_most_recent_game
+      end.compact
+    end
   end
 end

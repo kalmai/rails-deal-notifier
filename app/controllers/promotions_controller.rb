@@ -10,7 +10,7 @@ class PromotionsController < ApplicationController
     arr = []
     teams.map do |team|
       team.promotions.map do |promo|
-        Time.use_zone('America/Los_Angeles') do
+        Time.use_zone(location_data[:timezone]) do
           arr.push(promo.attributes.with_indifferent_access) if promo.evaluate_most_recent_game
         end
       end
