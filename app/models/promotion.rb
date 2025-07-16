@@ -25,9 +25,11 @@ class Promotion < ApplicationRecord
   end
 
   def evaluate_most_recent_game
-    return false if most_recent_game.nil?
+    game = most_recent_game
+    return false if game.nil?
+    return false unless Time.current.between?(game.utc_start_time, game.utc_start_time + hours_valid.hours)
 
-    Evaluator::Client.new(promotion: self, game: most_recent_game).evaluate(api_methods)
+    Evaluator::Client.new(promotion: self, game:).evaluate(api_methods)
   end
 
   def evaluate_next_game

@@ -2,10 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe Goal do
+RSpec.describe Event do
   describe 'validations' do
+    it { is_expected.to validate_presence_of :slug }
+    it { is_expected.to validate_presence_of :event_type }
     it { is_expected.to validate_presence_of :period }
-    it { is_expected.to validate_presence_of :utc_scored_at }
+    it { is_expected.to validate_presence_of :utc_occurred_at }
   end
 
   describe 'associations' do

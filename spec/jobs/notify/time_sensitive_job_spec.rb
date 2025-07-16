@@ -11,7 +11,7 @@ RSpec.describe Notify::TimeSensitiveJob do
   let(:timezone) { 'America/New_York' }
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
   let(:utc_start_time) { Time.parse('2024-10-02T23:30:00.0000000Z') }
-  let(:next_game) { build(:game, home_team: team, has_consumed_results: false, utc_start_time:) }
+  let(:next_game) { build(:game, home_team: team, finalized: false, utc_start_time:) }
 
   before do
     Timecop.freeze(freeze_time)
@@ -38,7 +38,7 @@ RSpec.describe Notify::TimeSensitiveJob do
 
       context 'when the it does not fulfill the location requirements' do
         let(:team_abbr) { 'arz' }
-        let(:next_game) { build(:game, away_team: team, has_consumed_results: false, utc_start_time:) }
+        let(:next_game) { build(:game, away_team: team, finalized: false, utc_start_time:) }
 
         it 'does not enque the email' do
           expect { described_class.new.perform }.not_to have_enqueued_mail(TimeSensitiveMailer, :notify)

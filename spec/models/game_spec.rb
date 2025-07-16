@@ -6,8 +6,8 @@ RSpec.describe Game do
   let(:game) { create(:game) }
 
   before do
-    create(:goal, team: game.home_team, game:)
-    create(:goal, team: game.away_team, game:)
+    create(:event, team: game.home_team, game:)
+    create(:event, team: game.away_team, game:)
   end
 
   describe 'validations' do
@@ -19,7 +19,7 @@ RSpec.describe Game do
     it { is_expected.to belong_to(:away_team).class_name('Team') }
     it { is_expected.to belong_to(:home_team).class_name('Team') }
     it { is_expected.to belong_to(:league) }
-    it { is_expected.to have_many(:goals).order('utc_scored_at') }
+    it { is_expected.to have_many(:events).order('utc_occurred_at') }
   end
 
   describe '#home_goals' do
@@ -51,12 +51,12 @@ RSpec.describe Game do
     end
 
     context 'when the game has read results' do
-      let(:game) { create(:game, has_consumed_results: true) }
+      let(:game) { create(:game, finalized: true) }
 
       it { is_expected.to eq game }
 
       context 'when there are multiple games that completed in history' do
-        let(:game) { create(:game, has_consumed_results: true, utc_start_time: freeze_time) }
+        let(:game) { create(:game, finalized: true, utc_start_time: freeze_time) }
 
         before do
           3.times do |i|
@@ -65,7 +65,7 @@ RSpec.describe Game do
               home_team: game.home_team,
               slug: "momvsdad-10-1#{i + 1}-1000",
               utc_start_time: (Time.zone.now - (i + 1).days),
-              has_consumed_results: true
+              finalized: true
             )
           end
         end

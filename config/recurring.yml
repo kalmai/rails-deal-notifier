@@ -1,10 +1,13 @@
 default: &default
   update_games:
-    schedule: 0 * * * * # every hour
+    schedule: "*/5 * * * *" # every hour
     class: Interactor::UpdateGamesJob
   store_games:
     schedule: 0 * * * *
     class: Interactor::StoreGamesJob
+  clean_up_old_games:
+    schedule: 0 * * * WED
+    class: CleanUpOldGames
   actionable_promotion:
     schedule: 0 * * * *
     class: Notify::ActionablePromotionJob

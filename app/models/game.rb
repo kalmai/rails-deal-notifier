@@ -7,23 +7,27 @@ class Game < ApplicationRecord
   belongs_to :league
   belongs_to :home_team, class_name: 'Team'
   belongs_to :away_team, class_name: 'Team'
-  has_many :goals, -> { order('utc_scored_at') }, dependent: :destroy
+  has_many :events, -> { order('utc_occurred_at') }, dependent: :destroy
 
   def home_goals
-    goals.where(team_id: home_team.id)
+    events.where(team_id: home_team.id)
   end
 
   def away_goals
-    goals.where(team_id: away_team.id)
+    events.where(team_id: away_team.id)
+  end
+
+  def teams
+    [home_team, away_team]
   end
 
   class << self
     def next_game(team_id:)
-      find_games_for(team_id:).order(:utc_start_time).where(has_consumed_results: false).first
+      find_games_for(team_id:).order(:utc_start_time).where(finalized: false).first
     end
 
     def most_recent_game(team_id:)
-      find_games_for(team_id:).order(:utc_start_time).reverse_order.where(has_consumed_results: true).first
+      find_games_for(team_id:).order(:utc_start_time).reverse_order.where(finalized: true).first
     end
 
     def find_games_for(team_id:)
