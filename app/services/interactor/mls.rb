@@ -68,8 +68,13 @@ module Interactor
       end
 
       def week_ago_week_from_now_data
-        resp = RestClient.get(game_schedule_url(7.day.ago.strftime('%Y-%m-%d'), 7.day.from_now.strftime('%Y-%m-%d')))
-        JSON.parse(resp)['schedule']
+        # the requests return errors if there are no games found within the range borking this job in odd situations
+        # can fix this perhaps by rescuing from the bad status or w/e rest client error is raised
+        # even though they improved their API i fear that they are limiting return data...
+        today = Time.now.strftime('%Y-%m-%d')
+        [[7.day.ago.strftime('%Y-%m-%d'), today], [today, 7.day.from_now.strftime('%Y-%m-%d')]].map do |set|
+          JSON.parse(RestClient.get(game_schedule_url(*set)))['schedule']
+        end.flatten.uniq
       end
 
       def game_schedule_url(beg, fin)

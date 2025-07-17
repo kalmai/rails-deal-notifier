@@ -3,9 +3,9 @@
 class CleanUpOldGames < ApplicationJob
   queue_as :default
 
+  # if there are promotions that last longer than a week after a game, it may be worth re-visiting
+  # how we clean up older games
   def perform
-    Game.where(finalized: true).map do |game|
-      game.destroy! if (game.utc_start_time + 1.week) < Time.current
-    end
+    Game.where('utc_start_time::date <= ?', 1.weeks.ago).each(&:destroy!)
   end
 end
