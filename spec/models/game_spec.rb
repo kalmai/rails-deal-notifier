@@ -39,8 +39,8 @@ RSpec.describe Game do
 
     let(:freeze_time) { Time.zone.now }
 
-    before { Timecop.freeze(freeze_time) }
-    after { Timecop.return }
+    before { travel_to(freeze_time) }
+    after { travel_back }
 
     it { is_expected.to be_nil }
 

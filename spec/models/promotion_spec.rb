@@ -9,8 +9,8 @@ RSpec.describe Promotion do
   let!(:game) { create(:game, home_team: promotion.team, finalized: true) }
   let(:freeze_time) { game.utc_start_time }
 
-  before { Timecop.freeze(freeze_time) }
-  after { Timecop.return }
+  before { travel_to(freeze_time) }
+  after { travel_back }
 
   it { is_expected.to belong_to(:team).class_name('Team') }
   it { is_expected.to validate_presence_of(:company) }

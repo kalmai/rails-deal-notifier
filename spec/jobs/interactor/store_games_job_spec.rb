@@ -11,10 +11,10 @@ RSpec.describe Interactor::StoreGamesJob do
   before do
     league = create(:league, end_month:, short_name: 'mls')
     allow(League).to receive(:all).and_return([league])
-    Timecop.freeze(freeze_time)
+    travel_to(freeze_time)
   end
 
-  after { Timecop.return }
+  after { travel_back }
 
   describe '#perform' do
     before do

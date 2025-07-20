@@ -13,10 +13,10 @@ RSpec.describe CleanUpOldGames do
 
   before do
     create(:game, home_team: promotion.team, utc_start_time:)
-    Timecop.freeze(freeze_time)
+    travel_to(freeze_time)
   end
 
-  after { Timecop.return }
+  after { travel_back }
 
   describe '#perform' do
     it 'deletes a game that is no longer redeemable' do

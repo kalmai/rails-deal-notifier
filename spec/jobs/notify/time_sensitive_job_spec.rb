@@ -14,11 +14,11 @@ RSpec.describe Notify::TimeSensitiveJob do
   let(:next_game) { build(:game, home_team: team, finalized: false, utc_start_time:) }
 
   before do
-    Timecop.freeze(freeze_time)
+    travel_to(freeze_time)
     next_game.save!
   end
 
-  after { Timecop.return }
+  after { travel_back }
 
   describe '#perform' do
     it 'enqueues the email' do
