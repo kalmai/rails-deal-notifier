@@ -13,11 +13,11 @@ RSpec.describe WelcomeMailer do
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
 
   before do
-    Timecop.freeze(freeze_time)
+    travel_to(freeze_time)
     create(:event, game:, team: game.home_team, utc_occurred_at: Time.current)
   end
 
-  after { Timecop.return }
+  after { travel_back }
 
   it 'renders the body and headers' do
     expect(mail.subject).to eq('Welcome to Sports DealNotifier')

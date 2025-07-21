@@ -12,10 +12,10 @@ RSpec.describe Notify::ActionablePromotionJob do
 
   before do
     create(:event, game:, team:)
-    Timecop.freeze(freeze_time)
+    travel_to(freeze_time)
   end
 
-  after { Timecop.return }
+  after { travel_back }
 
   describe '#perform' do
     it 'enqueues the email with all the actionable promotions' do

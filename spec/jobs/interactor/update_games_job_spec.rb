@@ -8,9 +8,9 @@ RSpec.describe Interactor::UpdateGamesJob do
   let(:end_month) { '11' }
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
 
-  before { Timecop.freeze(freeze_time) }
+  before { travel_to(freeze_time) }
 
-  after { Timecop.return }
+  after { travel_back }
 
   describe '#perform' do
     let!(:game) { create(:game) }

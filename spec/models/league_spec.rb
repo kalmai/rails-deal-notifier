@@ -21,8 +21,8 @@ RSpec.describe League do
     let(:start_month) { 1 }
     let(:end_month) { '11' }
 
-    before { Timecop.freeze(freeze_time) }
-    after { Timecop.return }
+    before { travel_to(freeze_time) }
+    after { travel_back }
 
     it { is_expected.to be true }
 
