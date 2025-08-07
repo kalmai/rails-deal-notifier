@@ -11,10 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_05_07_012406) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "hstore"
-  enable_extension "pg_catalog.plpgsql"
-
   create_table "contact_methods", force: :cascade do |t|
     t.integer "contact_type", null: false
     t.string "contact_detail", null: false
@@ -44,9 +40,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_012406) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "league_id", null: false
+    t.json "league_specifics"
     t.bigint "home_team_id", null: false
     t.bigint "away_team_id", null: false
-    t.hstore "league_specifics", default: {}
     t.boolean "finalized", default: false
     t.string "slug", null: false
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
@@ -74,10 +70,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_012406) do
     t.integer "redemption_limiter"
     t.integer "redemption_count"
     t.integer "hours_valid"
-    t.string "timing_methods", default: [], array: true
-    t.hstore "timing_parameters"
-    t.string "api_methods", default: [], array: true
-    t.hstore "api_parameters"
+    t.json "timing_parameters"
+    t.json "api_parameters"
+    t.json "timing_methods", default: []
+    t.json "api_methods", default: []
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "team_id"

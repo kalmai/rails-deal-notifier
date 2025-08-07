@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.4.1
+ARG RUBY_VERSION=3.4.2
 ARG RAILS_ENV
 ARG RAILS_MASTER_KEY
 
@@ -59,9 +59,6 @@ COPY --from=build /rails /rails
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
 USER rails:rails
-
-# Uncomment this to make MacOS work...?
-# RUN mkdir -p /tmp/pids/ && chown -R rails:rails /tmp/pids/
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

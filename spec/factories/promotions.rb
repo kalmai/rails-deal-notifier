@@ -11,7 +11,7 @@ FactoryBot.define do
     redemption_count { 1 }
     hours_valid { 24 }
     timing_methods { nil }
-    timing_parameters { {} }
+    timing_parameters { {}.to_json }
     api_methods { %w[won?] }
     api_parameters { {} }
 

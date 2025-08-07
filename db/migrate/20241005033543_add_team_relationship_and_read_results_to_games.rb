@@ -13,7 +13,7 @@ class AddTeamRelationshipAndReadResultsToGames < ActiveRecord::Migration[7.2]
       change_column_null :games, :away_team_id, false
     end
 
-    add_column :games, :league_specifics, :hstore, default: {}
+    add_column :games, :league_specifics, :json, default: {}
     add_column :games, :has_consumed_results, :boolean, default: false
     add_column :games, :slug, :string, null: false
 
@@ -27,7 +27,7 @@ class AddTeamRelationshipAndReadResultsToGames < ActiveRecord::Migration[7.2]
       remove_index :games, :has_consumed_results, algorithm: :concurrently
       remove_column :games, :has_consumed_results, :boolean
       remove_column :games, :slug, :string
-      remove_column :games, :league_specifics, :hstore, default: {}
+      remove_column :games, :league_specifics, :json, default: {}
       change_column_null :games, :home_team_id, true
       change_column_null :games, :away_team_id, true
 

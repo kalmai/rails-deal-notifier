@@ -29,6 +29,7 @@
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+/db/*.sqlite3
 
 /public/assets
 /node_modules
@@ -36,9 +37,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/.env.prod
-
-# Ignore development redis dumps
-/dump.rdb
+/.kamal/secrets
 
 /app/assets/builds/*
 !/app/assets/builds/.keep

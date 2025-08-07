@@ -68,12 +68,11 @@ module Interactor
       end
 
       def week_ago_week_from_now_data
-        # the requests return errors if there are no games found within the range borking this job in odd situations
-        # can fix this perhaps by rescuing from the bad status or w/e rest client error is raised
-        # even though they improved their API i fear that they are limiting return data...
         today = Time.now.strftime('%Y-%m-%d')
         [[7.day.ago.strftime('%Y-%m-%d'), today], [today, 7.day.from_now.strftime('%Y-%m-%d')]].map do |set|
           JSON.parse(RestClient.get(game_schedule_url(*set)))['schedule']
+        rescue RestClient::NotFound
+          [] # sometimes there is no data for a week, which means you return a 404 naturally
         end.flatten.uniq
       end
 

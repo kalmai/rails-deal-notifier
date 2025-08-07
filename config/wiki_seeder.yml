@@ -7,7 +7,7 @@ wiki_base_params:
 mls:
   wiki_specific_params:
     page: Major_League_Soccer
-    section: 3
+    section: 9
   sport_api:
     url: https://stats-api.mlssoccer.com/competitions/MLS-COM-000001/seasons/MLS-SEA-0001K9/standings?is_live=true
     data_path:

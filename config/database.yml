@@ -1,21 +1,17 @@
 default: &default
-  adapter: postgresql
+  adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: 'postgres'
-  password: 'postgres'
-  port: <%= ENV['DATABASE_PORT'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
   timeout: 5000
 
 development:
   <<: *default
-  database: deal_notifier_dev
+  database: db/development.sqlite3
   primary: &primary_dev
     <<: *default
-    database: deal_notifier_dev
+    database: db/development.sqlite3
   queue:
     <<: *primary_dev
-    database: deal_notifier_dev_queue
+    database: db/development_queue.sqlite3
     migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
@@ -23,31 +19,22 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: deal_notifier_test
+  database: db/test.sqlite3
   primary: &primary_test
     <<: *default
-    database: deal_notifier_test
+    database: db/test.sqlite3
   queue:
     <<: *primary_test
-    database: deal_notifier_test_queue
+    database: db/test_queue.sqlite3
     migrations_paths: db/queue_migrate
 
 production:
   <<: *default
-  prepared_statements: false
-  advisory_locks: false
-  database: postgres
-  username: <%= Rails.application.credentials.prod_db_username %>
-  password: <%= Rails.application.credentials.prod_db_password %>
-  port: 6543
-  host: <%= Rails.application.credentials.prod_db_host %>
-  timeout: 5000
-  database: postgres
+  database: 'storage/production.sqlite3'
   primary: &primary_prod
     <<: *default
-    database: postgres
-    username: <%= Rails.application.credentials.prod_db_username %>
-    password: <%= Rails.application.credentials.prod_db_password %>
+    database: 'storage/production.sqlite3'
   queue:
     <<: *primary_prod
-    database: postgres_queue
+    database: 'storage/production_queue.sqlite3'
+    migrations_paths: db/queue_migrate
