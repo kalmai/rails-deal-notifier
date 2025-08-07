@@ -6,24 +6,25 @@ MVP: notify me of a free carwash from CBJ OR columbus crew meeting conditions.
 \* _this project will **NOT** include promotions for gambling._
 
 #### Ruby version
-ruby 3.4.1
+ruby 3.4.2
 
 #### System dependencies
 - git
-- docker-compose: 2.27.0
-- docker 26.1.0
+- can run locally
+- OR use docker
+  - docker-compose
+  - docker
 
 #### Configuration
 - rails master key stored in `./config/master.key`
+- secrets for deployment live in `./.kamal/secrets`
 - run `docker compose up`
 
 #### Database creation
-- `psql -U $USER -d deal_notifier_dev` to connect to local DB
+- `rails db:setup`
 
 #### Database initialization
-- upon booting up the container/local environment it should be seeded by the seed file, should aim to automate team population within leagues in the future...
-- execute `rake digest_sports_data:wikipedia_ca_us_teams wikipedia_sports_teams.csv` to fill out hockey teams
-- need to add team abbreviations to each team since wikipedia does not. may be able to do this just by calling the appropriate sports api once it's built out
+- upon booting up the container/local environment it should be seeded by the seed file
 
 #### How to run the test suite
 - `bundle exec rspec`
@@ -31,15 +32,13 @@ ruby 3.4.1
 
 #### Services (job queues, cache servers, search engines, etc.)
 - nhl, mls, ... apis
-- sportapi (for mls, and more soon?)
-- redis
-- good_jobs
-- sendgrid
 - geoapify
-- render.io for free hosting
 
-#### Deployment instructions
-- if render.io deploy succeeds, it's as simple as just merging into master.
+#### Manual deployment instructions
+- ensure you have the `id.pem` file stored in `~/.ssh/`
+- tag the image with `docker build -t kalmai/rails-deal-notifier-rails:latest -f Dockerfile . --no-cache`
+- push the image to docker hub `docker push kalmai/rails-deal-notifier-rails:latest`
+- run `kamal deploy`
 
 ### TODOs:
 * seed https://en.wikipedia.org/wiki/Sports_in_Ohio deals listed below:

@@ -8,7 +8,7 @@ class CreateGoodJobs < ActiveRecord::Migration[7.1]
     create_table :good_jobs, id: :uuid do |t|
       t.text :queue_name
       t.integer :priority
-      t.jsonb :serialized_params
+      t.json :serialized_params
       t.datetime :scheduled_at
       t.datetime :performed_at
       t.datetime :finished_at
@@ -29,13 +29,13 @@ class CreateGoodJobs < ActiveRecord::Migration[7.1]
       t.integer :executions_count
       t.text :job_class
       t.integer :error_event, limit: 2
-      t.text :labels, array: true
+      t.json :labels
     end
 
     create_table :good_job_batches, id: :uuid do |t|
       t.timestamps
       t.text :description
-      t.jsonb :serialized_properties
+      t.json :serialized_properties
       t.text :on_finish
       t.text :on_success
       t.text :on_discard
@@ -52,7 +52,7 @@ class CreateGoodJobs < ActiveRecord::Migration[7.1]
       t.uuid :active_job_id, null: false
       t.text :job_class
       t.text :queue_name
-      t.jsonb :serialized_params
+      t.json :serialized_params
       t.datetime :scheduled_at
       t.datetime :finished_at
       t.text :error
@@ -61,13 +61,13 @@ class CreateGoodJobs < ActiveRecord::Migration[7.1]
 
     create_table :good_job_processes, id: :uuid do |t|
       t.timestamps
-      t.jsonb :state
+      t.json :state
     end
 
     create_table :good_job_settings, id: :uuid do |t|
       t.timestamps
       t.text :key
-      t.jsonb :value
+      t.json :value
       t.index :key, unique: true
     end
 
