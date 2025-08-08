@@ -48,13 +48,11 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: '"Sport DealNotifier" <sport.deal.notifier@gmail.com>' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :user_name => 'apikey',
-    :password => Rails.application.credentials.sendgrid_api_key,
-    :domain => 'yourdomain.com',
-    :address => 'smtp.sendgrid.net',
+    :user_name => 'sport.deal.notifier@gmail.com',
+    :password => Rails.application.credentials.email_app_key,
+    :address => 'smtp.gmail.com',
     :port => 587,
     :authentication => :plain,
-    :enable_starttls_auto => true
   }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.hosts << 'lemming-trusty-dane.ngrok-free.app'
