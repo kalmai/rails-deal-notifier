@@ -32,5 +32,19 @@ module DealNotifier
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.active_job.queue_adapter = :solid_queue
+
+    # after initialization upsert/delete new information provided in
+    # config/upsert/promotions.yml
+    unless Rails.env.test?
+      config.after_initialize do
+        League.all.each do |league|
+          next unless league.in_season?
+
+          Team.where(league_id: league.id).each do |team|
+            Upsert::Promotions.execute_for(team:)
+          end
+        end
+      end
+    end
   end
 end

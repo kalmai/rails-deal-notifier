@@ -1,0 +1,46 @@
+mls:
+  clb:
+    - company: Moo Moo Express Car Wash
+      name: Moo Moo Express Clean Sheets = Clean Car
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.columbuscrew.com/supporters/promotions
+      redemption_limiter: monthly
+      redemption_count: 0
+      hours_valid: 48
+      timing_parameters:
+        - minutes_before: 60
+      api_parameters: {}
+      timing_methods:
+        - home?
+      api_methods:
+        - home?
+        - perfect_defence?
+    - company: Tim Hortons
+      name: Tim Hortons - Free Coffee
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.columbuscrew.com/supporters/promotions
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters:
+      timing_methods:
+      api_parameters:
+        - goals_count: 1
+      api_methods:
+        - goal_count_equal_or_above?
+    - company: Donatos
+      name: Donatos - Victory Pizza
+      promo_type: coupon_codes
+      promo_code: CREW
+      source_url: https://www.columbuscrew.com/supporters/promotions
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters:
+      api_parameters: {}
+      timing_methods:
+      api_methods:
+        - won?
+nhl:

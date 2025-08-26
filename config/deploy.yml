@@ -1,6 +1,7 @@
 # Name of your application. Used to uniquely configure containers.
 service: deal-notifier
 retain_containers: 1
+deploy_timeout: 120
 
 # Name of the container image.
 image: kalmai/rails-deal-notifier-rails
@@ -8,10 +9,10 @@ image: kalmai/rails-deal-notifier-rails
 # Deploy to these servers.
 servers:
   web:
-    - pihole
+    - dealnotifier
   job:
     hosts:
-      - pihole
+      - dealnotifier
     cmd: bin/jobs
       # job:
       #   hosts:
