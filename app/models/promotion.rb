@@ -13,8 +13,8 @@ class Promotion < ApplicationRecord
   validates :company, presence: true
 
   belongs_to :team
-  has_many :subscriptions
-  has_many :users, through: :subscriptions
+  has_many :subscriptions, dependent: :destroy
+  has_many :users, through: :subscriptions, dependent: :destroy
 
   def most_recent_game
     Game.most_recent_game(team_id: team.id)
