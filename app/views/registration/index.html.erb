@@ -1,5 +1,5 @@
-<div class="container max-w-sm my-8">
-  <%= render_card(title: "Deal Notifier", subtitle: "At a Glance", body: "Get notified of local game day promotions you can use to save some cash.", footer: nil, class: "w-full pb-8") %>
+<div class="container -pt-px max-w-sm">
+  <%= render_card(title: "Deal Notifier", subtitle: "At a Glance", body: "Get notified of local game day promotions you can use to save some cash.", footer: nil, class: "w-full my-4 pb-8") %>
   <%= render_card(title: "Sounds Good", subtitle: "Register below", body: nil, footer: nil, class: "w-full my-4") do %>
     <%= render_form_with(url: '/registration', method: :post, model: @user, class: "w-full") do |form| %>
       <%= form.fields_for :contact_methods do |builder| %>
