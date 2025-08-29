@@ -34,10 +34,19 @@ RSpec.describe Notify::ActionablePromotionJob do
       end
     end
 
-    context 'when the hour too early' do
+    context 'when the hour is too early' do
       let(:time_adjustments) { { hour: 2 } }
 
       it 'does not notify the users yet' do
+        expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
+      end
+    end
+
+    context 'when it is a day past the game' do
+      let(:time_adjustments) { { hour: 24 } }
+
+      it 'does not notify the users twice' do
+        # TODO: this test should fail right now without #should_nofify? being used
         expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
       end
     end

@@ -38,7 +38,7 @@ module Interactor
       def game_attributes(datum)
         away_team = find_team_record(short_name: datum['away_team_three_letter_code'].downcase)
         home_team = find_team_record(short_name: datum['home_team_three_letter_code'].downcase)
-        utc_start_time = Time.parse(datum['start_date'])
+        utc_start_time = Time.parse(datum['planned_kickoff_time'])
         {
           slug: "#{home_team.short_name}vs#{away_team.short_name}-#{utc_start_time.strftime('%m-%d-%Y')}",
           utc_start_time:, away_team:, home_team:
