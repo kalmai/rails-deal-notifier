@@ -34,11 +34,24 @@ RSpec.describe Notify::ActionablePromotionJob do
       end
     end
 
-    context 'when the hour too early' do
+    context 'when the hour is too early' do
       let(:time_adjustments) { { hour: 2 } }
 
       it 'does not notify the users yet' do
         expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
+      end
+    end
+
+    context 'when it is a day past the game' do
+      let(:game) { create(:game, home_team: team, finalized: true, utc_start_time: freeze_time - 22.hours) }
+
+      it 'does not notify the users twice' do
+        expect do
+          described_class.new.perform
+          travel_to(24.hours.from_now) do
+            described_class.new.perform
+          end
+        end.to have_enqueued_mail(ActionablePromotionMailer, :notify).exactly(:once)
       end
     end
   end

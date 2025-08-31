@@ -28,7 +28,7 @@ module Notify
         users = promotion.users
         timezones = timezones_to_evaluate(users:)
         users.where(timezone: timezones).each do |user|
-          hsh[user.id] = hsh[user.id].push(promotion) if evaluation(promotion)
+          hsh[user.id] = hsh[user.id].push(promotion) if should_nofify?(user.timezone, promotion)
         end
       end
     end
@@ -42,6 +42,12 @@ module Notify
 
     def in_season_promotions
       Promotion.all.select { |promo| promo.team.league.in_season? }
+    end
+
+    def should_nofify?(timezone, promotion)
+      return false if promotion.most_recent_game.utc_start_time.in_time_zone(timezone).yesterday?
+
+      evaluation(promotion)
     end
   end
 end
