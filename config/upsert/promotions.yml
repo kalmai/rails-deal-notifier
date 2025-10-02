@@ -44,3 +44,33 @@ mls:
       api_methods:
         - won?
 nhl:
+  ana:
+    - company: Chick-fil-A
+      name: Chick-fil-A SoCal Goals for Chicken
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.nhl.com/ducks/fans/partner-promotions
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 72
+      timing_parameters:
+      api_parameters:
+        - goals_count: 5
+      timing_methods:
+      api_methods:
+        - home?
+        - goal_count_equal_or_above?
+    - company: McDonalds
+      name: Get $2 Sausage Egg & Cheese McGriddles When Ducks Win
+      promo_type: cash_discount
+      promo_code:
+      source_url: https://www.nhl.com/ducks/fans/partner-promotions
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters:
+      api_parameters:
+      timing_methods:
+      api_methods:
+        - home?
+        - won?
