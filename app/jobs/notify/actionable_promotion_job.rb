@@ -28,16 +28,9 @@ module Notify
         users = promotion.users
         timezones = timezones_to_evaluate(users:)
         users.where(timezone: timezones).each do |user|
-          hsh[user.id] = hsh[user.id].push(promotion) if evaluation(promotion)
+          hsh[user.id] = hsh[user.id].push(promotion) if promotion.evaluate_most_recent_game
         end
       end
-    end
-
-    def evaluation(promotion)
-      game = promotion.most_recent_game
-      return false unless game
-
-      Evaluator::Client.new(promotion:, game:).evaluate(promotion.api_methods)
     end
 
     def in_season_promotions
