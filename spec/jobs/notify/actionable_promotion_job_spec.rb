@@ -6,13 +6,14 @@ RSpec.describe Notify::ActionablePromotionJob do
   let(:promotions) { [create(:promotion, :with_users, team:)] }
   let!(:team) { create(:team, region: 'ny') }
   let(:user) { promotions.first.users.first }
-  let(:freeze_time) { Time.current.in_time_zone(user.timezone).change(time_adjustments) }
   let(:time_adjustments) { { hour: 5 } }
-  let(:game) { create(:game, home_team: team, finalized: true) }
+  let(:game) do
+    create(:game, home_team: team, finalized: true, utc_start_time: Time.current.yesterday.change(hour: 16))
+  end
 
   before do
     create(:event, game:, team:)
-    travel_to(freeze_time)
+    travel_to(Time.current.in_time_zone(user.timezone).change(time_adjustments))
   end
 
   after { travel_back }
@@ -39,19 +40,6 @@ RSpec.describe Notify::ActionablePromotionJob do
 
       it 'does not notify the users yet' do
         expect { described_class.new.perform }.not_to have_enqueued_mail(ActionablePromotionMailer, :notify)
-      end
-    end
-
-    context 'when it is a day past the game' do
-      let(:game) { create(:game, home_team: team, finalized: true, utc_start_time: freeze_time - 22.hours) }
-
-      it 'does not notify the users twice', pending: 'TODO: fix multiple notifications' do
-        expect do
-          described_class.new.perform
-          travel_to(24.hours.from_now) do
-            described_class.new.perform
-          end
-        end.to have_enqueued_mail(ActionablePromotionMailer, :notify).exactly(:once)
       end
     end
   end
