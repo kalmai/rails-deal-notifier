@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :registration, only: [:create]
   resources :promotions
-  get 'promotions/:postal', to: 'promotions#show'
+  get 'promotions/:postal', to: 'promotions#index'
   root 'registration#index'
   # Defines the root path route ("/")
   # root "posts#index"
