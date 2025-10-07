@@ -1,4 +1,11 @@
-index
 <div>
-  <%= render partial: "promotions/promotion", collection: @promotions %>
+  <%= render_table do %>
+    <%= table_head do %>
+      <%= table_header "Promotion" %>
+      <%= table_header "Available"%>
+    <% end %>
+    <%= table_body do %>
+      <%= render partial: "promotions/promotion", collection: @promotions %>
+    <% end %>
+  <% end %>
 </div>

@@ -1,10 +1,7 @@
 <%= turbo_stream_from "promotions" %>
-<div id="<%= dom_id promotion %>">
-  <%= promotion.name %>
-  <%= promotion.id %>
-  <% if local_assigns.has_key? :actionable %>
-    <%= actionable %>
-  <% else %>
+<%= table_row id: dom_id(promotion) do %>
+  <%= table_column promotion.name %>
+  <%= table_column do %>
     <%= promotion.evaluate_most_recent_game %>
   <% end %>
-</div>
+<% end %>
