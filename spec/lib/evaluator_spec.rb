@@ -9,7 +9,7 @@ RSpec.describe Evaluator::Client do
   let!(:game) { create(:game, home_team: promotion.team, finalized:) }
 
   let(:api_methods) { %i[played?].concat(additional_methods) }
-  let(:api_parameters) { {} }
+  let(:api_parameters) { [{}] }
   let(:additional_methods) { [] }
   let(:finalized) { true }
 
@@ -24,7 +24,7 @@ RSpec.describe Evaluator::Client do
   end
 
   describe '#scored_in?' do
-    let(:api_parameters) { { period: } }
+    let(:api_parameters) { [{ period: }] }
     let(:additional_methods) { ['scored_in?'] }
     let(:period) { 1 }
 
@@ -83,7 +83,7 @@ RSpec.describe Evaluator::Client do
 
   describe '#goal_count_equal_or_above?' do
     let(:additional_methods) { ['goal_count_equal_or_above?'] }
-    let(:api_parameters) { { goals_count: 2 } }
+    let(:api_parameters) { [{ goals_count: 2 }] }
     let(:goal_count) { 2 }
 
     it { is_expected.to be false }
@@ -96,13 +96,13 @@ RSpec.describe Evaluator::Client do
       it { is_expected.to be true }
 
       context 'when the scored goals exceed the required goals' do
-        let(:api_parameters) { { goals_count: 1 } }
+        let(:api_parameters) { [{ goals_count: 1 }] }
 
         it { is_expected.to be true }
       end
 
       context 'when the scored goals are below the threshold' do
-        let(:api_parameters) { { goals_count: 68 } }
+        let(:api_parameters) { [{ goals_count: 68 }] }
 
         it { is_expected.to be false }
       end

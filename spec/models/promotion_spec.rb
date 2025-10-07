@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Promotion do
   let(:promotion) do
-    create(:promotion, :with_users, api_methods: ['scored_in?'], api_parameters: { period: 1 })
+    create(:promotion, :with_users, api_methods: ['scored_in?'], api_parameters: [{ period: 1 }])
   end
   let!(:game) { create(:game, home_team: promotion.team, finalized: true) }
   let(:freeze_time) { game.utc_start_time }
