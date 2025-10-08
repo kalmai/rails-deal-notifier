@@ -1,0 +1,10 @@
+<div class="container -pt-px max-w-sm">
+  <%= render_card(title: "Deals Right Now", subtitle: "As per standings", body: nil, footer: nil, class: "w-full my-4") do %>
+    <%= render_table do %>
+      <%= table_body do %>
+        <%= render partial: "promotions/promotion", collection: @promotions %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= render partial: "shared/footer" %>
+</div>

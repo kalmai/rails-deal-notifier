@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PromotionsController < ApplicationController
-  def index
+  def show
     location_data = location_data(postal: params[:postal]) # Rails.cache.read('location_data') ||
     in_season_leagues = League.select(&:in_season?).map(&:id)
     teams = Team.where(league_id: in_season_leagues, country: location_data[:country], region: location_data[:region])
