@@ -1,7 +1,4 @@
 <%= turbo_stream_from "promotions" %>
 <%= table_row id: dom_id(promotion) do %>
-  <%= table_column promotion.name %>
-  <%= table_column do %>
-    <%= promotion.evaluate_most_recent_game %>
-  <% end %>
+  <%= render partial: 'promotions/promotion_table_data', locals: { promotion: } %>
 <% end %>

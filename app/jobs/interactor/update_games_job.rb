@@ -2,8 +2,6 @@
 
 module Interactor
   class UpdateGamesJob < ApplicationJob
-    include Components::TableHelper
-
     queue_as :high_priority
 
     def perform
@@ -23,10 +21,9 @@ module Interactor
 
     def broadcast_to_streams(promotions)
       promotions.each do |promotion|
-        promotion.broadcast_update_to(
+        promotion.broadcast_update_to \
           :promotions,
-          html: table_column(promotion.name) << table_column(promotion.evaluate_most_recent_game.to_s)
-        )
+          partial: 'promotions/promotion_table_data'
       end
     end
   end

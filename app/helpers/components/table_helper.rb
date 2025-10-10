@@ -1,7 +1,4 @@
 module Components::TableHelper
-  include ActionView::Helpers::TagHelper
-  include ComponentsHelper
-
   def render_table(caption = nil, **options, &block)
     content_tag :table, options.merge(
       class: tw("w-full text-sm border-b", options[:class])
@@ -45,9 +42,8 @@ module Components::TableHelper
   end
 
   def table_row(**options, &block)
-    # binding.pry if options[:id] == 'promotion_7'
     content_tag :tr, options.merge(
-      :class => tw("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", options[:class])
+      class: tw("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", options[:class])
     ), &block
   end
 
