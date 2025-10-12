@@ -21,7 +21,7 @@ module Evaluator
       return false unless played? && @game.events.present?
 
       @game.events.where(team_id: @promotion.team.id).any? do |goal|
-        goal.period == @promotion.api_parameters.first['period'].to_i
+        goal.period == @promotion.api_parameters['period'].to_i
       end
     end
 
@@ -40,7 +40,7 @@ module Evaluator
     def goal_count_equal_or_above?
       return false unless played?
 
-      @game.events.where(team_id: @promotion.team.id).count >= @promotion.api_parameters.first['goals_count'].to_i
+      @game.events.where(team_id: @promotion.team.id).count >= @promotion.api_parameters['goals_count'].to_i
     end
 
     def home?
