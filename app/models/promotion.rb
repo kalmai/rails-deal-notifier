@@ -30,6 +30,7 @@ class Promotion < ApplicationRecord
     return false unless Time.current.between?(game.utc_start_time, game.utc_start_time + hours_valid.hours)
 
     Evaluator::Client.new(promotion: self, game:).evaluate(api_methods)
+    # Rails.cache.write("#{id}_#{game.utc_start_time}")
   end
 
   def evaluate_next_game

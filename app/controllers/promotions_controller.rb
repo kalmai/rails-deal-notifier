@@ -15,10 +15,6 @@ class PromotionsController < ApplicationController
     data = Geocoder.search(postal, params: { countrycodes: 'us,ca', type: :postcode }).first&.data&.dig('properties')
     return {} unless data
 
-    {
-      region: data['state_code'].downcase,
-      country: data['country_code'].downcase,
-      timezone: data.dig('timezone', 'name')
-    }
+    { region: data['state_code'].downcase, country: data['country_code'].downcase }
   end
 end

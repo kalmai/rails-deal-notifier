@@ -29,6 +29,7 @@ gem 'rubocop-rspec', require: false
 gem 'shadcn-ui', '~> 0.0.15'
 gem 'simplecov-cobertura'
 gem 'solid_cable', '~> 3.0'
+gem 'solid_cache', '~> 1.0'
 gem 'solid_queue'
 gem 'sprockets-rails'
 gem 'sqlite3'

@@ -74,11 +74,10 @@ RSpec.describe 'Registrations' do
   end
 
   describe '#redirect_to_promotions' do
-    let(:request) { post '/redirect_to_promotions', params: { postal: new_york_ip } }
+    let(:request) { post '/registration_redirect', params: { user: { postal: postal_code } } }
 
     it 'redirects user' do
-      request
-      expect(request).to redirect_to("/promotions/#{new_york_ip}")
+      expect(request).to redirect_to("/promotions/#{postal_code}")
     end
   end
 end
