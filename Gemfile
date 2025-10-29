@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.4.2'
+ruby '3.4.7'
 
 gem 'brakeman'
 gem 'bundler-audit'
@@ -15,6 +15,7 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'net-pop', github: 'ruby/net-pop'
 gem 'nokogiri'
+gem 'openssl', '~> 3.3.2'
 gem 'pry'
 gem 'puma'
 gem 'rack'

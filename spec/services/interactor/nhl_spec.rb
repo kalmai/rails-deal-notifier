@@ -51,5 +51,16 @@ RSpec.describe Interactor::Nhl do
         .and change { game.home_goals.count }.from(0).to(1)
         .and change { game.away_goals.count }.from(0).to(4)
     end
+
+    context 'when a event has already been stored' do
+      before { execution }
+
+      it 'does not duplicate the event' do
+        expect do
+          execution
+        end
+          .not_to change(Event, :count)
+      end
+    end
   end
 end

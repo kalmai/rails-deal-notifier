@@ -9,7 +9,7 @@ mls:
       redemption_count: 0
       hours_valid: 48
       timing_parameters:
-        - minutes_before: 60
+        minutes_before: 60
       api_parameters: {}
       timing_methods:
         - home?
@@ -24,10 +24,10 @@ mls:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
+      timing_parameters: {}
       timing_methods:
       api_parameters:
-        - goals_count: 1
+        goals_count: 1
       api_methods:
         - goal_count_equal_or_above?
     - company: Donatos
@@ -38,7 +38,7 @@ mls:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
+      timing_parameters: {}
       api_parameters: {}
       timing_methods:
       api_methods:
@@ -53,9 +53,9 @@ nhl:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 72
-      timing_parameters:
+      timing_parameters: {}
       api_parameters:
-        - goals_count: 5
+        goals_count: 5
       timing_methods:
       api_methods:
         - home?
@@ -68,8 +68,8 @@ nhl:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
-      api_parameters:
+      timing_parameters: {}
+      api_parameters: {}
       timing_methods:
       api_methods:
         - home?
@@ -84,9 +84,9 @@ nhl:
       redemption_count: 1
       hours_valid: 24
       timing_parameters:
-        - minutes_before: 60
+        minutes_before: 60
       api_parameters:
-        - period: 3
+        period: 3
       timing_methods:
         - home?
       api_methods:

@@ -71,8 +71,8 @@ module Interactor
         today = Time.now.strftime('%Y-%m-%d')
         [[7.day.ago.strftime('%Y-%m-%d'), today], [today, 7.day.from_now.strftime('%Y-%m-%d')]].map do |set|
           JSON.parse(RestClient.get(game_schedule_url(*set)))['schedule']
-        rescue RestClient::NotFound
-          [] # sometimes there is no data for a week, which means you return a 404 naturally
+        rescue # rubocop:disable Style/RescueStandardError
+          return [] # api likes to spit out 503, 404, and 500s
         end.flatten.uniq
       end
 
