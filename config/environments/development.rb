@@ -37,6 +37,7 @@ Rails.application.configure do
   #   config.cache_store = :null_store
   # end
   # config.cache_store = :redis_cache_store, { url: 'redis://redis:6379/0' } # , password: your_pass }
+  config.cache_store = :solid_cache_store
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
@@ -79,7 +80,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :development } }
   config.solid_queue.logger = ActiveSupport::Logger.new(STDOUT)
-  config.log_level = :info
+  config.log_level = :debug
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true

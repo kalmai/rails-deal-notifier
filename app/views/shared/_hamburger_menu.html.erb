@@ -1,0 +1,18 @@
+<div class="sticky top-3 left-3 text-xl w-4">
+  <%= render_sheet direction: "left" do %>
+    <%= sheet_trigger do %>
+      <%= render_button("☰", variant: :ghost, class: "sticky right-0 text-xl") %>
+    <% end %>
+    <%= sheet_content do %>
+      <p>
+        <%= link_to "Home", "/", class: "no-underline hover:underline" %>
+      </p>
+      <p>
+        <%= link_to "Promotions", "/promotions/#{session.dig(:geocode_data, 'postal') || User.where.not(subscriptions: nil).limit(1).first&.postal || 'zip-code-placeholder'}", class: "no-underline hover:underline" %>
+      </p>
+      <p>
+        <%= link_to "About", "/about", class: "no-underline hover:underline" %>
+      </p>
+    <% end %>
+  <% end %>
+</div>

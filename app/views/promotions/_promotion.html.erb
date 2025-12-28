@@ -1,0 +1,4 @@
+<%= turbo_stream_from "promotions" %>
+<%= table_row id: dom_id(promotion) do %>
+  <%= render partial: 'promotions/promotion_table_data', locals: { promotion: } %>
+<% end %>

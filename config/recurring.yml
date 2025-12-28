@@ -1,6 +1,6 @@
 default: &default
   update_games:
-    schedule: "*/5 * * * *" # every hour
+    schedule: "*/5 * * * *" # every five minutes
     class: Interactor::UpdateGamesJob
   store_games:
     schedule: 0 * * * *

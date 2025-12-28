@@ -37,15 +37,22 @@ module Interactor
       private
 
       def create_goals_for(game:, team:, goal_data:)
-        team_goals = goal_data['goals'].select { |goal| goal if goal['teamAbbrev'].downcase.eql?(team.short_name) }
+        return if goal_data['goals'].nil?
+
+        team_goals = collect_goals_for(team:, goals: goal_data['goals'])
+        slugs = game.events.map(&:slug)
         team_goals.each do |goal|
           assumed_event_time = assumed_utc_occurred_time(game_start_time: game.utc_start_time, goal_data: goal)
-          Event.create! \
-            game:, team:, period: goal['period'],
-            utc_occurred_at: assumed_event_time,
-            slug: "#{team.short_name}_#{assumed_event_time.to_i}",
-            event_type: :goal
+          slug = "#{team.short_name}_#{assumed_event_time.to_i}"
+          next if slugs.include?(slug)
+
+          Event.create \
+            game:, team:, period: goal['period'], utc_occurred_at: assumed_event_time, slug:, event_type: :goal
         end
+      end
+
+      def collect_goals_for(team:, goals:)
+        goals.select { |goal| goal if goal['teamAbbrev'].downcase.eql?(team.short_name) } || []
       end
 
       def assumed_utc_occurred_time(game_start_time:, goal_data:)

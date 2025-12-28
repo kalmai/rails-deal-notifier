@@ -6,7 +6,7 @@ MVP: notify me of a free carwash from CBJ OR columbus crew meeting conditions.
 \* _this project will **NOT** include promotions for gambling._
 
 #### Ruby version
-ruby 3.4.2
+ruby 3.4.7
 
 #### System dependencies
 - git

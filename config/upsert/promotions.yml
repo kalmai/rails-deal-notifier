@@ -9,7 +9,7 @@ mls:
       redemption_count: 0
       hours_valid: 48
       timing_parameters:
-        - minutes_before: 60
+        minutes_before: 60
       api_parameters: {}
       timing_methods:
         - home?
@@ -24,10 +24,10 @@ mls:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
+      timing_parameters: {}
       timing_methods:
       api_parameters:
-        - goals_count: 1
+        goals_count: 1
       api_methods:
         - goal_count_equal_or_above?
     - company: Donatos
@@ -38,7 +38,7 @@ mls:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
+      timing_parameters: {}
       api_parameters: {}
       timing_methods:
       api_methods:
@@ -53,9 +53,9 @@ nhl:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 72
-      timing_parameters:
+      timing_parameters: {}
       api_parameters:
-        - goals_count: 5
+        goals_count: 5
       timing_methods:
       api_methods:
         - home?
@@ -68,9 +68,71 @@ nhl:
       redemption_limiter:
       redemption_count: 0
       hours_valid: 24
-      timing_parameters:
-      api_parameters:
+      timing_parameters: {}
+      api_parameters: {}
       timing_methods:
       api_methods:
         - home?
         - won?
+  cbj:
+    - company: Moo Moo Express Car Wash
+      name: Moo Moo Express Car Wash 3rd Period Goal
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.nhl.com/bluejackets/fans/gameday-central
+      redemption_limiter: seasonal
+      redemption_count: 1
+      hours_valid: 24
+      timing_parameters:
+        minutes_before: 60
+      api_parameters:
+        period: 3
+      timing_methods:
+        - home?
+      api_methods:
+        - home?
+        - scored_in?
+    - company: Jet's Pizza
+      name: Jet's Pizza Score Twice Half Price
+      promo_type: order_discounts
+      promo_code: CBJ50
+      source_url: https://www.nhl.com/bluejackets/fans/gameday-central
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters: {}
+      api_parameters:
+        goals_count: 2
+      timing_methods: []
+      api_methods:
+      - goal_count_equal_or_above?
+    - company: Roosters
+      name: Free Roosters Chili
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.nhl.com/bluejackets/fans/gameday-central
+      redemption_limiter:
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters: {}
+      api_parameters:
+        goals_count: 3
+      timing_methods: []
+      api_methods:
+      - home?
+      - goal_count_equal_or_above?
+    - company: Tim Hortons
+      name: Tim Hortons - Free Coffee
+      promo_type: free_gifts
+      promo_code:
+      source_url: https://www.nhl.com/bluejackets/fans/gameday-central
+      redemption_limiter: seasonal
+      redemption_count: 0
+      hours_valid: 24
+      timing_parameters: {}
+      api_parameters:
+        goals_count: 3
+      timing_methods: []
+      api_methods:
+      - home?
+      - won?

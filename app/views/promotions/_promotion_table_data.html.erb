@@ -1,0 +1,43 @@
+<% @evaluation = promotion.evaluate_most_recent_game ? simple_format("✓", style:"color: green;") : simple_format("✕", style:"color: red;") %>
+<%= table_column @evaluation %>
+<%= table_column promotion.company %>
+<%= table_column promotion.promo_code || '-' %>
+<%= table_column do %>
+  <%= render_dialog do %>
+    <%= dialog_trigger do %>
+      <%= render_button("☰", variant: :ghost) %>
+    <% end %>
+    <%= dialog_content do %>
+      <h4 class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"><%= promotion.company %></h4>
+      <%= render_table do %>
+        <%= table_body do %>
+          <%= table_row do %>
+            <%= table_column "Available" %>
+            <%= table_column @evaluation %>
+          <% end %>
+          <%= table_row do %>
+            <%= table_column "Name" %>
+            <%= table_column promotion.name %>
+          <% end %>
+          <%= table_row do %>
+            <%= table_column "Type" %>
+            <%= table_column ActiveSupport::Inflector.humanize promotion.promo_type %>
+          <% end %>
+          <%= table_row do %>
+            <%= table_column "Code" %>
+            <%= table_column promotion.promo_code || '-' %>
+          <% end %>
+          <%= table_row do %>
+            <%= table_column "Source" %>
+            <%= table_column link_to nil, promotion.source_url, target: "_blank" %>
+          <% end %>
+          <%= table_row do %>
+            <%= table_column "Hours Valid" %>
+            <%= table_column promotion.hours_valid.to_s %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <blockquote class="mt-6 border-l-2 pl-6 italic">Additional conditions and restrictions may apply. Please confirm with the provided source before attempting to redeem.</blockquote>
+    <% end %>
+  <% end %>
+<% end %>

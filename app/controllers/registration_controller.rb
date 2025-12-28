@@ -21,6 +21,10 @@ class RegistrationController < ApplicationController
     redirect_to root_path, notice:
   end
 
+  def redirect_to_promotions
+    redirect_to "/promotions/#{params.dig(:user, :postal)}"
+  end
+
   private
 
   def create_user_contact_method
