@@ -1,0 +1,20 @@
+<div class="container -pt-px px-0 max-w-sm">
+  <%= render partial: "shared/hamburger_menu" %>
+  <%= render_card(title: "About this Project", subtitle: "For a free 20 dollar car wash of course", footer: nil, class: "w-full my-4 pb-8") do %>
+    <div class="px-6">
+      The ultimate goal of this project is to save users money without investing the time and mental load into tracking sporting events.
+      <br/>
+      <br/>
+      Absolutely <i>no</i> gambling promotions will be covered since they are the antithesis of this project. If you or a loved one needs <%= link_to "help", "https://www.1800gambler.net/help", target: :_blank, class: "underline" %>.
+      <br/>
+      <br/>
+      As the developer of this site, I have been writing some about the journey of this project on my <%= link_to "blog/portfolio", "https://kalmai.github.io/portfolio/", target: :_blank, class: "underline" %> and will likely continue chronicling the adventure.
+      <br/>
+      <br/>
+      <h3 class="text-2xl font-semibold leading-none tracking-tight">Yeah, but why?</h3>
+      <br/>
+      My father often took advantage of these game-day-promotions, I wanted to as well but do not care about sports, my car has needed a car wash for years, through this project I can actualize a free car wash (around a $20 value), learn something, and maybe help others.
+    </div>
+  <% end %>
+  <%= render partial: "shared/footer" %>
+</div>

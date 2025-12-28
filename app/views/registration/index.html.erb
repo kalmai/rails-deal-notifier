@@ -1,4 +1,5 @@
 <div class="container -pt-px px-0 max-w-sm">
+  <%= render partial: "shared/hamburger_menu" %>
   <%= render partial: "shared/header" %>
   <%= render_card(title: "Sounds Good", subtitle: "Register below", body: nil, footer: nil, class: "w-full my-4") do %>
     <%= render_form_with(url: '/registration', method: :post, model: @user, class: "w-full") do |form| %>
@@ -22,7 +23,7 @@
     <% end %>
   <% end %>
   <%= render_card(title: "View Deals", subtitle: "Manually check here", body: nil, footer: nil, class: "w-full my-4") do %>
-    <%= render_form_with(url: "/registration_redirect", method: :post, model: @user, class: "w-full") do |form| %>
+    <%= render_form_with(url: "/registration_redirect", method: :post, model: User.new, class: "w-full") do |form| %>
         <div class="grid grid-cols-3 items-baseline mb-4 pr-8">
           <%= form.label :postal, class: "text-right mr-4 text-md" %>
           <%= form.text_field :postal, required: true, class: "mb-4 col-span-2", value: session.dig(:geocode_data, 'postal'), autocomplete: "off" %>

@@ -18,6 +18,9 @@ export default class UIDialog extends Controller {
   }
 
   close(e) {
+    if (e.target.parentElement.getAttribute('data-ui--sheet-target') === 'closeButton') {
+      document.body.classList.remove("overflow-hidden");
+    }
     this.closeBy(e.target);
     e.preventDefault();
   }
