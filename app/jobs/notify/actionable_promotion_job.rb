@@ -34,7 +34,8 @@ module Notify
     end
 
     def in_season_promotions
-      Promotion.all.select { |promo| promo.team.league.in_season? }
+      in_season_leagues = Game.group(:league_id).map(&:league_id)
+      Team.where(league_id: in_season_leagues).map(&:promotions).flatten
     end
   end
 end

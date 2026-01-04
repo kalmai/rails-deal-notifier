@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe Interactor::UpdateGamesJob do
   subject(:job) { described_class.new }
 
-  let(:end_month) { '11' }
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
 
   before { travel_to(freeze_time) }
@@ -32,7 +31,6 @@ RSpec.describe Interactor::UpdateGamesJob do
     end
 
     context 'when the league is out of season' do
-      let(:end_month) { '9' }
       let(:interactor) { Interactor::Mls }
 
       before do

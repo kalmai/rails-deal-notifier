@@ -9,8 +9,6 @@ FactoryBot.define do
 
     full_name { "national #{sport} league" }
     short_name { "n#{sport.split.map(&:first).join}l" }
-    start_month { 1 }
-    end_month { '10' }
 
     trait :with_teams do
       after(:create) do |league, evaluator|

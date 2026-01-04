@@ -36,14 +36,25 @@ RSpec.describe 'Promotions' do
     end
 
     context 'when promtions are registered to the region' do
-      let(:promotions) { create_list(:promotion, 2, team: create(:team, region: 'ny')) }
+      let(:promotions) { create_list(:promotion, 2, team:) }
+      let(:team) { create(:team, region: 'ny') }
 
       before { promotions }
 
-      it 'returns promotions for the passed in zipcode' do
+      it 'does not render any promotions' do
         get "/promotions/#{postal_code}", headers: { 'REMOTE_ADDR' => new_york_ip }
 
-        expect(response.body).to include("promotion_#{promotions.first.id}", "promotion_#{promotions.last.id}")
+        expect(response.body).not_to include("promotion_#{promotions.first.id}", "promotion_#{promotions.last.id}")
+      end
+
+      context 'when there are games' do
+        before { create(:game, home_team: team) }
+
+        it 'returns promotions for the passed in zipcode' do
+          get "/promotions/#{postal_code}", headers: { 'REMOTE_ADDR' => new_york_ip }
+
+          expect(response.body).to include("promotion_#{promotions.first.id}", "promotion_#{promotions.last.id}")
+        end
       end
     end
   end

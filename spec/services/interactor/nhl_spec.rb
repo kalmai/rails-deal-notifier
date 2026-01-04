@@ -9,7 +9,8 @@ RSpec.describe Interactor::Nhl do
     before do
       stub_request(:get, %r{#{described_class::BASE_URL}/v1/schedule/*})
         .to_return(status: 200, body: file_fixture('nhl/raw_data.json').read)
-      %w[tbl car sjs lak].each { |short_name| create(:team, short_name:, league_name: 'nhl') }
+      league = create(:league, short_name: 'nhl')
+      %w[tbl car sjs lak].each { create(:team, short_name: it, league:) }
     end
 
     it 'stores the games' do

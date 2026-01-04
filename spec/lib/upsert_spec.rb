@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Upsert::Promotions do
-  let(:team) { create(:team, promotions:) }
+  let(:team) { create(:team, promotions:, league:) }
+  let(:league) { create(:league, short_name: 'mls') }
   let(:promotions) { create_list(:promotion, existing_promotion_count) }
   let(:existing_promotion_count) { 1 }
   let(:upsert_promotions) { [upserting_promotion] }
