@@ -5,25 +5,20 @@ require 'rails_helper'
 RSpec.describe Interactor::StoreGamesJob do
   subject(:job) { described_class.new }
 
-  let(:end_month) { '11' }
   let(:freeze_time) { Time.parse('2024-10-02T10:00:00.0000000Z') }
 
-  before do
-    league = create(:league, end_month:, short_name: 'mls')
-    allow(League).to receive(:all).and_return([league])
-    travel_to(freeze_time)
-  end
-
+  before { travel_to(freeze_time) }
   after { travel_back }
 
   describe '#perform' do
     before do
+      league = create(:league, short_name: 'mls')
       stub_request(:get, %r{#{Interactor::Mls::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
-      create(:team, short_name: 'atl')
-      create(:team, short_name: 'la')
-      create(:team, short_name: 'nsh')
-      create(:team, short_name: 'por')
+      create(:team, short_name: 'atl', league:)
+      create(:team, short_name: 'la', league:)
+      create(:team, short_name: 'nsh', league:)
+      create(:team, short_name: 'por', league:)
     end
 
     it 'performs the job successfully' do
@@ -31,7 +26,6 @@ RSpec.describe Interactor::StoreGamesJob do
     end
 
     context 'when the league is out of season' do
-      let(:end_month) { '9' }
       let(:interactor) { Interactor::Mls }
 
       before do

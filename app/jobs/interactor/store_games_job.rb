@@ -6,7 +6,7 @@ module Interactor
 
     def perform
       League.all.each do |league|
-        "Interactor::#{league.short_name.titleize}".constantize.store_games if league.in_season?
+        "Interactor::#{league.short_name.titleize}".constantize.store_games
       end
     end
   end

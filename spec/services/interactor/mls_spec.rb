@@ -9,10 +9,8 @@ RSpec.describe Interactor::Mls do
     before do
       stub_request(:get, %r{#{described_class::BASE_URL}/*})
         .to_return(status: 200, body: file_fixture('mls/raw_data.json').read)
-      create(:team, short_name: 'atl')
-      create(:team, short_name: 'la')
-      create(:team, short_name: 'nsh')
-      create(:team, short_name: 'por')
+      league = create(:league, short_name: 'mls')
+      %w[atl la nsh por].each { create(:team, short_name: it, league:) }
     end
 
     it 'stores the games' do

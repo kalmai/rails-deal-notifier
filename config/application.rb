@@ -38,8 +38,6 @@ module DealNotifier
     unless Rails.env.test?
       config.after_initialize do
         League.all.each do |league|
-          next unless league.in_season?
-
           Team.where(league_id: league.id).each do |team|
             Upsert::Promotions.execute_for(team:)
           end

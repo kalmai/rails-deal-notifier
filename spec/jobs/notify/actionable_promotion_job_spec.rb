@@ -3,16 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Notify::ActionablePromotionJob do
-  let(:promotions) { [create(:promotion, :with_users, team:)] }
-  let!(:team) { create(:team, region: 'ny') }
+  let(:game) { create(:game, finalized: true, utc_start_time: Time.current.yesterday.change(hour: 16)) }
+  let(:promotions) { [create(:promotion, :with_users, user_region: game.home_team.region, team: game.home_team)] }
   let(:user) { promotions.first.users.first }
   let(:time_adjustments) { { hour: 5 } }
-  let(:game) do
-    create(:game, home_team: team, finalized: true, utc_start_time: Time.current.yesterday.change(hour: 16))
-  end
 
   before do
-    create(:event, game:, team:)
+    create(:event, game:, team: game.home_team)
     travel_to(Time.current.in_time_zone(user.timezone).change(time_adjustments))
   end
 
