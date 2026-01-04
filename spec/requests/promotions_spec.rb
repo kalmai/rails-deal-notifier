@@ -48,7 +48,7 @@ RSpec.describe 'Promotions' do
       end
 
       context 'when there are games' do
-        before { create(:game, home_team: team) }
+        before { create(:game, league: team.league, home_team: team) }
 
         it 'returns promotions for the passed in zipcode' do
           get "/promotions/#{postal_code}", headers: { 'REMOTE_ADDR' => new_york_ip }

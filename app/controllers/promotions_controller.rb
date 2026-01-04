@@ -3,7 +3,7 @@
 class PromotionsController < ApplicationController
   def show
     location_data = location_data(postal: params[:postal]) # Rails.cache.read('location_data') ||
-    in_season_leagues = Game.group(:league_id).map(&:id)
+    in_season_leagues = Game.group(:league_id).map(&:league_id)
     teams = Team.where(league_id: in_season_leagues, country: location_data[:country], region: location_data[:region])
     # Rails.cache.write('location_data', location_data, expires_in: 30.minutes)
     @promotions = teams.map(&:promotions).flatten
