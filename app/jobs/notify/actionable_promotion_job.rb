@@ -24,13 +24,17 @@ module Notify
     end
 
     def gather_users_and_promotions
-      in_season_promotions.each.with_object(Hash.new([])) do |promotion, hsh| # rubocop:disable Lint/SharedMutableDefault
-        users = promotion.users
-        timezones = timezones_to_evaluate(users:)
-        users.where(timezone: timezones).each do |user|
+      in_season_promotions.each.with_object(Hash.new { |h, k| h[k] = [] }) do |promotion, hsh|
+        users_for(promotion:).each do |user|
           hsh[user.id] = hsh[user.id].push(promotion) if promotion.evaluate_most_recent_game
         end
       end
+    end
+
+    def users_for(promotion:)
+      users = promotion.users
+      timezone = timezones_to_evaluate(users:)
+      users.where(timezone:)
     end
 
     def in_season_promotions
