@@ -13,13 +13,14 @@ module Interactor
 
       def build_games(data)
         data.each do |datum|
-          home_team = find_team_record(short_name: datum.dig('homeTeam', 'abbrev').downcase)
-          away_team = find_team_record(short_name: datum.dig('awayTeam', 'abbrev').downcase)
+          home, away = find_team_records(%w[home away].index_with { datum.dig("#{it}Team", 'abbrev') })
+          next if home.blank? || away.blank?
+
           utc_start_time = Time.parse(datum['startTimeUTC'])
-          slug = "#{home_team.short_name}vs#{away_team.short_name}-#{utc_start_time.strftime('%m-%d-%Y')}"
+          slug = "#{home.short_name}vs#{away.short_name}-#{utc_start_time.strftime('%m-%d-%Y')}"
           next unless Game.find_by(slug:).blank?
 
-          Game.create!(away_team:, home_team:, utc_start_time:, slug:, league: home_team.league)
+          Game.create!(away_team: away, home_team: home, slug:, utc_start_time:, league: home.league)
         end
       end
 
@@ -97,8 +98,13 @@ module Interactor
         JSON.parse(raw_response)['gameWeek'].map { it['games'] }.flatten
       end
 
-      def find_team_record(short_name:)
-        Team.joins(:league).where(teams: { short_name: }, leagues: { short_name: 'nhl' }).first
+      def find_team_records(team_hash)
+        rows = Team.joins(:league).where \
+          teams: { short_name: team_hash.values.map(&:downcase) }, leagues: { short_name: 'nhl' }
+        return if rows.blank?
+
+        team_hash.transform_values! { |v| rows.find { |row| row.short_name == v.downcase } }
+        [team_hash['home'], team_hash['away']]
       end
     end
   end
