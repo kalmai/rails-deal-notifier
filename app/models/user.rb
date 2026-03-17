@@ -11,7 +11,6 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :promotions, through: :subscriptions
   accepts_nested_attributes_for :contact_methods
-  # TODO: add roles with permissions i.e. admin:god, moderator:high, consumer:normal, visitor:low
 
   after_create :populate_default_promotions
 

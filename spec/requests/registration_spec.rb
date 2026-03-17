@@ -30,7 +30,7 @@ RSpec.describe 'Registrations' do
     it 'renders page and implies the postal code of the user' do
       get '/', headers: { 'REMOTE_ADDR' => new_york_ip }
 
-      expect(response.body).to include 'Email'
+      expect(response.body).to include 'email'
       expect(session[:geocode_data]).to eq new_york_info
     end
   end

@@ -1,11 +1,11 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.4.7
+ARG RUBY_VERSION=4.0.1
 ARG RAILS_ENV
 ARG RAILS_MASTER_KEY
 
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-bookworm as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-bookworm AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -18,14 +18,11 @@ ENV RAILS_ENV=$RAILS_ENV \
     BUNDLE_WITHOUT="development"
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build gems
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev nodejs && \
-    npm install -g yarn && \
-    yarn add tailwindcss-animate
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
