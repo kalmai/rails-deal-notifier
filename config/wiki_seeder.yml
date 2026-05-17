@@ -9,7 +9,7 @@ mls:
     page: Major_League_Soccer
     section: 9
   sport_api:
-    url: https://stats-api.mlssoccer.com/competitions/MLS-COM-000001/seasons/MLS-SEA-0001K9/standings?is_live=true
+    url: https://stats-api.mlssoccer.com/competitions/MLS-COM-000001/seasons/MLS-SEA-0001KA/standings?is_live=true
     data_path:
     - tables
     - 0
