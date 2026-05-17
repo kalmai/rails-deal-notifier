@@ -34,4 +34,13 @@ class Game < ApplicationRecord
       where(home_team_id: team_id).or(where(away_team_id: team_id))
     end
   end
+
+  class Presenter
+    attr_reader :promotions, :last_update_at
+
+    def initialize(game)
+      @promotions = game.teams.map.with_object(Hash.new) { |team, hsh| hsh[team.short_name] = team.promotions.map { Promotion::Presenter.new(it) } }
+      @last_update_at = game&.events&.last&.utc_occurred_at
+    end
+  end
 end

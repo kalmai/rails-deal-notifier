@@ -38,4 +38,13 @@ class Promotion < ApplicationRecord
 
     Evaluator::Client.new(promotion: self, game: next_game).evaluate(timing_methods)
   end
+
+  class Presenter
+    attr_reader :promotion, :evaluation
+
+    def initialize(promotion)
+      @promotion = promotion
+      @evaluation = promotion.evaluate_most_recent_game
+    end
+  end
 end

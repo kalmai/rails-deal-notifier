@@ -20,6 +20,7 @@ module DealNotifier
 
     # https://edgeguides.rubyonrails.org/active_record_encryption.html#unique-validations
     config.active_record.encryption.extend_queries = true
+    config.active_record.query_log_tags_enabled = true
 
     # force utf-8 encoding application wide
     config.encoding = 'utf-8'

@@ -10,41 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_13_061553) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_13_061553) do
   create_table "contact_methods", force: :cascade do |t|
-    t.integer "contact_type", null: false
     t.string "contact_detail", null: false
-    t.boolean "enabled", default: true
+    t.integer "contact_type", null: false
     t.datetime "created_at", null: false
+    t.boolean "enabled", default: true
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.index ["user_id"], name: "index_contact_methods_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
-    t.integer "period", null: false
-    t.datetime "utc_occurred_at", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "game_id", null: false
-    t.bigint "team_id", null: false
     t.integer "event_type", null: false
+    t.bigint "game_id", null: false
+    t.integer "period", null: false
     t.string "slug", null: false
+    t.bigint "team_id", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "utc_occurred_at", null: false
     t.index ["game_id"], name: "index_events_on_game_id"
     t.index ["slug"], name: "index_events_on_slug", unique: true
     t.index ["team_id"], name: "index_events_on_team_id"
   end
 
   create_table "games", force: :cascade do |t|
-    t.datetime "utc_start_time", null: false
+    t.bigint "away_team_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean "finalized", default: false
+    t.bigint "home_team_id", null: false
     t.bigint "league_id", null: false
     t.json "league_specifics"
-    t.bigint "home_team_id", null: false
-    t.bigint "away_team_id", null: false
-    t.boolean "finalized", default: false
     t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "utc_start_time", null: false
     t.index ["away_team_id"], name: "index_games_on_away_team_id"
     t.index ["finalized"], name: "index_games_on_finalized"
     t.index ["home_team_id"], name: "index_games_on_home_team_id"
@@ -53,91 +53,91 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_061553) do
   end
 
   create_table "leagues", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "end_month"
     t.string "full_name"
     t.string "short_name"
     t.integer "start_month"
-    t.string "end_month"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "promotions", force: :cascade do |t|
-    t.string "company"
-    t.string "name"
-    t.integer "promo_type"
-    t.string "promo_code"
-    t.string "source_url"
-    t.integer "redemption_limiter"
-    t.integer "redemption_count"
-    t.integer "hours_valid"
-    t.json "timing_parameters"
-    t.json "api_parameters"
-    t.json "timing_methods", default: []
     t.json "api_methods", default: []
+    t.json "api_parameters"
+    t.string "company"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "hours_valid"
+    t.string "name"
+    t.string "promo_code"
+    t.integer "promo_type"
+    t.integer "redemption_count"
+    t.integer "redemption_limiter"
+    t.string "source_url"
     t.bigint "team_id"
+    t.json "timing_methods", default: []
+    t.json "timing_parameters"
+    t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_promotions_on_team_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
     t.binary "channel", limit: 1024, null: false
-    t.binary "payload", limit: 536870912, null: false
-    t.datetime "created_at", null: false
     t.integer "channel_hash", limit: 8, null: false
+    t.datetime "created_at", null: false
+    t.binary "payload", limit: 536870912, null: false
     t.index ["channel"], name: "index_solid_cable_messages_on_channel"
     t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
-    t.binary "key", limit: 1024, null: false
-    t.binary "value", limit: 536870912, null: false
-    t.datetime "created_at", null: false
-    t.integer "key_hash", limit: 8, null: false
     t.integer "byte_size", limit: 4, null: false
+    t.datetime "created_at", null: false
+    t.binary "key", limit: 1024, null: false
+    t.integer "key_hash", limit: 8, null: false
+    t.binary "value", limit: 536870912, null: false
     t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
     t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
     t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "solid_queue_blocked_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
     t.string "concurrency_key", null: false
-    t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
     t.index ["concurrency_key", "priority", "job_id"], name: "index_solid_queue_blocked_executions_for_release"
     t.index ["expires_at", "concurrency_key"], name: "index_solid_queue_blocked_executions_for_maintenance"
     t.index ["job_id"], name: "index_solid_queue_blocked_executions_on_job_id", unique: true
   end
 
   create_table "solid_queue_claimed_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "job_id", null: false
     t.bigint "process_id"
-    t.datetime "created_at", null: false
     t.index ["job_id"], name: "index_solid_queue_claimed_executions_on_job_id", unique: true
     t.index ["process_id", "job_id"], name: "index_solid_queue_claimed_executions_on_process_id_and_job_id"
   end
 
   create_table "solid_queue_failed_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.text "error"
     t.datetime "created_at", null: false
+    t.text "error"
+    t.bigint "job_id", null: false
     t.index ["job_id"], name: "index_solid_queue_failed_executions_on_job_id", unique: true
   end
 
   create_table "solid_queue_jobs", force: :cascade do |t|
-    t.string "queue_name", null: false
-    t.string "class_name", null: false
-    t.text "arguments"
-    t.integer "priority", default: 0, null: false
     t.string "active_job_id"
-    t.datetime "scheduled_at"
-    t.datetime "finished_at"
+    t.text "arguments"
+    t.string "class_name", null: false
     t.string "concurrency_key"
     t.datetime "created_at", null: false
+    t.datetime "finished_at"
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.datetime "scheduled_at"
     t.datetime "updated_at", null: false
     t.index ["active_job_id"], name: "index_solid_queue_jobs_on_active_job_id"
     t.index ["class_name"], name: "index_solid_queue_jobs_on_class_name"
@@ -147,109 +147,109 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_061553) do
   end
 
   create_table "solid_queue_pauses", force: :cascade do |t|
-    t.string "queue_name", null: false
     t.datetime "created_at", null: false
+    t.string "queue_name", null: false
     t.index ["queue_name"], name: "index_solid_queue_pauses_on_queue_name", unique: true
   end
 
   create_table "solid_queue_processes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "hostname"
     t.string "kind", null: false
     t.datetime "last_heartbeat_at", null: false
-    t.bigint "supervisor_id"
-    t.integer "pid", null: false
-    t.string "hostname"
     t.text "metadata"
-    t.datetime "created_at", null: false
     t.string "name", null: false
+    t.integer "pid", null: false
+    t.bigint "supervisor_id"
     t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
     t.index ["name", "supervisor_id"], name: "index_solid_queue_processes_on_name_and_supervisor_id", unique: true
     t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
   end
 
   create_table "solid_queue_ready_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
     t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
     t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
     t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
     t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
   end
 
   create_table "solid_queue_recurring_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "task_key", null: false
-    t.datetime "run_at", null: false
     t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.datetime "run_at", null: false
+    t.string "task_key", null: false
     t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
     t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
   end
 
   create_table "solid_queue_recurring_tasks", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "schedule", null: false
-    t.string "command", limit: 2048
-    t.string "class_name"
     t.text "arguments"
-    t.string "queue_name"
-    t.integer "priority", default: 0
-    t.boolean "static", default: true, null: false
-    t.text "description"
+    t.string "class_name"
+    t.string "command", limit: 2048
     t.datetime "created_at", null: false
+    t.text "description"
+    t.string "key", null: false
+    t.integer "priority", default: 0
+    t.string "queue_name"
+    t.string "schedule", null: false
+    t.boolean "static", default: true, null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_solid_queue_recurring_tasks_on_key", unique: true
     t.index ["static"], name: "index_solid_queue_recurring_tasks_on_static"
   end
 
   create_table "solid_queue_scheduled_executions", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.string "queue_name", null: false
-    t.integer "priority", default: 0, null: false
-    t.datetime "scheduled_at", null: false
     t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.datetime "scheduled_at", null: false
     t.index ["job_id"], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true
     t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_dispatch_all"
   end
 
   create_table "solid_queue_semaphores", force: :cascade do |t|
-    t.string "key", null: false
-    t.integer "value", default: 1, null: false
-    t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.string "key", null: false
     t.datetime "updated_at", null: false
+    t.integer "value", default: 1, null: false
     t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
     t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "promotion_id"
-    t.boolean "enabled", default: true
-    t.integer "redemption_count", default: 0
     t.datetime "created_at", null: false
+    t.boolean "enabled", default: true
+    t.bigint "promotion_id"
+    t.integer "redemption_count", default: 0
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["promotion_id"], name: "index_subscriptions_on_promotion_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "full_name"
-    t.string "short_name"
-    t.string "region"
     t.string "country"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "full_name"
     t.bigint "league_id"
+    t.string "region"
+    t.string "short_name"
+    t.datetime "updated_at", null: false
     t.index ["league_id"], name: "index_teams_on_league_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "country"
+    t.datetime "created_at", null: false
     t.string "postal", limit: 15
     t.string "region"
-    t.string "country"
     t.string "timezone"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
