@@ -4,7 +4,7 @@ require 'rest-client'
 
 module Interactor
   class Mls
-    BASE_URL = 'https://stats-api.mlssoccer.com/matches'
+    BASE_URL = 'https://stats-api.mlssoccer.com'
 
     class << self
       def store_games
@@ -47,7 +47,7 @@ module Interactor
 
       def get_goal_data(match_id)
         begin
-          raw_response = RestClient.get("#{BASE_URL}/#{match_id}/key_events?per_page=1000")
+          raw_response = RestClient.get("#{BASE_URL}/matches/#{match_id}/key_events?per_page=1000")
         rescue RestClient::ExceptionWithResponse => e
           e.response
         end
@@ -77,7 +77,14 @@ module Interactor
       end
 
       def game_schedule_url(beg, fin)
-        "#{BASE_URL}/seasons/MLS-SEA-0001K9?match_date[gte]=#{beg}&match_date[lte]=#{fin}&competition_id=MLS-COM-000001"
+        "#{BASE_URL}/matches/seasons/#{mls_season_id}?match_date[gte]=#{beg}&match_date[lte]=#{fin}" \
+          '&competition_id=MLS-COM-000001'
+      end
+
+      def mls_season_id
+        response = RestClient.get("#{BASE_URL}/competitions/MLS-COM-000001/seasons")
+        data = JSON.parse(response)
+        data.dig('seasons', 0, 'season_id')
       end
 
       def match_data(match_id:)
